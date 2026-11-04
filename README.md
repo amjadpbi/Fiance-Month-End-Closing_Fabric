@@ -1,5 +1,5 @@
 # Elarwick Finance Reconciliation & Close-Readiness Intelligence
-
+<img width="1672" height="941" alt="Logo-Free Dark Blue Poster with Gold Divider" src="https://github.com/user-attachments/assets/32c71c32-f3da-4cbb-b70f-12652600af55" />
 A Microsoft Fabric and Power BI portfolio project that reconciles synthetic bank and general-ledger activity, surfaces exceptions and allocation details, and presents the results in a four-page finance report.
 
 All project data is synthetic. This is a learning and portfolio solution, not a production finance system or a real client engagement.
