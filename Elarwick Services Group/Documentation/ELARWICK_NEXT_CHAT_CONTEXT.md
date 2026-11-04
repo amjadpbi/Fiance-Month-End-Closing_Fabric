@@ -94,7 +94,9 @@ Go-based SQLCMD v1.10.0 is installed. The old ODBC SQLCMD earlier in PATH caused
 
 `<SQLCMD_PATH>`
 
-Known working admin connection pattern (Dev only):
+Replace `<SQLCMD_PATH>`, `<YOUR_ENTRA_UPN>`, and `<PROJECT_ROOT>` with values from your environment before running these examples.
+
+Example Dev connection (replace placeholders before running):
 
 ```powershell
 & "<SQLCMD_PATH>" -S "kxme24s4ar5excpmug6oeu3a5a-2upkngedxxhebght4tvazxeofq.datawarehouse.fabric.microsoft.com" -d "WH_Elarwick_Reconciliation_Dev" -G -U "<YOUR_ENTRA_UPN>" -Q "SELECT USER_NAME() AS CurrentUser, DB_NAME() AS CurrentDatabase;"
@@ -255,7 +257,7 @@ This is catalog permission metadata; effective behavior was separately tested be
 
 ## 7. Dev test identities and current security-test results
 
-Two Entra test users were created:
+Two Entra test users were created (UPNs redacted in this public copy):
 
 - Finance test user: `Finance_Approver_UPN_PLACEHOLDER`
 - Operator test user: `Operator_UPN_PLACEHOLDER`
