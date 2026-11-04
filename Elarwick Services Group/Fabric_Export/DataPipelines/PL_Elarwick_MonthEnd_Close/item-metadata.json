@@ -1,0 +1,11 @@
+{
+  "displayName": "PL_Elarwick_MonthEnd_Close",
+  "itemId": "56d419c8-e1ca-4f47-95bd-9b9493abe0e3",
+  "itemType": "DataPipeline",
+  "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c",
+  "definitionParts": [
+    "pipeline-content.json",
+    ".platform"
+  ],
+  "exportedUtc": "2026-11-04T08:19:07Z"
+}

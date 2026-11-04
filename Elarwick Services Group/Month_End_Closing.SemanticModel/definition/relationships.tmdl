@@ -1,0 +1,6 @@
+relationship 'Reconciliation Results to Exceptions'
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: 'Reconciliation Results'.ReconciliationGroupKey
+	toColumn: 'Reconciliation Exceptions'.ReconciliationGroupKey
+

@@ -1,0 +1,343 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "review_groups_table",
+  "position": {
+    "x": 25,
+    "y": 467,
+    "z": 1000,
+    "height": 253.125,
+    "width": 984.00974025974028,
+    "tabOrder": 1000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Reconciliation Results"
+                    }
+                  },
+                  "Property": "NormalizedReference"
+                }
+              },
+              "queryRef": "Reconciliation Results.NormalizedReference",
+              "nativeQueryRef": "NormalizedReference"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Reconciliation Results"
+                    }
+                  },
+                  "Property": "ReconciliationStatus"
+                }
+              },
+              "queryRef": "Reconciliation Results.ReconciliationStatus",
+              "nativeQueryRef": "ReconciliationStatus"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Reconciliation Results"
+                    }
+                  },
+                  "Property": "ExceptionReason"
+                }
+              },
+              "queryRef": "Reconciliation Results.ExceptionReason",
+              "nativeQueryRef": "ExceptionReason"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Reconciliation Results"
+                    }
+                  },
+                  "Property": "MatchMethod"
+                }
+              },
+              "queryRef": "Reconciliation Results.MatchMethod",
+              "nativeQueryRef": "MatchMethod"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Reconciliation Results"
+                    }
+                  },
+                  "Property": "BankSignedAmount"
+                }
+              },
+              "queryRef": "Reconciliation Results.BankSignedAmount",
+              "nativeQueryRef": "BankSignedAmount"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Reconciliation Results"
+                    }
+                  },
+                  "Property": "GLSignedAmount"
+                }
+              },
+              "queryRef": "Reconciliation Results.GLSignedAmount",
+              "nativeQueryRef": "GLSignedAmount"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Reconciliation Results"
+                    }
+                  },
+                  "Property": "Amount Difference"
+                }
+              },
+              "queryRef": "Reconciliation Results.AmountDifference",
+              "nativeQueryRef": "Amount Difference"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Reconciliation Results"
+                    }
+                  },
+                  "Property": "Date DifferenceDays"
+                }
+              },
+              "queryRef": "Reconciliation Results.DateDifferenceDays",
+              "nativeQueryRef": "Date DifferenceDays"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Reconciliation Results"
+                  }
+                },
+                "Property": "Amount Difference"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
+      }
+    },
+    "objects": {
+      "columnHeaders": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "values": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "total": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "346.4095011668434D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Reconciliation Results.ExceptionReason"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "135.88735606693677D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Reconciliation Results.BankSignedAmount"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "117.98426827801026D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Reconciliation Results.GLSignedAmount"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "136.09065763507667D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Reconciliation Results.AmountDifference"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "178.94313906475804D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Reconciliation Results.MatchMethod"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "152.0395143904041D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Reconciliation Results.DateDifferenceDays"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "137.03088523765413D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Reconciliation Results.NormalizedReference"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "186.96538308835116D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Reconciliation Results.ReconciliationStatus"
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Reconciliation groups - select a status to focus'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

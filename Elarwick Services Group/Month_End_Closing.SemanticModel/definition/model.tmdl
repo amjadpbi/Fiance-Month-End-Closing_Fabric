@@ -1,0 +1,24 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	discourageImplicitMeasures
+	sourceQueryCulture: en-PK
+	valueFilterBehavior: independent
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_ProTooling = ["DevMode"]
+
+annotation PBI_QueryOrder = ["Reconciliation Results","Reconciliation Exceptions","Allocation Review","Reconciliation Allocations","Month-End Close Summary"]
+
+ref table 'Reconciliation Results'
+ref table 'Reconciliation Exceptions'
+ref table 'Allocation Review'
+ref table 'Reconciliation Allocations'
+ref table 'Month-End Close Summary'
+
+ref cultureInfo en-US
+

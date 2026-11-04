@@ -1,0 +1,295 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "exception_detail_table",
+  "position": {
+    "x": 24,
+    "y": 350,
+    "z": 0,
+    "height": 345,
+    "width": 1232,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Reconciliation Exceptions"
+                    }
+                  },
+                  "Property": "NormalizedReference"
+                }
+              },
+              "queryRef": "Reconciliation Exceptions.NormalizedReference",
+              "nativeQueryRef": "NormalizedReference"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Reconciliation Exceptions"
+                    }
+                  },
+                  "Property": "ReconciliationStatus"
+                }
+              },
+              "queryRef": "Reconciliation Exceptions.ReconciliationStatus",
+              "nativeQueryRef": "ReconciliationStatus"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Reconciliation Exceptions"
+                    }
+                  },
+                  "Property": "ExceptionReason"
+                }
+              },
+              "queryRef": "Reconciliation Exceptions.ExceptionReason",
+              "nativeQueryRef": "ExceptionReason"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Reconciliation Exceptions"
+                    }
+                  },
+                  "Property": "MatchMethod"
+                }
+              },
+              "queryRef": "Reconciliation Exceptions.MatchMethod",
+              "nativeQueryRef": "MatchMethod"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Reconciliation Exceptions"
+                    }
+                  },
+                  "Property": "BankTransactionIDs"
+                }
+              },
+              "queryRef": "Reconciliation Exceptions.BankTransactionIDs",
+              "nativeQueryRef": "BankTransactionIDs"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Reconciliation Exceptions"
+                    }
+                  },
+                  "Property": "JournalEntryIDs"
+                }
+              },
+              "queryRef": "Reconciliation Exceptions.JournalEntryIDs",
+              "nativeQueryRef": "JournalEntryIDs"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Reconciliation Exceptions"
+                    }
+                  },
+                  "Property": "BankSignedAmount"
+                }
+              },
+              "queryRef": "Reconciliation Exceptions.BankSignedAmount",
+              "nativeQueryRef": "BankSignedAmount"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Reconciliation Exceptions"
+                    }
+                  },
+                  "Property": "GLSignedAmount"
+                }
+              },
+              "queryRef": "Reconciliation Exceptions.GLSignedAmount",
+              "nativeQueryRef": "GLSignedAmount"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Reconciliation Exceptions"
+                    }
+                  },
+                  "Property": "AmountDifference"
+                }
+              },
+              "queryRef": "Reconciliation Exceptions.AmountDifference",
+              "nativeQueryRef": "AmountDifference"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Reconciliation Exceptions"
+                    }
+                  },
+                  "Property": "BankFirstDate"
+                }
+              },
+              "queryRef": "Reconciliation Exceptions.BankFirstDate",
+              "nativeQueryRef": "BankFirstDate"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Reconciliation Exceptions"
+                    }
+                  },
+                  "Property": "GLFirstDate"
+                }
+              },
+              "queryRef": "Reconciliation Exceptions.GLFirstDate",
+              "nativeQueryRef": "GLFirstDate"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Reconciliation Exceptions"
+                    }
+                  },
+                  "Property": "DateDifferenceDays"
+                }
+              },
+              "queryRef": "Reconciliation Exceptions.DateDifferenceDays",
+              "nativeQueryRef": "DateDifferenceDays"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Investigation detail'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true,
+    "objects": {
+      "grid": [
+        {
+          "properties": {
+            "rowPadding": {
+              "expr": {
+                "Literal": {
+                  "Value": "2D"
+                }
+              }
+            },
+            "imageHeight": {
+              "expr": {
+                "Literal": {
+                  "Value": "32D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnHeaders": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "values": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "total": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

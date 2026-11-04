@@ -1,0 +1,150 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "279673ed-4a82-4465-a6e9-1e7b4eed5c6c",
+          "workspaceId": "862d5926-a7fb-4540-8fc7-51df8f916f0d"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Run_Bronze_Ingestion",
+        "dependsOn": []
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "42e6ee97-279b-44c8-ac5d-913d74ffda5f",
+          "workspaceId": "862d5926-a7fb-4540-8fc7-51df8f916f0d"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Run_Silver_Validation",
+        "dependsOn": [
+          {
+            "activity": "Run_Bronze_Ingestion",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "df7ff53a-2218-4d60-a136-cbd791ed64e6",
+          "workspaceId": "862d5926-a7fb-4540-8fc7-51df8f916f0d"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Run_Journal_Controls",
+        "dependsOn": [
+          {
+            "activity": "Run_Silver_Validation",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Copy",
+        "typeProperties": {
+          "source": {
+            "type": "LakehouseTableSource",
+            "datasetSettings": {
+              "type": "LakehouseTable",
+              "typeProperties": {
+                "schema": "dbo",
+                "table": "gold_reconciliationresults"
+              },
+              "schema": [],
+              "linkedService": {
+                "name": "LH_Elarwick_Reconciliation",
+                "properties": {
+                  "type": "Lakehouse",
+                  "typeProperties": {
+                    "artifactId": "a1933b01-c4ac-44dc-a17f-6f16b68bb93e",
+                    "workspaceId": "862d5926-a7fb-4540-8fc7-51df8f916f0d",
+                    "rootFolder": "Tables"
+                  },
+                  "annotations": []
+                }
+              },
+              "annotations": []
+            }
+          },
+          "sink": {
+            "type": "DataWarehouseSink",
+            "tableOption": "autoCreate",
+            "allowCopyCommand": true,
+            "copyCommandSettings": {},
+            "writeBehavior": "Insert",
+            "datasetSettings": {
+              "type": "DataWarehouseTable",
+              "typeProperties": {
+                "schema": "dbo",
+                "table": "FactReconciliationResults"
+              },
+              "schema": [],
+              "linkedService": {
+                "name": "WH_Elarwick_Reconciliation",
+                "properties": {
+                  "type": "DataWarehouse",
+                  "typeProperties": {
+                    "artifactId": "b312f7f7-e558-4836-abfc-872dbac3582e",
+                    "endpoint": "kxme24s4ar5excpmug6oeu3a5a-2upkngedxxhebght4tvazxeofq.datawarehouse.fabric.microsoft.com",
+                    "workspaceId": "862d5926-a7fb-4540-8fc7-51df8f916f0d"
+                  },
+                  "annotations": []
+                }
+              },
+              "annotations": []
+            }
+          },
+          "translator": {
+            "type": "TabularTranslator",
+            "typeConversion": true,
+            "typeConversionSettings": {
+              "allowDataTruncation": true,
+              "treatBooleanAsNumber": false
+            }
+          },
+          "enableStaging": true
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Copy_Gold_ReconciliationResults",
+        "dependsOn": [
+          {
+            "activity": "Run_Journal_Controls",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

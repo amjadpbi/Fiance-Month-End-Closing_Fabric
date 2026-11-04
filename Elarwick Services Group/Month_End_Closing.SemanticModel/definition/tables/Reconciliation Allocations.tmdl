@@ -1,0 +1,111 @@
+/// One row per bank-transaction to journal-entry allocation. AllocationRunID differs from the reconciliation result run ID in the current Warehouse snapshot.
+table 'Reconciliation Allocations'
+	lineageTag: f78270b6-e5d3-4f15-9e01-d583e8f44deb
+
+	/// Counts allocation-level bank transaction to journal entry rows.
+	measure 'Allocation Rows' = COUNTROWS ( 'Reconciliation Allocations' )
+		formatString: #,##0
+		displayFolder: Allocations
+		lineageTag: bc5fdda1-cbe2-4530-9c80-438d819b4734
+
+	/// Sums allocation-grain allocated amounts; does not sum repeated bank or ledger group totals.
+	measure 'Allocated Signed Amount' = SUM ( 'Reconciliation Allocations'[AllocatedSignedAmount] )
+		formatString: #,##0.00;(#,##0.00);0.00
+		displayFolder: Allocations
+		lineageTag: e9d907d7-10ec-4222-9734-2bd69fd5dfaa
+
+	column AllocationRunID
+		dataType: string
+		isHidden
+		lineageTag: e9337a39-c51e-435d-b8b9-ceffbc74fec2
+		sourceColumn: AllocationRunID
+
+	column ReferenceNumber
+		dataType: string
+		lineageTag: 1f595807-ef37-4735-9109-fed410cc606b
+		sourceColumn: ReferenceNumber
+
+	column BankTransactionID
+		dataType: string
+		lineageTag: 9ead7af3-f608-46c2-af9f-9d26e97f443d
+		sourceColumn: BankTransactionID
+
+	column JournalEntryID
+		dataType: string
+		lineageTag: 6f477ed4-c605-4bce-8c77-99ee1f99daf0
+		sourceColumn: JournalEntryID
+
+	column BankTransactionDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 0f12ab42-36b0-419c-9863-26b36153b98e
+		summarizeBy: none
+		sourceColumn: BankTransactionDate
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column GLPostingDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 381d327e-5606-4da0-87e6-c35c3058af2a
+		summarizeBy: none
+		sourceColumn: GLPostingDate
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column AllocatedSignedAmount
+		dataType: double
+		formatString: #,##0.00;(#,##0.00);0.00
+		lineageTag: f6021f15-9c91-4cc6-b181-b990a335a685
+		summarizeBy: sum
+		sourceColumn: AllocatedSignedAmount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column BankSignedAmount
+		dataType: double
+		formatString: #,##0.00;(#,##0.00);0.00
+		lineageTag: 9b1913f9-66a0-4f22-a022-4471755d07e9
+		summarizeBy: sum
+		sourceColumn: BankSignedAmount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column GLSignedAmount
+		dataType: double
+		formatString: #,##0.00;(#,##0.00);0.00
+		lineageTag: d9981e9b-7950-4618-97d7-ba9bed91b95c
+		summarizeBy: sum
+		sourceColumn: GLSignedAmount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column MatchMethod
+		dataType: string
+		lineageTag: f53da979-431b-41a2-b39f-e13545dbd9c8
+		sourceColumn: MatchMethod
+
+	column ReconciliationStatus
+		dataType: string
+		lineageTag: 2715adaa-4335-4bcc-86de-8a4c13b85c5e
+		sourceColumn: ReconciliationStatus
+
+	column ProcessedAt
+		dataType: dateTime
+		lineageTag: a82bd5a7-6ee8-4c4c-a583-9decb85d1e7c
+		sourceColumn: ProcessedAt
+
+	partition 'Reconciliation Allocations' = m
+		mode: import
+		source = let Source = Sql.Database("kxme24s4ar5excpmug6oeu3a5a-2upkngedxxhebght4tvazxeofq.datawarehouse.fabric.microsoft.com", "WH_Elarwick_Reconciliation"), View = Source{[Schema="dbo", Item="vw_ReconciliationAllocations"]}[Data] in View
+

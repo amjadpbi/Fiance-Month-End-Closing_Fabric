@@ -1,0 +1,11 @@
+{
+  "displayName": "NB_02_Validate_Silver_Dev",
+  "itemId": "bc06c534-4b1e-4950-a282-6d30f6af2e71",
+  "itemType": "Notebook",
+  "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c",
+  "definitionParts": [
+    "notebook-content.py",
+    ".platform"
+  ],
+  "exportedUtc": "2026-11-04T08:19:07Z"
+}

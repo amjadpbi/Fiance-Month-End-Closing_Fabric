@@ -1,0 +1,16 @@
+﻿TestCaseID,Scenario,BankRecord(s),LedgerRecord(s),ExpectedOutcome,AcceptanceRule
+TC01,Exact match,B001,JE001,ConfirmedMatch,"Reference, date, normalized cash direction and amount agree."
+TC02,Exact match: cash outflow,B002,JE002,ConfirmedMatch,Check credit-side cash movement.
+TC03,Missing reference,B009,JE009,PotentialMatch,Same date and amount but no reference; do not auto-confirm.
+TC04,Many bank rows to one GL line,B010 + B011,JE010,ConfirmedGroupedMatch,100 + 200 = 300 and reference supports grouping.
+TC05,One bank row to many GL lines,B012,JE011 + JE012,ConfirmedGroupedMatch,450 = 150 + 300 and reference supports grouping.
+TC06,Amount discrepancy,B013,JE013,PotentialMatch,Difference 500; leave for finance review.
+TC07,Date difference,B014,JE014,PotentialMatch,Date mismatch alone does not prove a timing difference.
+TC08,Bank-only transaction,B015,None,Unmatched,No supporting GL cash line.
+TC09,Suspected duplicate transaction,B016,JE001,SuspectedDuplicate,"Different source ID; flag and preserve, do not auto-delete."
+TC10,Invalid bank row,B017,None,Quarantined,Debit and credit both populated.
+TC11,Unbalanced journal,None,JE019,JournalValidationFailure,JE019 debits 700 and credits 650; not eligible for confirmed match.
+TC12,Ledger-only entries,None,JE018; JE020,Unmatched,GL cash entries have no bank-side counterpart.
+TC13,Repeat identical batch,same input file twice,same batch,No duplicate output,Second processing must not duplicate transaction/reconciliation rows.
+TC14,Account mapping,source account codes,Chart of Accounts,Pass if mapped,Each source account code maps to a valid AccountID.
+TC15,Control totals,all records,all journal entries,Pass if reconciled,"Check counts, quarantined records, journal balance, and bank totals."

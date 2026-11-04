@@ -1,0 +1,11 @@
+﻿AccountID,AccountCode,AccountName,AccountType,IsActive
+A1000,1000,Operating Bank,Asset,True
+A1010,1010,Cash Clearing,Asset,True
+A1100,1100,Accounts Receivable,Asset,True
+A1200,1200,Prepaid Expenses,Asset,True
+L2000,2000,Accounts Payable,Liability,True
+L2100,2100,Accrued Expenses,Liability,True
+E3000,3000,Owner Equity,Equity,True
+R4000,4000,Service Revenue,Revenue,True
+X5000,5000,Operating Expense,Expense,True
+X5100,5100,Payroll Expense,Expense,True

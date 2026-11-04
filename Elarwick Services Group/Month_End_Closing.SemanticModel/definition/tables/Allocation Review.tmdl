@@ -1,0 +1,54 @@
+/// One row per allocation-review reference group. Group amount fields are returned as text by the source view and should not be aggregated as numeric values.
+table 'Allocation Review'
+	lineageTag: 1c1ec2bf-eb0f-446a-accf-456424987f74
+
+	column AllocationRunID
+		dataType: string
+		isHidden
+		lineageTag: dd585b29-a5ad-4746-ab62-b21cf4e7bf55
+		sourceColumn: AllocationRunID
+
+	column ReferenceNumber
+		dataType: string
+		lineageTag: 608910e0-a30c-476c-9af6-26d29e54348b
+		sourceColumn: ReferenceNumber
+
+	column ReconciliationStatus
+		dataType: string
+		lineageTag: 809fa712-22d3-4c42-b0c9-6445adec0307
+		sourceColumn: ReconciliationStatus
+
+	column BankTransactionIDs
+		dataType: string
+		lineageTag: 5ffb7c68-c753-4de4-a012-b624c0dc88ee
+		sourceColumn: BankTransactionIDs
+
+	column JournalEntryIDs
+		dataType: string
+		lineageTag: 82ec8721-2066-4377-be66-1679bc23e59b
+		sourceColumn: JournalEntryIDs
+
+	column BankGroupAmount
+		dataType: string
+		lineageTag: 115bab64-4b3a-4232-8541-58a091dcef01
+		sourceColumn: BankGroupAmount
+
+	column GLGroupAmount
+		dataType: string
+		lineageTag: 3ebffe9c-9788-4e04-9b0c-c63cb1937dcc
+		sourceColumn: GLGroupAmount
+
+	column ReviewReason
+		dataType: string
+		lineageTag: 50c5819a-b702-4489-9595-faa2de77e289
+		sourceColumn: ReviewReason
+
+	column ProcessedAt
+		dataType: dateTime
+		lineageTag: c611c839-75b2-41fd-a455-6c78241a998f
+		sourceColumn: ProcessedAt
+
+	partition 'Allocation Review' = m
+		mode: import
+		source = let Source = Sql.Database("kxme24s4ar5excpmug6oeu3a5a-2upkngedxxhebght4tvazxeofq.datawarehouse.fabric.microsoft.com", "WH_Elarwick_Reconciliation"), View = Source{[Schema="dbo", Item="vw_ReconciliationAllocationReview"]}[Data] in View
+

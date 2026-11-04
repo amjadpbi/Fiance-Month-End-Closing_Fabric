@@ -1,0 +1,11 @@
+{
+  "displayName": "NB_01_Ingest_Bronze",
+  "itemId": "bbe940fc-a2c4-4ff6-9390-55e94035a151",
+  "itemType": "Notebook",
+  "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c",
+  "definitionParts": [
+    "notebook-content.py",
+    ".platform"
+  ],
+  "exportedUtc": "2026-11-04T08:19:07Z"
+}

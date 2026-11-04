@@ -1,0 +1,13 @@
+{
+  "displayName": "LH_Elarwick_Reconciliation",
+  "itemId": "1836fa4b-2f43-4a48-b8d6-de7bd7d9e935",
+  "itemType": "Lakehouse",
+  "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c",
+  "relatedSqlEndpointId": "5f26eff9-79c3-466c-85b1-2748387ad799",
+  "definitionParts": [
+    "lakehouse.metadata.json",
+    "alm.settings.json",
+    "shortcuts.metadata.json",
+    ".platform"
+  ]
+}

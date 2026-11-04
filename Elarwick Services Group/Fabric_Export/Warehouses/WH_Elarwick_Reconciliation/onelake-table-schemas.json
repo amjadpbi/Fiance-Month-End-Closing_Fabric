@@ -1,0 +1,479 @@
+{
+    "itemName":  "WH_Elarwick_Reconciliation",
+    "itemId":  "22a20472-caf8-4bec-affa-ae5d2c788748",
+    "itemType":  "Warehouse",
+    "workspaceName":  "Elarwick_Finance_Engineering",
+    "workspaceId":  "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c",
+    "exportType":  "OneLake Delta schema metadata only",
+    "tableCount":  7,
+    "tables":  [
+                   {
+                       "namespace":  "dbo",
+                       "name":  "DimAccountMapping",
+                       "tableUuid":  "df90be3c-9834-430f-8414-12c4854b32ea",
+                       "schemaId":  1,
+                       "fields":  [
+                                      {
+                                          "name":  "SourceSystem",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "SourceAccountCode",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "TargetAccountID",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "EffectiveFrom",
+                                          "required":  false,
+                                          "type":  "date"
+                                      },
+                                      {
+                                          "name":  "EffectiveTo",
+                                          "required":  false,
+                                          "type":  "date"
+                                      },
+                                      {
+                                          "name":  "BatchID",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "SourceFileName",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "SourceFileHash",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "IngestedAt",
+                                          "required":  false,
+                                          "type":  "timestamptz"
+                                      },
+                                      {
+                                          "name":  "SourceRowHash",
+                                          "required":  false,
+                                          "type":  "string"
+                                      }
+                                  ]
+                   },
+                   {
+                       "namespace":  "dbo",
+                       "name":  "DimChartOfAccounts",
+                       "tableUuid":  "2d1298af-2032-46f9-8083-4e53ac488970",
+                       "schemaId":  1,
+                       "fields":  [
+                                      {
+                                          "name":  "AccountID",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "AccountCode",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "AccountName",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "AccountType",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "IsActive",
+                                          "required":  false,
+                                          "type":  "boolean"
+                                      },
+                                      {
+                                          "name":  "BatchID",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "SourceFileName",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "SourceFileHash",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "IngestedAt",
+                                          "required":  false,
+                                          "type":  "timestamptz"
+                                      },
+                                      {
+                                          "name":  "SourceRowHash",
+                                          "required":  false,
+                                          "type":  "string"
+                                      }
+                                  ]
+                   },
+                   {
+                       "namespace":  "dbo",
+                       "name":  "FactReconciliationAllocationReview",
+                       "tableUuid":  "e058bf3e-5e01-496d-bb06-66c396c1df7c",
+                       "schemaId":  1,
+                       "fields":  [
+                                      {
+                                          "name":  "AllocationRunID",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "ReferenceNumber",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "ReconciliationStatus",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "BankTransactionIDs",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "JournalEntryIDs",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "BankGroupAmount",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "GLGroupAmount",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "ReviewReason",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "ProcessedAt",
+                                          "required":  false,
+                                          "type":  "timestamptz"
+                                      }
+                                  ]
+                   },
+                   {
+                       "namespace":  "dbo",
+                       "name":  "FactReconciliationAllocations",
+                       "tableUuid":  "3372e5f2-cf21-4ca0-a917-2f60e09d1d43",
+                       "schemaId":  1,
+                       "fields":  [
+                                      {
+                                          "name":  "AllocationRunID",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "ReferenceNumber",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "BankTransactionID",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "JournalEntryID",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "BankTransactionDate",
+                                          "required":  false,
+                                          "type":  "date"
+                                      },
+                                      {
+                                          "name":  "GLPostingDate",
+                                          "required":  false,
+                                          "type":  "date"
+                                      },
+                                      {
+                                          "name":  "AllocatedSignedAmount",
+                                          "required":  false,
+                                          "type":  "decimal(18, 2)"
+                                      },
+                                      {
+                                          "name":  "BankSignedAmount",
+                                          "required":  false,
+                                          "type":  "decimal(18, 2)"
+                                      },
+                                      {
+                                          "name":  "GLSignedAmount",
+                                          "required":  false,
+                                          "type":  "decimal(18, 2)"
+                                      },
+                                      {
+                                          "name":  "MatchMethod",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "ReconciliationStatus",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "ProcessedAt",
+                                          "required":  false,
+                                          "type":  "timestamptz"
+                                      }
+                                  ]
+                   },
+                   {
+                       "namespace":  "dbo",
+                       "name":  "FactReconciliationExceptions",
+                       "tableUuid":  "1cfd8f2b-e438-4e1f-a953-a0e21a63965d",
+                       "schemaId":  1,
+                       "fields":  [
+                                      {
+                                          "name":  "NormalizedReference",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "BankTransactionIDs",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "JournalEntryIDs",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "BankSignedAmount",
+                                          "required":  false,
+                                          "type":  "decimal(29, 2)"
+                                      },
+                                      {
+                                          "name":  "GLSignedAmount",
+                                          "required":  false,
+                                          "type":  "decimal(38, 2)"
+                                      },
+                                      {
+                                          "name":  "AmountDifference",
+                                          "required":  false,
+                                          "type":  "decimal(38, 2)"
+                                      },
+                                      {
+                                          "name":  "BankFirstDate",
+                                          "required":  false,
+                                          "type":  "date"
+                                      },
+                                      {
+                                          "name":  "BankLastDate",
+                                          "required":  false,
+                                          "type":  "date"
+                                      },
+                                      {
+                                          "name":  "GLFirstDate",
+                                          "required":  false,
+                                          "type":  "date"
+                                      },
+                                      {
+                                          "name":  "GLLastDate",
+                                          "required":  false,
+                                          "type":  "date"
+                                      },
+                                      {
+                                          "name":  "DateDifferenceDays",
+                                          "required":  false,
+                                          "type":  "int"
+                                      },
+                                      {
+                                          "name":  "BankTransactionCount",
+                                          "required":  false,
+                                          "type":  "long"
+                                      },
+                                      {
+                                          "name":  "GLEntryCount",
+                                          "required":  false,
+                                          "type":  "long"
+                                      },
+                                      {
+                                          "name":  "ReconciliationStatus",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "MatchMethod",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "ExceptionReason",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "ReconciliationRunID",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "ProcessedAt",
+                                          "required":  false,
+                                          "type":  "timestamptz"
+                                      }
+                                  ]
+                   },
+                   {
+                       "namespace":  "dbo",
+                       "name":  "FactReconciliationResults",
+                       "tableUuid":  "ca6f071b-1461-4b0b-bdff-4218c1184c38",
+                       "schemaId":  1,
+                       "fields":  [
+                                      {
+                                          "name":  "NormalizedReference",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "BankTransactionIDs",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "JournalEntryIDs",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "BankSignedAmount",
+                                          "required":  false,
+                                          "type":  "decimal(29, 2)"
+                                      },
+                                      {
+                                          "name":  "GLSignedAmount",
+                                          "required":  false,
+                                          "type":  "decimal(38, 2)"
+                                      },
+                                      {
+                                          "name":  "AmountDifference",
+                                          "required":  false,
+                                          "type":  "decimal(38, 2)"
+                                      },
+                                      {
+                                          "name":  "BankFirstDate",
+                                          "required":  false,
+                                          "type":  "date"
+                                      },
+                                      {
+                                          "name":  "BankLastDate",
+                                          "required":  false,
+                                          "type":  "date"
+                                      },
+                                      {
+                                          "name":  "GLFirstDate",
+                                          "required":  false,
+                                          "type":  "date"
+                                      },
+                                      {
+                                          "name":  "GLLastDate",
+                                          "required":  false,
+                                          "type":  "date"
+                                      },
+                                      {
+                                          "name":  "DateDifferenceDays",
+                                          "required":  false,
+                                          "type":  "int"
+                                      },
+                                      {
+                                          "name":  "BankTransactionCount",
+                                          "required":  false,
+                                          "type":  "long"
+                                      },
+                                      {
+                                          "name":  "GLEntryCount",
+                                          "required":  false,
+                                          "type":  "long"
+                                      },
+                                      {
+                                          "name":  "ReconciliationStatus",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "MatchMethod",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "ExceptionReason",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "ReconciliationRunID",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "ProcessedAt",
+                                          "required":  false,
+                                          "type":  "timestamptz"
+                                      }
+                                  ]
+                   },
+                   {
+                       "namespace":  "dbo",
+                       "name":  "FactReconciliationSummary",
+                       "tableUuid":  "a034d109-b268-4ae5-8918-5100d9729e94",
+                       "schemaId":  1,
+                       "fields":  [
+                                      {
+                                          "name":  "ReconciliationStatus",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "ReferenceGroupCount",
+                                          "required":  false,
+                                          "type":  "long"
+                                      },
+                                      {
+                                          "name":  "BankTransactionCount",
+                                          "required":  false,
+                                          "type":  "long"
+                                      },
+                                      {
+                                          "name":  "GLEntryCount",
+                                          "required":  false,
+                                          "type":  "long"
+                                      },
+                                      {
+                                          "name":  "ProcessedAt",
+                                          "required":  false,
+                                          "type":  "timestamptz"
+                                      }
+                                  ]
+                   }
+               ],
+    "dataRowsExported":  false,
+    "exportedUtc":  "2026-11-04T08:37:05Z"
+}

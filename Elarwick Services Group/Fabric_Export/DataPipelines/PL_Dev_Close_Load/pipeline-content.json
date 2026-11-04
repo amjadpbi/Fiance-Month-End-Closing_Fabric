@@ -1,0 +1,2667 @@
+{
+  "properties": {
+    "description": "Dev-only new-close processing. Stops after seven table manifests for separate Finance exception review; no approval or finalization is performed here.",
+    "parameters": {
+      "ReportingPeriodKey": {
+        "type": "String"
+      },
+      "FinanceConfirmationReference": {
+        "type": "String"
+      }
+    },
+    "variables": {},
+    "activities": [
+      {
+        "name": "Preflight_Dev_Warehouse",
+        "type": "Script",
+        "dependsOn": [],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "linkedService": {
+          "name": "WH_Elarwick_Reconciliation_Dev",
+          "properties": {
+            "annotations": [],
+            "type": "DataWarehouse",
+            "typeProperties": {
+              "endpoint": "kxme24s4ar5excpmug6oeu3a5a-2upkngedxxhebght4tvazxeofq.datawarehouse.fabric.microsoft.com",
+              "artifactId": "af68efe3-b674-4e5a-bf86-ab7ab1a9a5c9",
+              "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c"
+            }
+          }
+        },
+        "typeProperties": {
+          "scripts": [
+            {
+              "type": "Query",
+              "text": {
+                "value": "@concat('IF DB_NAME() <> N''WH_Elarwick_Reconciliation_Dev'' THROW 51200, ''This activity can run only in WH_Elarwick_Reconciliation_Dev.'', 1;\n\nIF OBJECT_ID(N''dbo.usp_BeginClose'', N''P'') IS NULL THROW 51201, ''usp_BeginClose is missing.'', 1;\nIF OBJECT_ID(N''dbo.usp_RecordCloseSourceFile'', N''P'') IS NULL THROW 51202, ''Source manifest procedure is missing.'', 1;\nIF OBJECT_ID(N''dbo.usp_RecordCloseValidation'', N''P'') IS NULL THROW 51203, ''Validation procedure is missing.'', 1;\nIF OBJECT_ID(N''dbo.usp_RecordCloseTableLoad'', N''P'') IS NULL THROW 51204, ''Table-load procedure is missing.'', 1;\nIF OBJECT_ID(N''dbo.usp_RegisterCloseException'', N''P'') IS NULL THROW 51205, ''Exception registration procedure is missing.'', 1;\nIF OBJECT_ID(N''dbo.FactReconciliationResults'', N''U'') IS NULL THROW 51206, ''Required target dbo.FactReconciliationResults is missing.'', 1;\nIF OBJECT_ID(N''dbo.FactReconciliationExceptions'', N''U'') IS NULL THROW 51206, ''Required target dbo.FactReconciliationExceptions is missing.'', 1;\nIF OBJECT_ID(N''dbo.FactReconciliationSummary'', N''U'') IS NULL THROW 51206, ''Required target dbo.FactReconciliationSummary is missing.'', 1;\nIF OBJECT_ID(N''dbo.DimAccountMapping'', N''U'') IS NULL THROW 51206, ''Required target dbo.DimAccountMapping is missing.'', 1;\nIF OBJECT_ID(N''dbo.DimChartOfAccounts'', N''U'') IS NULL THROW 51206, ''Required target dbo.DimChartOfAccounts is missing.'', 1;\nIF OBJECT_ID(N''dbo.FactReconciliationAllocationReview'', N''U'') IS NULL THROW 51206, ''Required target dbo.FactReconciliationAllocationReview is missing.'', 1;\nIF OBJECT_ID(N''dbo.FactReconciliationAllocations'', N''U'') IS NULL THROW 51206, ''Required target dbo.FactReconciliationAllocations is missing.'', 1;\nSELECT 1 AS PreflightPassed;')",
+                "type": "Expression"
+              }
+            }
+          ],
+          "scriptBlockExecutionTimeout": "02:00:00"
+        }
+      },
+      {
+        "name": "Validate_Close_Inputs",
+        "type": "Script",
+        "dependsOn": [
+          {
+            "activity": "Preflight_Dev_Warehouse",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "linkedService": {
+          "name": "WH_Elarwick_Reconciliation_Dev",
+          "properties": {
+            "annotations": [],
+            "type": "DataWarehouse",
+            "typeProperties": {
+              "endpoint": "kxme24s4ar5excpmug6oeu3a5a-2upkngedxxhebght4tvazxeofq.datawarehouse.fabric.microsoft.com",
+              "artifactId": "af68efe3-b674-4e5a-bf86-ab7ab1a9a5c9",
+              "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c"
+            }
+          }
+        },
+        "typeProperties": {
+          "scripts": [
+            {
+              "type": "Query",
+              "text": {
+                "value": "@concat('IF DB_NAME() <> N''WH_Elarwick_Reconciliation_Dev'' THROW 51200, ''This activity can run only in WH_Elarwick_Reconciliation_Dev.'', 1;\nDECLARE @ReportingPeriodKey varchar(64) = N''',replace(pipeline().parameters.ReportingPeriodKey,'''',''''''),''';\nDECLARE @FinanceConfirmationReference varchar(2000) = N''',replace(pipeline().parameters.FinanceConfirmationReference,'''',''''''),''';\nIF @ReportingPeriodKey IS NULL OR LTRIM(RTRIM(@ReportingPeriodKey)) = '''' THROW 51207, ''A finance-confirmed ReportingPeriodKey is required.'', 1;\nIF @FinanceConfirmationReference IS NULL OR LTRIM(RTRIM(@FinanceConfirmationReference)) = '''' THROW 51208, ''A Finance confirmation evidence reference is required.'', 1;\nSELECT 1 AS InputsValidated;')",
+                "type": "Expression"
+              }
+            }
+          ],
+          "scriptBlockExecutionTimeout": "02:00:00"
+        }
+      },
+      {
+        "name": "Begin_Close",
+        "type": "Script",
+        "dependsOn": [
+          {
+            "activity": "Validate_Close_Inputs",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "linkedService": {
+          "name": "WH_Elarwick_Reconciliation_Dev",
+          "properties": {
+            "annotations": [],
+            "type": "DataWarehouse",
+            "typeProperties": {
+              "endpoint": "kxme24s4ar5excpmug6oeu3a5a-2upkngedxxhebght4tvazxeofq.datawarehouse.fabric.microsoft.com",
+              "artifactId": "af68efe3-b674-4e5a-bf86-ab7ab1a9a5c9",
+              "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c"
+            }
+          }
+        },
+        "typeProperties": {
+          "scripts": [
+            {
+              "type": "Query",
+              "text": {
+                "value": "@concat('IF DB_NAME() <> N''WH_Elarwick_Reconciliation_Dev'' THROW 51200, ''This activity can run only in WH_Elarwick_Reconciliation_Dev.'', 1;\nDECLARE @ReportingPeriodKey varchar(64) = N''',replace(pipeline().parameters.ReportingPeriodKey,'''',''''''),''';\nDECLARE @CloseRunID varchar(36);\nDECLARE @CloseAttemptID varchar(36);\nEXEC dbo.usp_BeginClose @ReportingPeriodKey = @ReportingPeriodKey, @CloseRunID = @CloseRunID OUTPUT, @CloseAttemptID = @CloseAttemptID OUTPUT;\nSELECT @CloseRunID AS CloseRunID, @CloseAttemptID AS CloseAttemptID;')",
+                "type": "Expression"
+              }
+            }
+          ],
+          "scriptBlockExecutionTimeout": "02:00:00"
+        }
+      },
+      {
+        "name": "Record_Reporting_Period_Confirmation",
+        "type": "Script",
+        "dependsOn": [
+          {
+            "activity": "Begin_Close",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "linkedService": {
+          "name": "WH_Elarwick_Reconciliation_Dev",
+          "properties": {
+            "annotations": [],
+            "type": "DataWarehouse",
+            "typeProperties": {
+              "endpoint": "kxme24s4ar5excpmug6oeu3a5a-2upkngedxxhebght4tvazxeofq.datawarehouse.fabric.microsoft.com",
+              "artifactId": "af68efe3-b674-4e5a-bf86-ab7ab1a9a5c9",
+              "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c"
+            }
+          }
+        },
+        "typeProperties": {
+          "scripts": [
+            {
+              "type": "NonQuery",
+              "text": {
+                "value": "@concat('IF DB_NAME() <> N''WH_Elarwick_Reconciliation_Dev'' THROW 51200, ''This activity can run only in WH_Elarwick_Reconciliation_Dev.'', 1;\n','DECLARE @CloseRunID varchar(36) = N''',replace(activity('Begin_Close').output.resultSets[0].rows[0].CloseRunID,'''',''''''),''';\nDECLARE @CloseAttemptID varchar(36) = N''',replace(activity('Begin_Close').output.resultSets[0].rows[0].CloseAttemptID,'''',''''''),''';\n','DECLARE @ReportingPeriodKey varchar(64);\nSELECT @ReportingPeriodKey = ReportingPeriodKey FROM dbo.Control_CloseRuns WHERE CloseRunID = @CloseRunID AND CurrentAttemptID = @CloseAttemptID AND ExecutionStatus = ''RUNNING'';\nIF @ReportingPeriodKey IS NULL THROW 51209, ''The newly created close attempt is not current and running.'', 1;\nEXEC dbo.usp_RecordCloseValidation @CloseRunID = @CloseRunID, @CloseAttemptID = @CloseAttemptID, @ValidationCode = ''REPORTING_PERIOD_CONFIRMATION'', @ValidationResult = ''PASS'', @ExpectedValue = @ReportingPeriodKey, @ActualValue = @ReportingPeriodKey, @EvidenceReference = N''',replace(pipeline().parameters.FinanceConfirmationReference,'''',''''''),''';')",
+                "type": "Expression"
+              }
+            }
+          ],
+          "scriptBlockExecutionTimeout": "02:00:00"
+        }
+      },
+      {
+        "name": "Run_Bronze_Ingestion",
+        "type": "TridentNotebook",
+        "dependsOn": [
+          {
+            "activity": "Record_Reporting_Period_Confirmation",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "typeProperties": {
+          "notebookId": "3390794a-de7a-4d9c-967c-7085d22eb4b7",
+          "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        }
+      },
+      {
+        "name": "Record_Source_Manifests",
+        "type": "ForEach",
+        "dependsOn": [
+          {
+            "activity": "Run_Bronze_Ingestion",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "typeProperties": {
+          "isSequential": true,
+          "items": {
+            "value": "@json(activity('Run_Bronze_Ingestion').output.result.exitValue).FileResults",
+            "type": "Expression"
+          },
+          "activities": [
+            {
+              "name": "Record_One_Source_Manifest",
+              "type": "Script",
+              "dependsOn": [],
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureOutput": false,
+                "secureInput": false
+              },
+              "linkedService": {
+                "name": "WH_Elarwick_Reconciliation_Dev",
+                "properties": {
+                  "annotations": [],
+                  "type": "DataWarehouse",
+                  "typeProperties": {
+                    "endpoint": "kxme24s4ar5excpmug6oeu3a5a-2upkngedxxhebght4tvazxeofq.datawarehouse.fabric.microsoft.com",
+                    "artifactId": "af68efe3-b674-4e5a-bf86-ab7ab1a9a5c9",
+                    "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c"
+                  }
+                }
+              },
+              "typeProperties": {
+                "scripts": [
+                  {
+                    "type": "NonQuery",
+                    "text": {
+                      "value": "@concat('IF DB_NAME() <> N''WH_Elarwick_Reconciliation_Dev'' THROW 51200, ''This activity can run only in WH_Elarwick_Reconciliation_Dev.'', 1;\n','DECLARE @CloseRunID varchar(36) = N''',replace(activity('Begin_Close').output.resultSets[0].rows[0].CloseRunID,'''',''''''),''';\nDECLARE @CloseAttemptID varchar(36) = N''',replace(activity('Begin_Close').output.resultSets[0].rows[0].CloseAttemptID,'''',''''''),''';\n','DECLARE @SourceRole varchar(64) = N''',replace(item().SourceRole,'''',''''''),'''; DECLARE @FileName varchar(512) = N''',replace(item().FileName,'''',''''''),'''; DECLARE @SourceFileHash varchar(128) = N''',replace(item().SourceFileHash,'''',''''''),'''; DECLARE @BatchID varchar(36) = N''',replace(item().BatchID,'''',''''''),'''; DECLARE @SourceRowCount bigint = ',string(item().SourceRowCount),'; EXEC dbo.usp_RecordCloseSourceFile @CloseRunID = @CloseRunID, @CloseAttemptID = @CloseAttemptID, @SourceRole = @SourceRole, @FileName = @FileName, @SourceFileHash = @SourceFileHash, @HashAlgorithm = ''SHA256'', @BatchID = @BatchID, @SourceRowCount = @SourceRowCount, @BronzeRowCount = NULL;')",
+                      "type": "Expression"
+                    }
+                  }
+                ],
+                "scriptBlockExecutionTimeout": "02:00:00"
+              }
+            }
+          ]
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        }
+      },
+      {
+        "name": "Validate_Source_Completeness",
+        "type": "Script",
+        "dependsOn": [
+          {
+            "activity": "Record_Source_Manifests",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "linkedService": {
+          "name": "WH_Elarwick_Reconciliation_Dev",
+          "properties": {
+            "annotations": [],
+            "type": "DataWarehouse",
+            "typeProperties": {
+              "endpoint": "kxme24s4ar5excpmug6oeu3a5a-2upkngedxxhebght4tvazxeofq.datawarehouse.fabric.microsoft.com",
+              "artifactId": "af68efe3-b674-4e5a-bf86-ab7ab1a9a5c9",
+              "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c"
+            }
+          }
+        },
+        "typeProperties": {
+          "scripts": [
+            {
+              "type": "NonQuery",
+              "text": {
+                "value": "@concat('IF DB_NAME() <> N''WH_Elarwick_Reconciliation_Dev'' THROW 51200, ''This activity can run only in WH_Elarwick_Reconciliation_Dev.'', 1;\n','DECLARE @CloseRunID varchar(36) = N''',replace(activity('Begin_Close').output.resultSets[0].rows[0].CloseRunID,'''',''''''),''';\nDECLARE @CloseAttemptID varchar(36) = N''',replace(activity('Begin_Close').output.resultSets[0].rows[0].CloseAttemptID,'''',''''''),''';\n','\nIF (SELECT COUNT_BIG(*) FROM dbo.Control_CloseSourceFiles WHERE CloseRunID = @CloseRunID AND CloseAttemptID = @CloseAttemptID) <> 4 THROW 51210, ''Expected exactly four source-file manifests.'', 1;\nIF NOT EXISTS (SELECT 1 FROM dbo.Control_CloseSourceFiles WHERE CloseRunID = @CloseRunID AND CloseAttemptID = @CloseAttemptID AND SourceRole = ''BANK_STATEMENT'' AND FileName = ''bank_statement.csv'') THROW 51211, ''Bank statement manifest is missing.'', 1;\nIF NOT EXISTS (SELECT 1 FROM dbo.Control_CloseSourceFiles WHERE CloseRunID = @CloseRunID AND CloseAttemptID = @CloseAttemptID AND SourceRole = ''GENERAL_LEDGER'' AND FileName = ''general_ledger.csv'') THROW 51212, ''General ledger manifest is missing.'', 1;\nIF NOT EXISTS (SELECT 1 FROM dbo.Control_CloseSourceFiles WHERE CloseRunID = @CloseRunID AND CloseAttemptID = @CloseAttemptID AND SourceRole = ''CHART_OF_ACCOUNTS'' AND FileName = ''chart_of_accounts.csv'') THROW 51213, ''Chart of accounts manifest is missing.'', 1;\nIF NOT EXISTS (SELECT 1 FROM dbo.Control_CloseSourceFiles WHERE CloseRunID = @CloseRunID AND CloseAttemptID = @CloseAttemptID AND SourceRole = ''ACCOUNT_MAPPING'' AND FileName = ''account_mapping.csv'') THROW 51214, ''Account mapping manifest is missing.'', 1;\nEXEC dbo.usp_RecordCloseValidation @CloseRunID = @CloseRunID, @CloseAttemptID = @CloseAttemptID, @ValidationCode = ''SOURCE_COMPLETENESS'', @ValidationResult = ''PASS'', @ExpectedValue = ''4 named source files'', @ActualValue = ''4 source manifests'', @EvidenceReference = ''NB_01_Ingest_Bronze_Dev'';\n')",
+                "type": "Expression"
+              }
+            }
+          ],
+          "scriptBlockExecutionTimeout": "02:00:00"
+        }
+      },
+      {
+        "name": "Run_Silver_Validation",
+        "type": "TridentNotebook",
+        "dependsOn": [
+          {
+            "activity": "Validate_Source_Completeness",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "typeProperties": {
+          "notebookId": "bc06c534-4b1e-4950-a282-6d30f6af2e71",
+          "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        }
+      },
+      {
+        "name": "Record_Data_Validation",
+        "type": "Script",
+        "dependsOn": [
+          {
+            "activity": "Run_Silver_Validation",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "linkedService": {
+          "name": "WH_Elarwick_Reconciliation_Dev",
+          "properties": {
+            "annotations": [],
+            "type": "DataWarehouse",
+            "typeProperties": {
+              "endpoint": "kxme24s4ar5excpmug6oeu3a5a-2upkngedxxhebght4tvazxeofq.datawarehouse.fabric.microsoft.com",
+              "artifactId": "af68efe3-b674-4e5a-bf86-ab7ab1a9a5c9",
+              "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c"
+            }
+          }
+        },
+        "typeProperties": {
+          "scripts": [
+            {
+              "type": "NonQuery",
+              "text": {
+                "value": "@concat('IF DB_NAME() <> N''WH_Elarwick_Reconciliation_Dev'' THROW 51200, ''This activity can run only in WH_Elarwick_Reconciliation_Dev.'', 1;\n','DECLARE @CloseRunID varchar(36) = N''',replace(activity('Begin_Close').output.resultSets[0].rows[0].CloseRunID,'''',''''''),''';\nDECLARE @CloseAttemptID varchar(36) = N''',replace(activity('Begin_Close').output.resultSets[0].rows[0].CloseAttemptID,'''',''''''),''';\n','DECLARE @FailedRowCount bigint = ',string(json(activity('Run_Silver_Validation').output.result.exitValue).FailedRowCount),'; DECLARE @QuarantinedRecordCount bigint = ',string(json(activity('Run_Silver_Validation').output.result.exitValue).QuarantinedRecordCount),'; DECLARE @QualityRuleCount int = ',string(json(activity('Run_Silver_Validation').output.result.exitValue).QualityRuleCount),'; DECLARE @ReportedStatus varchar(8) = N''',replace(json(activity('Run_Silver_Validation').output.result.exitValue).Status,'''',''''''),'''; DECLARE @ValidationRunID varchar(64) = N''',replace(json(activity('Run_Silver_Validation').output.result.exitValue).ValidationRunID,'''',''''''),'''; IF @QualityRuleCount <= 0 THROW 51215, ''Silver notebook returned no quality rules.'', 1; DECLARE @ValidationResult varchar(8) = CASE WHEN @FailedRowCount = 0 AND @QuarantinedRecordCount = 0 THEN ''PASS'' ELSE ''FAIL'' END; IF @ReportedStatus <> @ValidationResult THROW 51216, ''Silver notebook status does not match its quality counts.'', 1; EXEC dbo.usp_RecordCloseValidation @CloseRunID = @CloseRunID, @CloseAttemptID = @CloseAttemptID, @ValidationCode = ''DATA_VALIDATION'', @ValidationResult = @ValidationResult, @ExpectedValue = ''zero failed or quarantined rows'', @ActualValue = CONVERT(varchar(20), @FailedRowCount) + ''/'' + CONVERT(varchar(20), @QuarantinedRecordCount), @EvidenceReference = @ValidationRunID; IF @ValidationResult = ''FAIL'' THROW 51217, ''Silver data validation reported failed or quarantined records.'', 1;')",
+                "type": "Expression"
+              }
+            }
+          ],
+          "scriptBlockExecutionTimeout": "02:00:00"
+        }
+      },
+      {
+        "name": "Run_Reconciliation_Engine",
+        "type": "TridentNotebook",
+        "dependsOn": [
+          {
+            "activity": "Record_Data_Validation",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "typeProperties": {
+          "notebookId": "a6ede369-a7b6-4cd7-a869-89f324af1034",
+          "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c",
+          "parameters": {
+            "CloseRunID": {
+              "value": {
+                "value": "@activity('Begin_Close').output.resultSets[0].rows[0].CloseRunID",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "CloseAttemptID": {
+              "value": {
+                "value": "@activity('Begin_Close').output.resultSets[0].rows[0].CloseAttemptID",
+                "type": "Expression"
+              },
+              "type": "string"
+            }
+          }
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        }
+      },
+      {
+        "name": "Record_Reconciliation_Integrity",
+        "type": "Script",
+        "dependsOn": [
+          {
+            "activity": "Run_Reconciliation_Engine",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "linkedService": {
+          "name": "WH_Elarwick_Reconciliation_Dev",
+          "properties": {
+            "annotations": [],
+            "type": "DataWarehouse",
+            "typeProperties": {
+              "endpoint": "kxme24s4ar5excpmug6oeu3a5a-2upkngedxxhebght4tvazxeofq.datawarehouse.fabric.microsoft.com",
+              "artifactId": "af68efe3-b674-4e5a-bf86-ab7ab1a9a5c9",
+              "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c"
+            }
+          }
+        },
+        "typeProperties": {
+          "scripts": [
+            {
+              "type": "NonQuery",
+              "text": {
+                "value": "@concat('IF DB_NAME() <> N''WH_Elarwick_Reconciliation_Dev'' THROW 51200, ''This activity can run only in WH_Elarwick_Reconciliation_Dev.'', 1;\n','DECLARE @CloseRunID varchar(36) = N''',replace(activity('Begin_Close').output.resultSets[0].rows[0].CloseRunID,'''',''''''),''';\nDECLARE @CloseAttemptID varchar(36) = N''',replace(activity('Begin_Close').output.resultSets[0].rows[0].CloseAttemptID,'''',''''''),''';\n','EXEC dbo.usp_RecordCloseValidation @CloseRunID = @CloseRunID, @CloseAttemptID = @CloseAttemptID, @ValidationCode = ''RECONCILIATION_INTEGRITY'', @ValidationResult = ''PASS'', @ExpectedValue = ''Notebook assertions passed'', @ActualValue = ''NB_03_Reconciliation_Engine_Dev completed'', @EvidenceReference = ''',pipeline().RunId,''';')",
+                "type": "Expression"
+              }
+            }
+          ],
+          "scriptBlockExecutionTimeout": "02:00:00"
+        }
+      },
+      {
+        "name": "Copy_FactReconciliationResults",
+        "type": "Copy",
+        "dependsOn": [
+          {
+            "activity": "Record_Reconciliation_Integrity",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "source": {
+            "type": "LakehouseTableSource",
+            "datasetSettings": {
+              "annotations": [],
+              "linkedService": {
+                "name": "LH_Elarwick_Reconciliation_Dev",
+                "properties": {
+                  "annotations": [],
+                  "type": "Lakehouse",
+                  "typeProperties": {
+                    "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c",
+                    "artifactId": "fde2d467-db15-4156-9ae9-4ebc889e90e4",
+                    "rootFolder": "Tables"
+                  }
+                }
+              },
+              "type": "LakehouseTable",
+              "schema": [],
+              "typeProperties": {
+                "schema": "dbo",
+                "table": "gold_reconciliationresults"
+              }
+            }
+          },
+          "sink": {
+            "type": "DataWarehouseSink",
+            "allowCopyCommand": true,
+            "copyCommandSettings": {},
+            "writeBehavior": "Insert",
+            "tableOption": "autoCreate",
+            "datasetSettings": {
+              "annotations": [],
+              "linkedService": {
+                "name": "WH_Elarwick_Reconciliation_Dev",
+                "properties": {
+                  "annotations": [],
+                  "type": "DataWarehouse",
+                  "typeProperties": {
+                    "endpoint": "kxme24s4ar5excpmug6oeu3a5a-2upkngedxxhebght4tvazxeofq.datawarehouse.fabric.microsoft.com",
+                    "artifactId": "af68efe3-b674-4e5a-bf86-ab7ab1a9a5c9",
+                    "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c"
+                  }
+                }
+              },
+              "type": "DataWarehouseTable",
+              "schema": [],
+              "typeProperties": {
+                "schema": "dbo",
+                "table": "FactReconciliationResults"
+              }
+            }
+          },
+          "enableStaging": true,
+          "translator": {
+            "type": "TabularTranslator",
+            "mappings": [
+              {
+                "source": {
+                  "name": "NormalizedReference",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "NormalizedReference",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                }
+              },
+              {
+                "source": {
+                  "name": "BankTransactionIDs",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "BankTransactionIDs",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                }
+              },
+              {
+                "source": {
+                  "name": "JournalEntryIDs",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "JournalEntryIDs",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                }
+              },
+              {
+                "source": {
+                  "name": "BankSignedAmount",
+                  "type": "Decimal",
+                  "physicalType": "decimal",
+                  "precision": 29,
+                  "scale": 2
+                },
+                "sink": {
+                  "name": "BankSignedAmount",
+                  "physicalType": "decimal",
+                  "precision": 29,
+                  "scale": 2
+                }
+              },
+              {
+                "source": {
+                  "name": "GLSignedAmount",
+                  "type": "Decimal",
+                  "physicalType": "decimal",
+                  "precision": 38,
+                  "scale": 2
+                },
+                "sink": {
+                  "name": "GLSignedAmount",
+                  "physicalType": "decimal",
+                  "precision": 38,
+                  "scale": 2
+                }
+              },
+              {
+                "source": {
+                  "name": "AmountDifference",
+                  "type": "Decimal",
+                  "physicalType": "decimal",
+                  "precision": 38,
+                  "scale": 2
+                },
+                "sink": {
+                  "name": "AmountDifference",
+                  "physicalType": "decimal",
+                  "precision": 38,
+                  "scale": 2
+                }
+              },
+              {
+                "source": {
+                  "name": "BankFirstDate",
+                  "type": "Date",
+                  "physicalType": "date"
+                },
+                "sink": {
+                  "name": "BankFirstDate",
+                  "physicalType": "date"
+                }
+              },
+              {
+                "source": {
+                  "name": "BankLastDate",
+                  "type": "Date",
+                  "physicalType": "date"
+                },
+                "sink": {
+                  "name": "BankLastDate",
+                  "physicalType": "date"
+                }
+              },
+              {
+                "source": {
+                  "name": "GLFirstDate",
+                  "type": "Date",
+                  "physicalType": "date"
+                },
+                "sink": {
+                  "name": "GLFirstDate",
+                  "physicalType": "date"
+                }
+              },
+              {
+                "source": {
+                  "name": "GLLastDate",
+                  "type": "Date",
+                  "physicalType": "date"
+                },
+                "sink": {
+                  "name": "GLLastDate",
+                  "physicalType": "date"
+                }
+              },
+              {
+                "source": {
+                  "name": "DateDifferenceDays",
+                  "type": "Int32",
+                  "physicalType": "integer"
+                },
+                "sink": {
+                  "name": "DateDifferenceDays",
+                  "physicalType": "int"
+                }
+              },
+              {
+                "source": {
+                  "name": "BankTransactionCount",
+                  "type": "Int64",
+                  "physicalType": "long"
+                },
+                "sink": {
+                  "name": "BankTransactionCount",
+                  "physicalType": "bigint"
+                }
+              },
+              {
+                "source": {
+                  "name": "GLEntryCount",
+                  "type": "Int64",
+                  "physicalType": "long"
+                },
+                "sink": {
+                  "name": "GLEntryCount",
+                  "physicalType": "bigint"
+                }
+              },
+              {
+                "source": {
+                  "name": "ReconciliationStatus",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "ReconciliationStatus",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                }
+              },
+              {
+                "source": {
+                  "name": "MatchMethod",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "MatchMethod",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                }
+              },
+              {
+                "source": {
+                  "name": "ExceptionReason",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "ExceptionReason",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                }
+              },
+              {
+                "source": {
+                  "name": "ReconciliationRunID",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "ReconciliationRunID",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                }
+              },
+              {
+                "source": {
+                  "name": "ProcessedAt",
+                  "type": "DateTime",
+                  "physicalType": "timestamp"
+                },
+                "sink": {
+                  "name": "ProcessedAt",
+                  "physicalType": "datetime2",
+                  "precision": 6
+                }
+              },
+              {
+                "source": {
+                  "name": "CloseRunID",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "CloseRunID",
+                  "physicalType": "varchar",
+                  "length": "36"
+                }
+              },
+              {
+                "source": {
+                  "name": "CloseAttemptID",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "CloseAttemptID",
+                  "physicalType": "varchar",
+                  "length": "36"
+                }
+              }
+            ],
+            "typeConversion": true,
+            "typeConversionSettings": {
+              "allowDataTruncation": false,
+              "treatBooleanAsNumber": false
+            }
+          }
+        }
+      },
+      {
+        "name": "Record_Load_FactReconciliationResults",
+        "type": "Script",
+        "dependsOn": [
+          {
+            "activity": "Copy_FactReconciliationResults",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "linkedService": {
+          "name": "WH_Elarwick_Reconciliation_Dev",
+          "properties": {
+            "annotations": [],
+            "type": "DataWarehouse",
+            "typeProperties": {
+              "endpoint": "kxme24s4ar5excpmug6oeu3a5a-2upkngedxxhebght4tvazxeofq.datawarehouse.fabric.microsoft.com",
+              "artifactId": "af68efe3-b674-4e5a-bf86-ab7ab1a9a5c9",
+              "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c"
+            }
+          }
+        },
+        "typeProperties": {
+          "scripts": [
+            {
+              "type": "NonQuery",
+              "text": {
+                "value": "@concat('IF DB_NAME() <> N''WH_Elarwick_Reconciliation_Dev'' THROW 51200, ''This activity can run only in WH_Elarwick_Reconciliation_Dev.'', 1;\n','DECLARE @CloseRunID varchar(36) = N''',replace(activity('Begin_Close').output.resultSets[0].rows[0].CloseRunID,'''',''''''),''';\nDECLARE @CloseAttemptID varchar(36) = N''',replace(activity('Begin_Close').output.resultSets[0].rows[0].CloseAttemptID,'''',''''''),''';\n','DECLARE @ExpectedRowCount bigint = ',string(activity('Copy_FactReconciliationResults').output.rowsRead),'; DECLARE @StagedRowCount bigint = ',string(activity('Copy_FactReconciliationResults').output.rowsCopied),'; EXEC dbo.usp_RecordCloseTableLoad @CloseRunID = @CloseRunID, @CloseAttemptID = @CloseAttemptID, @TargetTable = ''dbo.FactReconciliationResults'', @LoadStatus = ''PERSISTED'', @ExpectedRowCount = @ExpectedRowCount, @StagedRowCount = @StagedRowCount;')",
+                "type": "Expression"
+              }
+            }
+          ],
+          "scriptBlockExecutionTimeout": "02:00:00"
+        }
+      },
+      {
+        "name": "Copy_FactReconciliationExceptions",
+        "type": "Copy",
+        "dependsOn": [
+          {
+            "activity": "Record_Load_FactReconciliationResults",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "source": {
+            "type": "LakehouseTableSource",
+            "datasetSettings": {
+              "annotations": [],
+              "linkedService": {
+                "name": "LH_Elarwick_Reconciliation_Dev",
+                "properties": {
+                  "annotations": [],
+                  "type": "Lakehouse",
+                  "typeProperties": {
+                    "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c",
+                    "artifactId": "fde2d467-db15-4156-9ae9-4ebc889e90e4",
+                    "rootFolder": "Tables"
+                  }
+                }
+              },
+              "type": "LakehouseTable",
+              "schema": [],
+              "typeProperties": {
+                "schema": "dbo",
+                "table": "gold_reconciliationexceptions"
+              }
+            }
+          },
+          "sink": {
+            "type": "DataWarehouseSink",
+            "allowCopyCommand": true,
+            "copyCommandSettings": {},
+            "writeBehavior": "Insert",
+            "tableOption": "autoCreate",
+            "datasetSettings": {
+              "annotations": [],
+              "linkedService": {
+                "name": "WH_Elarwick_Reconciliation_Dev",
+                "properties": {
+                  "annotations": [],
+                  "type": "DataWarehouse",
+                  "typeProperties": {
+                    "endpoint": "kxme24s4ar5excpmug6oeu3a5a-2upkngedxxhebght4tvazxeofq.datawarehouse.fabric.microsoft.com",
+                    "artifactId": "af68efe3-b674-4e5a-bf86-ab7ab1a9a5c9",
+                    "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c"
+                  }
+                }
+              },
+              "type": "DataWarehouseTable",
+              "schema": [],
+              "typeProperties": {
+                "schema": "dbo",
+                "table": "FactReconciliationExceptions"
+              }
+            }
+          },
+          "enableStaging": true,
+          "translator": {
+            "type": "TabularTranslator",
+            "mappings": [
+              {
+                "source": {
+                  "name": "NormalizedReference",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "NormalizedReference",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                }
+              },
+              {
+                "source": {
+                  "name": "BankTransactionIDs",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "BankTransactionIDs",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                }
+              },
+              {
+                "source": {
+                  "name": "JournalEntryIDs",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "JournalEntryIDs",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                }
+              },
+              {
+                "source": {
+                  "name": "BankSignedAmount",
+                  "type": "Decimal",
+                  "physicalType": "decimal",
+                  "precision": 29,
+                  "scale": 2
+                },
+                "sink": {
+                  "name": "BankSignedAmount",
+                  "physicalType": "decimal",
+                  "precision": 29,
+                  "scale": 2
+                }
+              },
+              {
+                "source": {
+                  "name": "GLSignedAmount",
+                  "type": "Decimal",
+                  "physicalType": "decimal",
+                  "precision": 38,
+                  "scale": 2
+                },
+                "sink": {
+                  "name": "GLSignedAmount",
+                  "physicalType": "decimal",
+                  "precision": 38,
+                  "scale": 2
+                }
+              },
+              {
+                "source": {
+                  "name": "AmountDifference",
+                  "type": "Decimal",
+                  "physicalType": "decimal",
+                  "precision": 38,
+                  "scale": 2
+                },
+                "sink": {
+                  "name": "AmountDifference",
+                  "physicalType": "decimal",
+                  "precision": 38,
+                  "scale": 2
+                }
+              },
+              {
+                "source": {
+                  "name": "BankFirstDate",
+                  "type": "Date",
+                  "physicalType": "date"
+                },
+                "sink": {
+                  "name": "BankFirstDate",
+                  "physicalType": "date"
+                }
+              },
+              {
+                "source": {
+                  "name": "BankLastDate",
+                  "type": "Date",
+                  "physicalType": "date"
+                },
+                "sink": {
+                  "name": "BankLastDate",
+                  "physicalType": "date"
+                }
+              },
+              {
+                "source": {
+                  "name": "GLFirstDate",
+                  "type": "Date",
+                  "physicalType": "date"
+                },
+                "sink": {
+                  "name": "GLFirstDate",
+                  "physicalType": "date"
+                }
+              },
+              {
+                "source": {
+                  "name": "GLLastDate",
+                  "type": "Date",
+                  "physicalType": "date"
+                },
+                "sink": {
+                  "name": "GLLastDate",
+                  "physicalType": "date"
+                }
+              },
+              {
+                "source": {
+                  "name": "DateDifferenceDays",
+                  "type": "Int32",
+                  "physicalType": "integer"
+                },
+                "sink": {
+                  "name": "DateDifferenceDays",
+                  "physicalType": "int"
+                }
+              },
+              {
+                "source": {
+                  "name": "BankTransactionCount",
+                  "type": "Int64",
+                  "physicalType": "long"
+                },
+                "sink": {
+                  "name": "BankTransactionCount",
+                  "physicalType": "bigint"
+                }
+              },
+              {
+                "source": {
+                  "name": "GLEntryCount",
+                  "type": "Int64",
+                  "physicalType": "long"
+                },
+                "sink": {
+                  "name": "GLEntryCount",
+                  "physicalType": "bigint"
+                }
+              },
+              {
+                "source": {
+                  "name": "ReconciliationStatus",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "ReconciliationStatus",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                }
+              },
+              {
+                "source": {
+                  "name": "MatchMethod",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "MatchMethod",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                }
+              },
+              {
+                "source": {
+                  "name": "ExceptionReason",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "ExceptionReason",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                }
+              },
+              {
+                "source": {
+                  "name": "ReconciliationRunID",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "ReconciliationRunID",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                }
+              },
+              {
+                "source": {
+                  "name": "ProcessedAt",
+                  "type": "DateTime",
+                  "physicalType": "timestamp"
+                },
+                "sink": {
+                  "name": "ProcessedAt",
+                  "physicalType": "datetime2",
+                  "precision": 6
+                }
+              },
+              {
+                "source": {
+                  "name": "CloseExceptionID",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "CloseExceptionID",
+                  "physicalType": "varchar",
+                  "length": "36"
+                }
+              },
+              {
+                "source": {
+                  "name": "CloseRunID",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "CloseRunID",
+                  "physicalType": "varchar",
+                  "length": "36"
+                }
+              },
+              {
+                "source": {
+                  "name": "CloseAttemptID",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "CloseAttemptID",
+                  "physicalType": "varchar",
+                  "length": "36"
+                }
+              }
+            ],
+            "typeConversion": true,
+            "typeConversionSettings": {
+              "allowDataTruncation": false,
+              "treatBooleanAsNumber": false
+            }
+          }
+        }
+      },
+      {
+        "name": "Record_Load_FactReconciliationExceptions",
+        "type": "Script",
+        "dependsOn": [
+          {
+            "activity": "Copy_FactReconciliationExceptions",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "linkedService": {
+          "name": "WH_Elarwick_Reconciliation_Dev",
+          "properties": {
+            "annotations": [],
+            "type": "DataWarehouse",
+            "typeProperties": {
+              "endpoint": "kxme24s4ar5excpmug6oeu3a5a-2upkngedxxhebght4tvazxeofq.datawarehouse.fabric.microsoft.com",
+              "artifactId": "af68efe3-b674-4e5a-bf86-ab7ab1a9a5c9",
+              "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c"
+            }
+          }
+        },
+        "typeProperties": {
+          "scripts": [
+            {
+              "type": "NonQuery",
+              "text": {
+                "value": "@concat('IF DB_NAME() <> N''WH_Elarwick_Reconciliation_Dev'' THROW 51200, ''This activity can run only in WH_Elarwick_Reconciliation_Dev.'', 1;\n','DECLARE @CloseRunID varchar(36) = N''',replace(activity('Begin_Close').output.resultSets[0].rows[0].CloseRunID,'''',''''''),''';\nDECLARE @CloseAttemptID varchar(36) = N''',replace(activity('Begin_Close').output.resultSets[0].rows[0].CloseAttemptID,'''',''''''),''';\n','DECLARE @ExpectedRowCount bigint = ',string(activity('Copy_FactReconciliationExceptions').output.rowsRead),'; DECLARE @StagedRowCount bigint = ',string(activity('Copy_FactReconciliationExceptions').output.rowsCopied),'; EXEC dbo.usp_RecordCloseTableLoad @CloseRunID = @CloseRunID, @CloseAttemptID = @CloseAttemptID, @TargetTable = ''dbo.FactReconciliationExceptions'', @LoadStatus = ''PERSISTED'', @ExpectedRowCount = @ExpectedRowCount, @StagedRowCount = @StagedRowCount;')",
+                "type": "Expression"
+              }
+            }
+          ],
+          "scriptBlockExecutionTimeout": "02:00:00"
+        }
+      },
+      {
+        "name": "Get_Close_Exceptions",
+        "type": "Script",
+        "dependsOn": [
+          {
+            "activity": "Record_Load_FactReconciliationExceptions",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "linkedService": {
+          "name": "WH_Elarwick_Reconciliation_Dev",
+          "properties": {
+            "annotations": [],
+            "type": "DataWarehouse",
+            "typeProperties": {
+              "endpoint": "kxme24s4ar5excpmug6oeu3a5a-2upkngedxxhebght4tvazxeofq.datawarehouse.fabric.microsoft.com",
+              "artifactId": "af68efe3-b674-4e5a-bf86-ab7ab1a9a5c9",
+              "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c"
+            }
+          }
+        },
+        "typeProperties": {
+          "scripts": [
+            {
+              "type": "Query",
+              "text": {
+                "value": "@concat('IF DB_NAME() <> N''WH_Elarwick_Reconciliation_Dev'' THROW 51200, ''This activity can run only in WH_Elarwick_Reconciliation_Dev.'', 1;\n','DECLARE @CloseRunID varchar(36) = N''',replace(activity('Begin_Close').output.resultSets[0].rows[0].CloseRunID,'''',''''''),''';\nDECLARE @CloseAttemptID varchar(36) = N''',replace(activity('Begin_Close').output.resultSets[0].rows[0].CloseAttemptID,'''',''''''),''';\n','SELECT CloseExceptionID FROM dbo.FactReconciliationExceptions WHERE CloseRunID = @CloseRunID AND CloseAttemptID = @CloseAttemptID ORDER BY CloseExceptionID;')",
+                "type": "Expression"
+              }
+            }
+          ],
+          "scriptBlockExecutionTimeout": "02:00:00"
+        }
+      },
+      {
+        "name": "Register_Close_Exceptions",
+        "type": "ForEach",
+        "dependsOn": [
+          {
+            "activity": "Get_Close_Exceptions",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "typeProperties": {
+          "isSequential": true,
+          "items": {
+            "value": "@activity('Get_Close_Exceptions').output.resultSets[0].rows",
+            "type": "Expression"
+          },
+          "activities": [
+            {
+              "name": "Register_One_Close_Exception",
+              "type": "Script",
+              "dependsOn": [],
+              "policy": {
+                "timeout": "0.12:00:00",
+                "retry": 0,
+                "retryIntervalInSeconds": 30,
+                "secureOutput": false,
+                "secureInput": false
+              },
+              "linkedService": {
+                "name": "WH_Elarwick_Reconciliation_Dev",
+                "properties": {
+                  "annotations": [],
+                  "type": "DataWarehouse",
+                  "typeProperties": {
+                    "endpoint": "kxme24s4ar5excpmug6oeu3a5a-2upkngedxxhebght4tvazxeofq.datawarehouse.fabric.microsoft.com",
+                    "artifactId": "af68efe3-b674-4e5a-bf86-ab7ab1a9a5c9",
+                    "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c"
+                  }
+                }
+              },
+              "typeProperties": {
+                "scripts": [
+                  {
+                    "type": "NonQuery",
+                    "text": {
+                      "value": "@concat('IF DB_NAME() <> N''WH_Elarwick_Reconciliation_Dev'' THROW 51200, ''This activity can run only in WH_Elarwick_Reconciliation_Dev.'', 1;\n','DECLARE @CloseRunID varchar(36) = N''',replace(activity('Begin_Close').output.resultSets[0].rows[0].CloseRunID,'''',''''''),''';\nDECLARE @CloseAttemptID varchar(36) = N''',replace(activity('Begin_Close').output.resultSets[0].rows[0].CloseAttemptID,'''',''''''),''';\n','DECLARE @CloseExceptionID varchar(36) = N''',replace(item().CloseExceptionID,'''',''''''),'''; EXEC dbo.usp_RegisterCloseException @CloseExceptionID = @CloseExceptionID, @CloseRunID = @CloseRunID, @CloseAttemptID = @CloseAttemptID, @ExceptionLocator = @CloseExceptionID, @ExceptionReason = NULL, @ExceptionStatus = ''OPEN'';')",
+                      "type": "Expression"
+                    }
+                  }
+                ],
+                "scriptBlockExecutionTimeout": "02:00:00"
+              }
+            }
+          ]
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        }
+      },
+      {
+        "name": "Copy_FactReconciliationSummary",
+        "type": "Copy",
+        "dependsOn": [
+          {
+            "activity": "Register_Close_Exceptions",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "source": {
+            "type": "LakehouseTableSource",
+            "datasetSettings": {
+              "annotations": [],
+              "linkedService": {
+                "name": "LH_Elarwick_Reconciliation_Dev",
+                "properties": {
+                  "annotations": [],
+                  "type": "Lakehouse",
+                  "typeProperties": {
+                    "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c",
+                    "artifactId": "fde2d467-db15-4156-9ae9-4ebc889e90e4",
+                    "rootFolder": "Tables"
+                  }
+                }
+              },
+              "type": "LakehouseTable",
+              "schema": [],
+              "typeProperties": {
+                "schema": "dbo",
+                "table": "gold_reconciliationsummary"
+              }
+            }
+          },
+          "sink": {
+            "type": "DataWarehouseSink",
+            "allowCopyCommand": true,
+            "copyCommandSettings": {},
+            "writeBehavior": "Insert",
+            "tableOption": "autoCreate",
+            "datasetSettings": {
+              "annotations": [],
+              "linkedService": {
+                "name": "WH_Elarwick_Reconciliation_Dev",
+                "properties": {
+                  "annotations": [],
+                  "type": "DataWarehouse",
+                  "typeProperties": {
+                    "endpoint": "kxme24s4ar5excpmug6oeu3a5a-2upkngedxxhebght4tvazxeofq.datawarehouse.fabric.microsoft.com",
+                    "artifactId": "af68efe3-b674-4e5a-bf86-ab7ab1a9a5c9",
+                    "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c"
+                  }
+                }
+              },
+              "type": "DataWarehouseTable",
+              "schema": [],
+              "typeProperties": {
+                "schema": "dbo",
+                "table": "FactReconciliationSummary"
+              }
+            }
+          },
+          "enableStaging": true,
+          "translator": {
+            "type": "TabularTranslator",
+            "mappings": [
+              {
+                "source": {
+                  "name": "ReconciliationStatus",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "ReconciliationStatus",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                }
+              },
+              {
+                "source": {
+                  "name": "ReferenceGroupCount",
+                  "type": "Int64",
+                  "physicalType": "long"
+                },
+                "sink": {
+                  "name": "ReferenceGroupCount",
+                  "physicalType": "bigint"
+                }
+              },
+              {
+                "source": {
+                  "name": "BankTransactionCount",
+                  "type": "Int64",
+                  "physicalType": "long"
+                },
+                "sink": {
+                  "name": "BankTransactionCount",
+                  "physicalType": "bigint"
+                }
+              },
+              {
+                "source": {
+                  "name": "GLEntryCount",
+                  "type": "Int64",
+                  "physicalType": "long"
+                },
+                "sink": {
+                  "name": "GLEntryCount",
+                  "physicalType": "bigint"
+                }
+              },
+              {
+                "source": {
+                  "name": "ProcessedAt",
+                  "type": "DateTime",
+                  "physicalType": "timestamp"
+                },
+                "sink": {
+                  "name": "ProcessedAt",
+                  "physicalType": "datetime2",
+                  "precision": 6
+                }
+              },
+              {
+                "source": {
+                  "name": "CloseRunID",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "CloseRunID",
+                  "physicalType": "varchar",
+                  "length": "36"
+                }
+              },
+              {
+                "source": {
+                  "name": "CloseAttemptID",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "CloseAttemptID",
+                  "physicalType": "varchar",
+                  "length": "36"
+                }
+              }
+            ],
+            "typeConversion": true,
+            "typeConversionSettings": {
+              "allowDataTruncation": false,
+              "treatBooleanAsNumber": false
+            }
+          }
+        }
+      },
+      {
+        "name": "Record_Load_FactReconciliationSummary",
+        "type": "Script",
+        "dependsOn": [
+          {
+            "activity": "Copy_FactReconciliationSummary",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "linkedService": {
+          "name": "WH_Elarwick_Reconciliation_Dev",
+          "properties": {
+            "annotations": [],
+            "type": "DataWarehouse",
+            "typeProperties": {
+              "endpoint": "kxme24s4ar5excpmug6oeu3a5a-2upkngedxxhebght4tvazxeofq.datawarehouse.fabric.microsoft.com",
+              "artifactId": "af68efe3-b674-4e5a-bf86-ab7ab1a9a5c9",
+              "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c"
+            }
+          }
+        },
+        "typeProperties": {
+          "scripts": [
+            {
+              "type": "NonQuery",
+              "text": {
+                "value": "@concat('IF DB_NAME() <> N''WH_Elarwick_Reconciliation_Dev'' THROW 51200, ''This activity can run only in WH_Elarwick_Reconciliation_Dev.'', 1;\n','DECLARE @CloseRunID varchar(36) = N''',replace(activity('Begin_Close').output.resultSets[0].rows[0].CloseRunID,'''',''''''),''';\nDECLARE @CloseAttemptID varchar(36) = N''',replace(activity('Begin_Close').output.resultSets[0].rows[0].CloseAttemptID,'''',''''''),''';\n','DECLARE @ExpectedRowCount bigint = ',string(activity('Copy_FactReconciliationSummary').output.rowsRead),'; DECLARE @StagedRowCount bigint = ',string(activity('Copy_FactReconciliationSummary').output.rowsCopied),'; EXEC dbo.usp_RecordCloseTableLoad @CloseRunID = @CloseRunID, @CloseAttemptID = @CloseAttemptID, @TargetTable = ''dbo.FactReconciliationSummary'', @LoadStatus = ''PERSISTED'', @ExpectedRowCount = @ExpectedRowCount, @StagedRowCount = @StagedRowCount;')",
+                "type": "Expression"
+              }
+            }
+          ],
+          "scriptBlockExecutionTimeout": "02:00:00"
+        }
+      },
+      {
+        "name": "Copy_DimAccountMapping",
+        "type": "Copy",
+        "dependsOn": [
+          {
+            "activity": "Record_Load_FactReconciliationSummary",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "source": {
+            "type": "LakehouseTableSource",
+            "datasetSettings": {
+              "annotations": [],
+              "linkedService": {
+                "name": "LH_Elarwick_Reconciliation_Dev",
+                "properties": {
+                  "annotations": [],
+                  "type": "Lakehouse",
+                  "typeProperties": {
+                    "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c",
+                    "artifactId": "fde2d467-db15-4156-9ae9-4ebc889e90e4",
+                    "rootFolder": "Tables"
+                  }
+                }
+              },
+              "type": "LakehouseTable",
+              "schema": [],
+              "typeProperties": {
+                "schema": "dbo",
+                "table": "dim_accountmapping"
+              }
+            }
+          },
+          "sink": {
+            "type": "DataWarehouseSink",
+            "allowCopyCommand": true,
+            "copyCommandSettings": {},
+            "writeBehavior": "Insert",
+            "tableOption": "autoCreate",
+            "datasetSettings": {
+              "annotations": [],
+              "linkedService": {
+                "name": "WH_Elarwick_Reconciliation_Dev",
+                "properties": {
+                  "annotations": [],
+                  "type": "DataWarehouse",
+                  "typeProperties": {
+                    "endpoint": "kxme24s4ar5excpmug6oeu3a5a-2upkngedxxhebght4tvazxeofq.datawarehouse.fabric.microsoft.com",
+                    "artifactId": "af68efe3-b674-4e5a-bf86-ab7ab1a9a5c9",
+                    "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c"
+                  }
+                }
+              },
+              "type": "DataWarehouseTable",
+              "schema": [],
+              "typeProperties": {
+                "schema": "dbo",
+                "table": "DimAccountMapping"
+              }
+            }
+          },
+          "enableStaging": true,
+          "translator": {
+            "type": "TabularTranslator",
+            "mappings": [
+              {
+                "source": {
+                  "name": "SourceSystem",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "SourceSystem",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                }
+              },
+              {
+                "source": {
+                  "name": "SourceAccountCode",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "SourceAccountCode",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                }
+              },
+              {
+                "source": {
+                  "name": "TargetAccountID",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "TargetAccountID",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                }
+              },
+              {
+                "source": {
+                  "name": "EffectiveFrom",
+                  "type": "Date",
+                  "physicalType": "date"
+                },
+                "sink": {
+                  "name": "EffectiveFrom",
+                  "physicalType": "date"
+                }
+              },
+              {
+                "source": {
+                  "name": "EffectiveTo",
+                  "type": "Date",
+                  "physicalType": "date"
+                },
+                "sink": {
+                  "name": "EffectiveTo",
+                  "physicalType": "date"
+                }
+              },
+              {
+                "source": {
+                  "name": "BatchID",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "BatchID",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                }
+              },
+              {
+                "source": {
+                  "name": "SourceFileName",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "SourceFileName",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                }
+              },
+              {
+                "source": {
+                  "name": "SourceFileHash",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "SourceFileHash",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                }
+              },
+              {
+                "source": {
+                  "name": "IngestedAt",
+                  "type": "DateTime",
+                  "physicalType": "timestamp"
+                },
+                "sink": {
+                  "name": "IngestedAt",
+                  "physicalType": "datetime2",
+                  "precision": 6
+                }
+              },
+              {
+                "source": {
+                  "name": "SourceRowHash",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "SourceRowHash",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                }
+              },
+              {
+                "source": {
+                  "name": "CloseRunID",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "CloseRunID",
+                  "physicalType": "varchar",
+                  "length": "36"
+                }
+              },
+              {
+                "source": {
+                  "name": "CloseAttemptID",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "CloseAttemptID",
+                  "physicalType": "varchar",
+                  "length": "36"
+                }
+              }
+            ],
+            "typeConversion": true,
+            "typeConversionSettings": {
+              "allowDataTruncation": false,
+              "treatBooleanAsNumber": false
+            }
+          }
+        }
+      },
+      {
+        "name": "Record_Load_DimAccountMapping",
+        "type": "Script",
+        "dependsOn": [
+          {
+            "activity": "Copy_DimAccountMapping",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "linkedService": {
+          "name": "WH_Elarwick_Reconciliation_Dev",
+          "properties": {
+            "annotations": [],
+            "type": "DataWarehouse",
+            "typeProperties": {
+              "endpoint": "kxme24s4ar5excpmug6oeu3a5a-2upkngedxxhebght4tvazxeofq.datawarehouse.fabric.microsoft.com",
+              "artifactId": "af68efe3-b674-4e5a-bf86-ab7ab1a9a5c9",
+              "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c"
+            }
+          }
+        },
+        "typeProperties": {
+          "scripts": [
+            {
+              "type": "NonQuery",
+              "text": {
+                "value": "@concat('IF DB_NAME() <> N''WH_Elarwick_Reconciliation_Dev'' THROW 51200, ''This activity can run only in WH_Elarwick_Reconciliation_Dev.'', 1;\n','DECLARE @CloseRunID varchar(36) = N''',replace(activity('Begin_Close').output.resultSets[0].rows[0].CloseRunID,'''',''''''),''';\nDECLARE @CloseAttemptID varchar(36) = N''',replace(activity('Begin_Close').output.resultSets[0].rows[0].CloseAttemptID,'''',''''''),''';\n','DECLARE @ExpectedRowCount bigint = ',string(activity('Copy_DimAccountMapping').output.rowsRead),'; DECLARE @StagedRowCount bigint = ',string(activity('Copy_DimAccountMapping').output.rowsCopied),'; EXEC dbo.usp_RecordCloseTableLoad @CloseRunID = @CloseRunID, @CloseAttemptID = @CloseAttemptID, @TargetTable = ''dbo.DimAccountMapping'', @LoadStatus = ''PERSISTED'', @ExpectedRowCount = @ExpectedRowCount, @StagedRowCount = @StagedRowCount;')",
+                "type": "Expression"
+              }
+            }
+          ],
+          "scriptBlockExecutionTimeout": "02:00:00"
+        }
+      },
+      {
+        "name": "Copy_DimChartOfAccounts",
+        "type": "Copy",
+        "dependsOn": [
+          {
+            "activity": "Record_Load_DimAccountMapping",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "source": {
+            "type": "LakehouseTableSource",
+            "datasetSettings": {
+              "annotations": [],
+              "linkedService": {
+                "name": "LH_Elarwick_Reconciliation_Dev",
+                "properties": {
+                  "annotations": [],
+                  "type": "Lakehouse",
+                  "typeProperties": {
+                    "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c",
+                    "artifactId": "fde2d467-db15-4156-9ae9-4ebc889e90e4",
+                    "rootFolder": "Tables"
+                  }
+                }
+              },
+              "type": "LakehouseTable",
+              "schema": [],
+              "typeProperties": {
+                "schema": "dbo",
+                "table": "dim_chartofaccounts"
+              }
+            }
+          },
+          "sink": {
+            "type": "DataWarehouseSink",
+            "allowCopyCommand": true,
+            "copyCommandSettings": {},
+            "writeBehavior": "Insert",
+            "tableOption": "autoCreate",
+            "datasetSettings": {
+              "annotations": [],
+              "linkedService": {
+                "name": "WH_Elarwick_Reconciliation_Dev",
+                "properties": {
+                  "annotations": [],
+                  "type": "DataWarehouse",
+                  "typeProperties": {
+                    "endpoint": "kxme24s4ar5excpmug6oeu3a5a-2upkngedxxhebght4tvazxeofq.datawarehouse.fabric.microsoft.com",
+                    "artifactId": "af68efe3-b674-4e5a-bf86-ab7ab1a9a5c9",
+                    "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c"
+                  }
+                }
+              },
+              "type": "DataWarehouseTable",
+              "schema": [],
+              "typeProperties": {
+                "schema": "dbo",
+                "table": "DimChartOfAccounts"
+              }
+            }
+          },
+          "enableStaging": true,
+          "translator": {
+            "type": "TabularTranslator",
+            "mappings": [
+              {
+                "source": {
+                  "name": "AccountID",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "AccountID",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                }
+              },
+              {
+                "source": {
+                  "name": "AccountCode",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "AccountCode",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                }
+              },
+              {
+                "source": {
+                  "name": "AccountName",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "AccountName",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                }
+              },
+              {
+                "source": {
+                  "name": "AccountType",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "AccountType",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                }
+              },
+              {
+                "source": {
+                  "name": "IsActive",
+                  "type": "Boolean",
+                  "physicalType": "boolean"
+                },
+                "sink": {
+                  "name": "IsActive",
+                  "physicalType": "bit"
+                }
+              },
+              {
+                "source": {
+                  "name": "BatchID",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "BatchID",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                }
+              },
+              {
+                "source": {
+                  "name": "SourceFileName",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "SourceFileName",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                }
+              },
+              {
+                "source": {
+                  "name": "SourceFileHash",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "SourceFileHash",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                }
+              },
+              {
+                "source": {
+                  "name": "IngestedAt",
+                  "type": "DateTime",
+                  "physicalType": "timestamp"
+                },
+                "sink": {
+                  "name": "IngestedAt",
+                  "physicalType": "datetime2",
+                  "precision": 6
+                }
+              },
+              {
+                "source": {
+                  "name": "SourceRowHash",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "SourceRowHash",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                }
+              },
+              {
+                "source": {
+                  "name": "CloseRunID",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "CloseRunID",
+                  "physicalType": "varchar",
+                  "length": "36"
+                }
+              },
+              {
+                "source": {
+                  "name": "CloseAttemptID",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "CloseAttemptID",
+                  "physicalType": "varchar",
+                  "length": "36"
+                }
+              }
+            ],
+            "typeConversion": true,
+            "typeConversionSettings": {
+              "allowDataTruncation": false,
+              "treatBooleanAsNumber": false
+            }
+          }
+        }
+      },
+      {
+        "name": "Record_Load_DimChartOfAccounts",
+        "type": "Script",
+        "dependsOn": [
+          {
+            "activity": "Copy_DimChartOfAccounts",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "linkedService": {
+          "name": "WH_Elarwick_Reconciliation_Dev",
+          "properties": {
+            "annotations": [],
+            "type": "DataWarehouse",
+            "typeProperties": {
+              "endpoint": "kxme24s4ar5excpmug6oeu3a5a-2upkngedxxhebght4tvazxeofq.datawarehouse.fabric.microsoft.com",
+              "artifactId": "af68efe3-b674-4e5a-bf86-ab7ab1a9a5c9",
+              "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c"
+            }
+          }
+        },
+        "typeProperties": {
+          "scripts": [
+            {
+              "type": "NonQuery",
+              "text": {
+                "value": "@concat('IF DB_NAME() <> N''WH_Elarwick_Reconciliation_Dev'' THROW 51200, ''This activity can run only in WH_Elarwick_Reconciliation_Dev.'', 1;\n','DECLARE @CloseRunID varchar(36) = N''',replace(activity('Begin_Close').output.resultSets[0].rows[0].CloseRunID,'''',''''''),''';\nDECLARE @CloseAttemptID varchar(36) = N''',replace(activity('Begin_Close').output.resultSets[0].rows[0].CloseAttemptID,'''',''''''),''';\n','DECLARE @ExpectedRowCount bigint = ',string(activity('Copy_DimChartOfAccounts').output.rowsRead),'; DECLARE @StagedRowCount bigint = ',string(activity('Copy_DimChartOfAccounts').output.rowsCopied),'; EXEC dbo.usp_RecordCloseTableLoad @CloseRunID = @CloseRunID, @CloseAttemptID = @CloseAttemptID, @TargetTable = ''dbo.DimChartOfAccounts'', @LoadStatus = ''PERSISTED'', @ExpectedRowCount = @ExpectedRowCount, @StagedRowCount = @StagedRowCount;')",
+                "type": "Expression"
+              }
+            }
+          ],
+          "scriptBlockExecutionTimeout": "02:00:00"
+        }
+      },
+      {
+        "name": "Copy_FactReconciliationAllocationReview",
+        "type": "Copy",
+        "dependsOn": [
+          {
+            "activity": "Record_Load_DimChartOfAccounts",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "source": {
+            "type": "LakehouseTableSource",
+            "datasetSettings": {
+              "annotations": [],
+              "linkedService": {
+                "name": "LH_Elarwick_Reconciliation_Dev",
+                "properties": {
+                  "annotations": [],
+                  "type": "Lakehouse",
+                  "typeProperties": {
+                    "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c",
+                    "artifactId": "fde2d467-db15-4156-9ae9-4ebc889e90e4",
+                    "rootFolder": "Tables"
+                  }
+                }
+              },
+              "type": "LakehouseTable",
+              "schema": [],
+              "typeProperties": {
+                "schema": "dbo",
+                "table": "gold_reconciliationallocationreview"
+              }
+            }
+          },
+          "sink": {
+            "type": "DataWarehouseSink",
+            "allowCopyCommand": true,
+            "copyCommandSettings": {},
+            "writeBehavior": "Insert",
+            "tableOption": "autoCreate",
+            "datasetSettings": {
+              "annotations": [],
+              "linkedService": {
+                "name": "WH_Elarwick_Reconciliation_Dev",
+                "properties": {
+                  "annotations": [],
+                  "type": "DataWarehouse",
+                  "typeProperties": {
+                    "endpoint": "kxme24s4ar5excpmug6oeu3a5a-2upkngedxxhebght4tvazxeofq.datawarehouse.fabric.microsoft.com",
+                    "artifactId": "af68efe3-b674-4e5a-bf86-ab7ab1a9a5c9",
+                    "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c"
+                  }
+                }
+              },
+              "type": "DataWarehouseTable",
+              "schema": [],
+              "typeProperties": {
+                "schema": "dbo",
+                "table": "FactReconciliationAllocationReview"
+              }
+            }
+          },
+          "enableStaging": true,
+          "translator": {
+            "type": "TabularTranslator",
+            "mappings": [
+              {
+                "source": {
+                  "name": "AllocationRunID",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "AllocationRunID",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                }
+              },
+              {
+                "source": {
+                  "name": "ReferenceNumber",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "ReferenceNumber",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                }
+              },
+              {
+                "source": {
+                  "name": "ReconciliationStatus",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "ReconciliationStatus",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                }
+              },
+              {
+                "source": {
+                  "name": "BankTransactionIDs",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "BankTransactionIDs",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                }
+              },
+              {
+                "source": {
+                  "name": "JournalEntryIDs",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "JournalEntryIDs",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                }
+              },
+              {
+                "source": {
+                  "name": "BankGroupAmount",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "BankGroupAmount",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                }
+              },
+              {
+                "source": {
+                  "name": "GLGroupAmount",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "GLGroupAmount",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                }
+              },
+              {
+                "source": {
+                  "name": "ReviewReason",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "ReviewReason",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                }
+              },
+              {
+                "source": {
+                  "name": "ProcessedAt",
+                  "type": "DateTime",
+                  "physicalType": "timestamp"
+                },
+                "sink": {
+                  "name": "ProcessedAt",
+                  "physicalType": "datetime2",
+                  "precision": 6
+                }
+              },
+              {
+                "source": {
+                  "name": "CloseRunID",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "CloseRunID",
+                  "physicalType": "varchar",
+                  "length": "36"
+                }
+              },
+              {
+                "source": {
+                  "name": "CloseAttemptID",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "CloseAttemptID",
+                  "physicalType": "varchar",
+                  "length": "36"
+                }
+              }
+            ],
+            "typeConversion": true,
+            "typeConversionSettings": {
+              "allowDataTruncation": false,
+              "treatBooleanAsNumber": false
+            }
+          }
+        }
+      },
+      {
+        "name": "Record_Load_FactReconciliationAllocationReview",
+        "type": "Script",
+        "dependsOn": [
+          {
+            "activity": "Copy_FactReconciliationAllocationReview",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "linkedService": {
+          "name": "WH_Elarwick_Reconciliation_Dev",
+          "properties": {
+            "annotations": [],
+            "type": "DataWarehouse",
+            "typeProperties": {
+              "endpoint": "kxme24s4ar5excpmug6oeu3a5a-2upkngedxxhebght4tvazxeofq.datawarehouse.fabric.microsoft.com",
+              "artifactId": "af68efe3-b674-4e5a-bf86-ab7ab1a9a5c9",
+              "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c"
+            }
+          }
+        },
+        "typeProperties": {
+          "scripts": [
+            {
+              "type": "NonQuery",
+              "text": {
+                "value": "@concat('IF DB_NAME() <> N''WH_Elarwick_Reconciliation_Dev'' THROW 51200, ''This activity can run only in WH_Elarwick_Reconciliation_Dev.'', 1;\n','DECLARE @CloseRunID varchar(36) = N''',replace(activity('Begin_Close').output.resultSets[0].rows[0].CloseRunID,'''',''''''),''';\nDECLARE @CloseAttemptID varchar(36) = N''',replace(activity('Begin_Close').output.resultSets[0].rows[0].CloseAttemptID,'''',''''''),''';\n','DECLARE @ExpectedRowCount bigint = ',string(activity('Copy_FactReconciliationAllocationReview').output.rowsRead),'; DECLARE @StagedRowCount bigint = ',string(activity('Copy_FactReconciliationAllocationReview').output.rowsCopied),'; EXEC dbo.usp_RecordCloseTableLoad @CloseRunID = @CloseRunID, @CloseAttemptID = @CloseAttemptID, @TargetTable = ''dbo.FactReconciliationAllocationReview'', @LoadStatus = ''PERSISTED'', @ExpectedRowCount = @ExpectedRowCount, @StagedRowCount = @StagedRowCount;')",
+                "type": "Expression"
+              }
+            }
+          ],
+          "scriptBlockExecutionTimeout": "02:00:00"
+        }
+      },
+      {
+        "name": "Copy_FactReconciliationAllocations",
+        "type": "Copy",
+        "dependsOn": [
+          {
+            "activity": "Record_Load_FactReconciliationAllocationReview",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "source": {
+            "type": "LakehouseTableSource",
+            "datasetSettings": {
+              "annotations": [],
+              "linkedService": {
+                "name": "LH_Elarwick_Reconciliation_Dev",
+                "properties": {
+                  "annotations": [],
+                  "type": "Lakehouse",
+                  "typeProperties": {
+                    "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c",
+                    "artifactId": "fde2d467-db15-4156-9ae9-4ebc889e90e4",
+                    "rootFolder": "Tables"
+                  }
+                }
+              },
+              "type": "LakehouseTable",
+              "schema": [],
+              "typeProperties": {
+                "schema": "dbo",
+                "table": "gold_reconciliationallocations"
+              }
+            }
+          },
+          "sink": {
+            "type": "DataWarehouseSink",
+            "allowCopyCommand": true,
+            "copyCommandSettings": {},
+            "writeBehavior": "Insert",
+            "tableOption": "autoCreate",
+            "datasetSettings": {
+              "annotations": [],
+              "linkedService": {
+                "name": "WH_Elarwick_Reconciliation_Dev",
+                "properties": {
+                  "annotations": [],
+                  "type": "DataWarehouse",
+                  "typeProperties": {
+                    "endpoint": "kxme24s4ar5excpmug6oeu3a5a-2upkngedxxhebght4tvazxeofq.datawarehouse.fabric.microsoft.com",
+                    "artifactId": "af68efe3-b674-4e5a-bf86-ab7ab1a9a5c9",
+                    "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c"
+                  }
+                }
+              },
+              "type": "DataWarehouseTable",
+              "schema": [],
+              "typeProperties": {
+                "schema": "dbo",
+                "table": "FactReconciliationAllocations"
+              }
+            }
+          },
+          "enableStaging": true,
+          "translator": {
+            "type": "TabularTranslator",
+            "mappings": [
+              {
+                "source": {
+                  "name": "AllocationRunID",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "AllocationRunID",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                }
+              },
+              {
+                "source": {
+                  "name": "ReferenceNumber",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "ReferenceNumber",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                }
+              },
+              {
+                "source": {
+                  "name": "BankTransactionID",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "BankTransactionID",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                }
+              },
+              {
+                "source": {
+                  "name": "JournalEntryID",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "JournalEntryID",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                }
+              },
+              {
+                "source": {
+                  "name": "BankTransactionDate",
+                  "type": "Date",
+                  "physicalType": "date"
+                },
+                "sink": {
+                  "name": "BankTransactionDate",
+                  "physicalType": "date"
+                }
+              },
+              {
+                "source": {
+                  "name": "GLPostingDate",
+                  "type": "Date",
+                  "physicalType": "date"
+                },
+                "sink": {
+                  "name": "GLPostingDate",
+                  "physicalType": "date"
+                }
+              },
+              {
+                "source": {
+                  "name": "AllocatedSignedAmount",
+                  "type": "Decimal",
+                  "physicalType": "decimal",
+                  "precision": 18,
+                  "scale": 2
+                },
+                "sink": {
+                  "name": "AllocatedSignedAmount",
+                  "physicalType": "decimal",
+                  "precision": 18,
+                  "scale": 2
+                }
+              },
+              {
+                "source": {
+                  "name": "BankSignedAmount",
+                  "type": "Decimal",
+                  "physicalType": "decimal",
+                  "precision": 18,
+                  "scale": 2
+                },
+                "sink": {
+                  "name": "BankSignedAmount",
+                  "physicalType": "decimal",
+                  "precision": 18,
+                  "scale": 2
+                }
+              },
+              {
+                "source": {
+                  "name": "GLSignedAmount",
+                  "type": "Decimal",
+                  "physicalType": "decimal",
+                  "precision": 18,
+                  "scale": 2
+                },
+                "sink": {
+                  "name": "GLSignedAmount",
+                  "physicalType": "decimal",
+                  "precision": 18,
+                  "scale": 2
+                }
+              },
+              {
+                "source": {
+                  "name": "MatchMethod",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "MatchMethod",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                }
+              },
+              {
+                "source": {
+                  "name": "ReconciliationStatus",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "ReconciliationStatus",
+                  "physicalType": "varchar",
+                  "length": "8000"
+                }
+              },
+              {
+                "source": {
+                  "name": "ProcessedAt",
+                  "type": "DateTime",
+                  "physicalType": "timestamp"
+                },
+                "sink": {
+                  "name": "ProcessedAt",
+                  "physicalType": "datetime2",
+                  "precision": 6
+                }
+              },
+              {
+                "source": {
+                  "name": "CloseRunID",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "CloseRunID",
+                  "physicalType": "varchar",
+                  "length": "36"
+                }
+              },
+              {
+                "source": {
+                  "name": "CloseAttemptID",
+                  "type": "String",
+                  "physicalType": "string"
+                },
+                "sink": {
+                  "name": "CloseAttemptID",
+                  "physicalType": "varchar",
+                  "length": "36"
+                }
+              }
+            ],
+            "typeConversion": true,
+            "typeConversionSettings": {
+              "allowDataTruncation": false,
+              "treatBooleanAsNumber": false
+            }
+          }
+        }
+      },
+      {
+        "name": "Record_Load_FactReconciliationAllocations",
+        "type": "Script",
+        "dependsOn": [
+          {
+            "activity": "Copy_FactReconciliationAllocations",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "linkedService": {
+          "name": "WH_Elarwick_Reconciliation_Dev",
+          "properties": {
+            "annotations": [],
+            "type": "DataWarehouse",
+            "typeProperties": {
+              "endpoint": "kxme24s4ar5excpmug6oeu3a5a-2upkngedxxhebght4tvazxeofq.datawarehouse.fabric.microsoft.com",
+              "artifactId": "af68efe3-b674-4e5a-bf86-ab7ab1a9a5c9",
+              "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c"
+            }
+          }
+        },
+        "typeProperties": {
+          "scripts": [
+            {
+              "type": "NonQuery",
+              "text": {
+                "value": "@concat('IF DB_NAME() <> N''WH_Elarwick_Reconciliation_Dev'' THROW 51200, ''This activity can run only in WH_Elarwick_Reconciliation_Dev.'', 1;\n','DECLARE @CloseRunID varchar(36) = N''',replace(activity('Begin_Close').output.resultSets[0].rows[0].CloseRunID,'''',''''''),''';\nDECLARE @CloseAttemptID varchar(36) = N''',replace(activity('Begin_Close').output.resultSets[0].rows[0].CloseAttemptID,'''',''''''),''';\n','DECLARE @ExpectedRowCount bigint = ',string(activity('Copy_FactReconciliationAllocations').output.rowsRead),'; DECLARE @StagedRowCount bigint = ',string(activity('Copy_FactReconciliationAllocations').output.rowsCopied),'; EXEC dbo.usp_RecordCloseTableLoad @CloseRunID = @CloseRunID, @CloseAttemptID = @CloseAttemptID, @TargetTable = ''dbo.FactReconciliationAllocations'', @LoadStatus = ''PERSISTED'', @ExpectedRowCount = @ExpectedRowCount, @StagedRowCount = @StagedRowCount;')",
+                "type": "Expression"
+              }
+            }
+          ],
+          "scriptBlockExecutionTimeout": "02:00:00"
+        }
+      },
+      {
+        "name": "Verify_Load_Manifests",
+        "type": "Script",
+        "dependsOn": [
+          {
+            "activity": "Record_Load_FactReconciliationAllocations",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "linkedService": {
+          "name": "WH_Elarwick_Reconciliation_Dev",
+          "properties": {
+            "annotations": [],
+            "type": "DataWarehouse",
+            "typeProperties": {
+              "endpoint": "kxme24s4ar5excpmug6oeu3a5a-2upkngedxxhebght4tvazxeofq.datawarehouse.fabric.microsoft.com",
+              "artifactId": "af68efe3-b674-4e5a-bf86-ab7ab1a9a5c9",
+              "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c"
+            }
+          }
+        },
+        "typeProperties": {
+          "scripts": [
+            {
+              "type": "Query",
+              "text": {
+                "value": "@concat('IF DB_NAME() <> N''WH_Elarwick_Reconciliation_Dev'' THROW 51200, ''This activity can run only in WH_Elarwick_Reconciliation_Dev.'', 1;\n','DECLARE @CloseRunID varchar(36) = N''',replace(activity('Begin_Close').output.resultSets[0].rows[0].CloseRunID,'''',''''''),''';\nDECLARE @CloseAttemptID varchar(36) = N''',replace(activity('Begin_Close').output.resultSets[0].rows[0].CloseAttemptID,'''',''''''),''';\n','\nIF (SELECT COUNT_BIG(*) FROM dbo.Control_CloseTableLoads WHERE CloseRunID = @CloseRunID AND CloseAttemptID = @CloseAttemptID AND LoadStatus = ''PERSISTED'') <> 7 THROW 51218, ''All seven persisted table manifests are required.'', 1;\nIF (SELECT COUNT_BIG(*) FROM dbo.Control_CloseSourceFiles WHERE CloseRunID = @CloseRunID AND CloseAttemptID = @CloseAttemptID) <> 4 THROW 51219, ''All four source manifests are required.'', 1;\nIF NOT EXISTS (SELECT 1 FROM dbo.Control_CloseValidations WHERE CloseRunID = @CloseRunID AND CloseAttemptID = @CloseAttemptID AND ValidationCode = ''SOURCE_COMPLETENESS'' AND ValidationResult = ''PASS'' AND IsRequired = 1) THROW 51220, ''Source completeness did not pass.'', 1;\nIF NOT EXISTS (SELECT 1 FROM dbo.Control_CloseValidations WHERE CloseRunID = @CloseRunID AND CloseAttemptID = @CloseAttemptID AND ValidationCode = ''DATA_VALIDATION'' AND ValidationResult = ''PASS'' AND IsRequired = 1) THROW 51221, ''Data validation did not pass.'', 1;\nIF NOT EXISTS (SELECT 1 FROM dbo.Control_CloseValidations WHERE CloseRunID = @CloseRunID AND CloseAttemptID = @CloseAttemptID AND ValidationCode = ''RECONCILIATION_INTEGRITY'' AND ValidationResult = ''PASS'' AND IsRequired = 1) THROW 51222, ''Reconciliation integrity did not pass.'', 1;\nIF NOT EXISTS (SELECT 1 FROM dbo.Control_CloseValidations WHERE CloseRunID = @CloseRunID AND CloseAttemptID = @CloseAttemptID AND ValidationCode = ''REPORTING_PERIOD_CONFIRMATION'' AND ValidationResult = ''PASS'' AND IsRequired = 1) THROW 51223, ''Reporting period confirmation did not pass.'', 1;\nSELECT @CloseRunID AS CloseRunID, @CloseAttemptID AS CloseAttemptID, ''AWAITING_FINANCE_REVIEW'' AS CloseStage;\n')",
+                "type": "Expression"
+              }
+            }
+          ],
+          "scriptBlockExecutionTimeout": "02:00:00"
+        }
+      }
+    ]
+  }
+}

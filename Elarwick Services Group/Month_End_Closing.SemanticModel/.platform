@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "Month_End_Closing"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "21e9d0af-1c68-4c19-b5ad-5a283dd5f739"
+  }
+}

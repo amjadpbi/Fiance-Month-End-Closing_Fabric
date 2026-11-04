@@ -1,0 +1,11 @@
+{
+  "displayName": "PL_Dev_Lakehouse_Connector_Test",
+  "itemId": "942f81f3-7721-4c86-b3e7-6b0e4074e23c",
+  "itemType": "DataPipeline",
+  "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c",
+  "definitionParts": [
+    "pipeline-content.json",
+    ".platform"
+  ],
+  "exportedUtc": "2026-11-04T08:19:07Z"
+}
