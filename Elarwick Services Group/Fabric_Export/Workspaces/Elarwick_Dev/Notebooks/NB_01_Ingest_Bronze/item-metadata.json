@@ -1,0 +1,21 @@
+{
+    "displayName":  "NB_01_Ingest_Bronze",
+    "itemId":  "279673ed-4a82-4465-a6e9-1e7b4eed5c6c",
+    "itemType":  "Notebook",
+    "workspaceId":  "862d5926-a7fb-4540-8fc7-51df8f916f0d",
+    "workspaceName":  "Elarwick Dev",
+    "definitionParts":  [
+                            {
+                                "path":  "notebook-content.py",
+                                "payloadType":  "InlineBase64",
+                                "byteCount":  16380
+                            },
+                            {
+                                "path":  ".platform",
+                                "payloadType":  "InlineBase64",
+                                "byteCount":  305
+                            }
+                        ],
+    "exportedUtc":  "2026-11-04T08:32:47Z",
+    "dataRowsExported":  false
+}

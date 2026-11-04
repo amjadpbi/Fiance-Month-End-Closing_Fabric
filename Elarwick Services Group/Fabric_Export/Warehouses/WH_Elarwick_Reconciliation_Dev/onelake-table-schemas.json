@@ -1,0 +1,1142 @@
+{
+    "itemName":  "WH_Elarwick_Reconciliation_Dev",
+    "itemId":  "af68efe3-b674-4e5a-bf86-ab7ab1a9a5c9",
+    "itemType":  "Warehouse",
+    "workspaceName":  "Elarwick_Finance_Engineering",
+    "workspaceId":  "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c",
+    "exportType":  "OneLake Delta schema metadata only",
+    "tableCount":  18,
+    "tables":  [
+                   {
+                       "namespace":  "dbo",
+                       "name":  "Control_CloseApprovalExceptions",
+                       "tableUuid":  "3ff8d9a2-7024-4947-9ba9-622b3b575521",
+                       "schemaId":  1,
+                       "fields":  [
+                                      {
+                                          "name":  "ApprovalEventID",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "CloseExceptionID",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "CloseRunID",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "CloseAttemptID",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "AcknowledgedAt",
+                                          "required":  true,
+                                          "type":  "timestamptz"
+                                      }
+                                  ]
+                   },
+                   {
+                       "namespace":  "dbo",
+                       "name":  "Control_CloseApprovals",
+                       "tableUuid":  "ac8e047f-744b-477c-9ab3-1e3bf183c32f",
+                       "schemaId":  1,
+                       "fields":  [
+                                      {
+                                          "name":  "ApprovalEventID",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "CloseRunID",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "CloseAttemptID",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "Decision",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "ApproverDatabasePrincipal",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "DecisionAt",
+                                          "required":  true,
+                                          "type":  "timestamptz"
+                                      },
+                                      {
+                                          "name":  "Comments",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "RejectionReason",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "PreviousAcceptedCloseRunID",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "PreviousAcceptedAttemptID",
+                                          "required":  false,
+                                          "type":  "string"
+                                      }
+                                  ]
+                   },
+                   {
+                       "namespace":  "dbo",
+                       "name":  "Control_CloseApproverPrincipals",
+                       "tableUuid":  "71ee4317-db22-41c1-9de9-7ec31da7dff4",
+                       "schemaId":  1,
+                       "fields":  [
+                                      {
+                                          "name":  "DatabasePrincipalName",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "IsEnabled",
+                                          "required":  true,
+                                          "type":  "boolean"
+                                      },
+                                      {
+                                          "name":  "ConfiguredAt",
+                                          "required":  true,
+                                          "type":  "timestamptz"
+                                      },
+                                      {
+                                          "name":  "ConfiguredByDatabasePrincipal",
+                                          "required":  true,
+                                          "type":  "string"
+                                      }
+                                  ]
+                   },
+                   {
+                       "namespace":  "dbo",
+                       "name":  "Control_CloseAttempts",
+                       "tableUuid":  "17644bab-8f74-414f-92cb-023747c283a9",
+                       "schemaId":  1,
+                       "fields":  [
+                                      {
+                                          "name":  "CloseAttemptID",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "CloseRunID",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "AttemptNumber",
+                                          "required":  true,
+                                          "type":  "int"
+                                      },
+                                      {
+                                          "name":  "ExecutionStatus",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "StartedAt",
+                                          "required":  true,
+                                          "type":  "timestamptz"
+                                      },
+                                      {
+                                          "name":  "CompletedAt",
+                                          "required":  false,
+                                          "type":  "timestamptz"
+                                      },
+                                      {
+                                          "name":  "InitiatedByDatabasePrincipal",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "PipelineRunID",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "FailureMessage",
+                                          "required":  false,
+                                          "type":  "string"
+                                      }
+                                  ]
+                   },
+                   {
+                       "namespace":  "dbo",
+                       "name":  "Control_CloseExceptionReviews",
+                       "tableUuid":  "413ca30b-ddcd-4bdf-a735-025e831aa19e",
+                       "schemaId":  1,
+                       "fields":  [
+                                      {
+                                          "name":  "ExceptionReviewEventID",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "CloseExceptionID",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "CloseRunID",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "CloseAttemptID",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "ReviewStatus",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "ReviewerDatabasePrincipal",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "ReviewedAt",
+                                          "required":  true,
+                                          "type":  "timestamptz"
+                                      },
+                                      {
+                                          "name":  "ReviewComments",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "UnresolvedAcknowledged",
+                                          "required":  true,
+                                          "type":  "boolean"
+                                      }
+                                  ]
+                   },
+                   {
+                       "namespace":  "dbo",
+                       "name":  "Control_CloseExceptions",
+                       "tableUuid":  "94ef5444-43b9-489b-b606-966d2cc2e2c9",
+                       "schemaId":  1,
+                       "fields":  [
+                                      {
+                                          "name":  "CloseExceptionID",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "CloseRunID",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "CloseAttemptID",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "ExceptionLocator",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "ExceptionReason",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "ExceptionStatus",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "ReviewStatus",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "ReviewedByDatabasePrincipal",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "ReviewedAt",
+                                          "required":  false,
+                                          "type":  "timestamptz"
+                                      },
+                                      {
+                                          "name":  "ReviewComments",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "UnresolvedAcknowledged",
+                                          "required":  true,
+                                          "type":  "boolean"
+                                      }
+                                  ]
+                   },
+                   {
+                       "namespace":  "dbo",
+                       "name":  "Control_CloseRuns",
+                       "tableUuid":  "40da039c-1339-4e36-b147-256fc7a99a75",
+                       "schemaId":  1,
+                       "fields":  [
+                                      {
+                                          "name":  "CloseRunID",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "ReportingPeriodKey",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "ExecutionStatus",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "ReadinessStatus",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "ApprovalStatus",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "CurrentAttemptID",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "CreatedAt",
+                                          "required":  true,
+                                          "type":  "timestamptz"
+                                      },
+                                      {
+                                          "name":  "CreatedByDatabasePrincipal",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "StartedAt",
+                                          "required":  false,
+                                          "type":  "timestamptz"
+                                      },
+                                      {
+                                          "name":  "CompletedAt",
+                                          "required":  false,
+                                          "type":  "timestamptz"
+                                      },
+                                      {
+                                          "name":  "LastError",
+                                          "required":  false,
+                                          "type":  "string"
+                                      }
+                                  ]
+                   },
+                   {
+                       "namespace":  "dbo",
+                       "name":  "Control_CloseSourceFiles",
+                       "tableUuid":  "ff0db671-38b3-4d25-ae30-94e017d31ced",
+                       "schemaId":  1,
+                       "fields":  [
+                                      {
+                                          "name":  "SourceManifestEntryID",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "CloseRunID",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "CloseAttemptID",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "SourceRole",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "FileName",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "SourceFileHash",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "HashAlgorithm",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "BatchID",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "SourceRowCount",
+                                          "required":  true,
+                                          "type":  "long"
+                                      },
+                                      {
+                                          "name":  "BronzeRowCount",
+                                          "required":  false,
+                                          "type":  "long"
+                                      },
+                                      {
+                                          "name":  "SelectedAt",
+                                          "required":  true,
+                                          "type":  "timestamptz"
+                                      },
+                                      {
+                                          "name":  "SelectedByDatabasePrincipal",
+                                          "required":  true,
+                                          "type":  "string"
+                                      }
+                                  ]
+                   },
+                   {
+                       "namespace":  "dbo",
+                       "name":  "Control_CloseTableLoads",
+                       "tableUuid":  "06557463-e0da-43a4-a1dc-c56223aaf91a",
+                       "schemaId":  1,
+                       "fields":  [
+                                      {
+                                          "name":  "LoadManifestID",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "CloseRunID",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "CloseAttemptID",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "TargetTable",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "LoadStatus",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "ExpectedRowCount",
+                                          "required":  false,
+                                          "type":  "long"
+                                      },
+                                      {
+                                          "name":  "StagedRowCount",
+                                          "required":  false,
+                                          "type":  "long"
+                                      },
+                                      {
+                                          "name":  "PublishedRowCount",
+                                          "required":  true,
+                                          "type":  "long"
+                                      },
+                                      {
+                                          "name":  "ContentDigest",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "SchemaVersion",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "ValidatedAt",
+                                          "required":  true,
+                                          "type":  "timestamptz"
+                                      },
+                                      {
+                                          "name":  "RecordedByDatabasePrincipal",
+                                          "required":  true,
+                                          "type":  "string"
+                                      }
+                                  ]
+                   },
+                   {
+                       "namespace":  "dbo",
+                       "name":  "Control_CloseValidations",
+                       "tableUuid":  "5d9a0cf9-56d9-46d0-b9c8-ca20b8252fbc",
+                       "schemaId":  1,
+                       "fields":  [
+                                      {
+                                          "name":  "ValidationEvidenceID",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "CloseRunID",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "CloseAttemptID",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "ValidationCode",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "ValidationResult",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "IsRequired",
+                                          "required":  true,
+                                          "type":  "boolean"
+                                      },
+                                      {
+                                          "name":  "ExpectedValue",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "ActualValue",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "EvidenceReference",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "EvaluatedByDatabasePrincipal",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "EvaluatedAt",
+                                          "required":  true,
+                                          "type":  "timestamptz"
+                                      }
+                                  ]
+                   },
+                   {
+                       "namespace":  "dbo",
+                       "name":  "Control_CurrentAcceptedClose",
+                       "tableUuid":  "8d89fd65-01a6-4fd4-9835-3f9391fb51f5",
+                       "schemaId":  1,
+                       "fields":  [
+                                      {
+                                          "name":  "ReportingPeriodKey",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "CloseRunID",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "CloseAttemptID",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "ApprovalEventID",
+                                          "required":  true,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "PublishedAt",
+                                          "required":  true,
+                                          "type":  "timestamptz"
+                                      },
+                                      {
+                                          "name":  "PublishedByDatabasePrincipal",
+                                          "required":  true,
+                                          "type":  "string"
+                                      }
+                                  ]
+                   },
+                   {
+                       "namespace":  "dbo",
+                       "name":  "DimAccountMapping",
+                       "tableUuid":  "7d3809f2-740e-46e3-b60f-f6881321ca2c",
+                       "schemaId":  1,
+                       "fields":  [
+                                      {
+                                          "name":  "SourceSystem",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "SourceAccountCode",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "TargetAccountID",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "EffectiveFrom",
+                                          "required":  false,
+                                          "type":  "date"
+                                      },
+                                      {
+                                          "name":  "EffectiveTo",
+                                          "required":  false,
+                                          "type":  "date"
+                                      },
+                                      {
+                                          "name":  "BatchID",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "SourceFileName",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "SourceFileHash",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "IngestedAt",
+                                          "required":  false,
+                                          "type":  "timestamptz"
+                                      },
+                                      {
+                                          "name":  "SourceRowHash",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "CloseRunID",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "CloseAttemptID",
+                                          "required":  false,
+                                          "type":  "string"
+                                      }
+                                  ]
+                   },
+                   {
+                       "namespace":  "dbo",
+                       "name":  "DimChartOfAccounts",
+                       "tableUuid":  "3fb5f22b-ec28-455d-8aad-783d0be1cb78",
+                       "schemaId":  1,
+                       "fields":  [
+                                      {
+                                          "name":  "AccountID",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "AccountCode",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "AccountName",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "AccountType",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "IsActive",
+                                          "required":  false,
+                                          "type":  "boolean"
+                                      },
+                                      {
+                                          "name":  "BatchID",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "SourceFileName",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "SourceFileHash",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "IngestedAt",
+                                          "required":  false,
+                                          "type":  "timestamptz"
+                                      },
+                                      {
+                                          "name":  "SourceRowHash",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "CloseRunID",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "CloseAttemptID",
+                                          "required":  false,
+                                          "type":  "string"
+                                      }
+                                  ]
+                   },
+                   {
+                       "namespace":  "dbo",
+                       "name":  "FactReconciliationAllocationReview",
+                       "tableUuid":  "f8cd67ab-89ab-42ba-b464-f24d01685b78",
+                       "schemaId":  1,
+                       "fields":  [
+                                      {
+                                          "name":  "AllocationRunID",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "ReferenceNumber",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "ReconciliationStatus",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "BankTransactionIDs",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "JournalEntryIDs",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "BankGroupAmount",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "GLGroupAmount",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "ReviewReason",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "ProcessedAt",
+                                          "required":  false,
+                                          "type":  "timestamptz"
+                                      },
+                                      {
+                                          "name":  "CloseRunID",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "CloseAttemptID",
+                                          "required":  false,
+                                          "type":  "string"
+                                      }
+                                  ]
+                   },
+                   {
+                       "namespace":  "dbo",
+                       "name":  "FactReconciliationAllocations",
+                       "tableUuid":  "b7c57f03-70b0-4a12-9906-13c86d546882",
+                       "schemaId":  1,
+                       "fields":  [
+                                      {
+                                          "name":  "AllocationRunID",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "ReferenceNumber",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "BankTransactionID",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "JournalEntryID",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "BankTransactionDate",
+                                          "required":  false,
+                                          "type":  "date"
+                                      },
+                                      {
+                                          "name":  "GLPostingDate",
+                                          "required":  false,
+                                          "type":  "date"
+                                      },
+                                      {
+                                          "name":  "AllocatedSignedAmount",
+                                          "required":  false,
+                                          "type":  "decimal(18, 2)"
+                                      },
+                                      {
+                                          "name":  "BankSignedAmount",
+                                          "required":  false,
+                                          "type":  "decimal(18, 2)"
+                                      },
+                                      {
+                                          "name":  "GLSignedAmount",
+                                          "required":  false,
+                                          "type":  "decimal(18, 2)"
+                                      },
+                                      {
+                                          "name":  "MatchMethod",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "ReconciliationStatus",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "ProcessedAt",
+                                          "required":  false,
+                                          "type":  "timestamptz"
+                                      },
+                                      {
+                                          "name":  "CloseRunID",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "CloseAttemptID",
+                                          "required":  false,
+                                          "type":  "string"
+                                      }
+                                  ]
+                   },
+                   {
+                       "namespace":  "dbo",
+                       "name":  "FactReconciliationExceptions",
+                       "tableUuid":  "48275713-76ac-4359-b05a-b6babc5ff9d1",
+                       "schemaId":  1,
+                       "fields":  [
+                                      {
+                                          "name":  "NormalizedReference",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "BankTransactionIDs",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "JournalEntryIDs",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "BankSignedAmount",
+                                          "required":  false,
+                                          "type":  "decimal(29, 2)"
+                                      },
+                                      {
+                                          "name":  "GLSignedAmount",
+                                          "required":  false,
+                                          "type":  "decimal(38, 2)"
+                                      },
+                                      {
+                                          "name":  "AmountDifference",
+                                          "required":  false,
+                                          "type":  "decimal(38, 2)"
+                                      },
+                                      {
+                                          "name":  "BankFirstDate",
+                                          "required":  false,
+                                          "type":  "date"
+                                      },
+                                      {
+                                          "name":  "BankLastDate",
+                                          "required":  false,
+                                          "type":  "date"
+                                      },
+                                      {
+                                          "name":  "GLFirstDate",
+                                          "required":  false,
+                                          "type":  "date"
+                                      },
+                                      {
+                                          "name":  "GLLastDate",
+                                          "required":  false,
+                                          "type":  "date"
+                                      },
+                                      {
+                                          "name":  "DateDifferenceDays",
+                                          "required":  false,
+                                          "type":  "int"
+                                      },
+                                      {
+                                          "name":  "BankTransactionCount",
+                                          "required":  false,
+                                          "type":  "long"
+                                      },
+                                      {
+                                          "name":  "GLEntryCount",
+                                          "required":  false,
+                                          "type":  "long"
+                                      },
+                                      {
+                                          "name":  "ReconciliationStatus",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "MatchMethod",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "ExceptionReason",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "ReconciliationRunID",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "ProcessedAt",
+                                          "required":  false,
+                                          "type":  "timestamptz"
+                                      },
+                                      {
+                                          "name":  "CloseRunID",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "CloseAttemptID",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "CloseExceptionID",
+                                          "required":  false,
+                                          "type":  "string"
+                                      }
+                                  ]
+                   },
+                   {
+                       "namespace":  "dbo",
+                       "name":  "FactReconciliationResults",
+                       "tableUuid":  "2fc10552-dce2-410b-9ff0-714c2d2e1a0c",
+                       "schemaId":  1,
+                       "fields":  [
+                                      {
+                                          "name":  "NormalizedReference",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "BankTransactionIDs",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "JournalEntryIDs",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "BankSignedAmount",
+                                          "required":  false,
+                                          "type":  "decimal(29, 2)"
+                                      },
+                                      {
+                                          "name":  "GLSignedAmount",
+                                          "required":  false,
+                                          "type":  "decimal(38, 2)"
+                                      },
+                                      {
+                                          "name":  "AmountDifference",
+                                          "required":  false,
+                                          "type":  "decimal(38, 2)"
+                                      },
+                                      {
+                                          "name":  "BankFirstDate",
+                                          "required":  false,
+                                          "type":  "date"
+                                      },
+                                      {
+                                          "name":  "BankLastDate",
+                                          "required":  false,
+                                          "type":  "date"
+                                      },
+                                      {
+                                          "name":  "GLFirstDate",
+                                          "required":  false,
+                                          "type":  "date"
+                                      },
+                                      {
+                                          "name":  "GLLastDate",
+                                          "required":  false,
+                                          "type":  "date"
+                                      },
+                                      {
+                                          "name":  "DateDifferenceDays",
+                                          "required":  false,
+                                          "type":  "int"
+                                      },
+                                      {
+                                          "name":  "BankTransactionCount",
+                                          "required":  false,
+                                          "type":  "long"
+                                      },
+                                      {
+                                          "name":  "GLEntryCount",
+                                          "required":  false,
+                                          "type":  "long"
+                                      },
+                                      {
+                                          "name":  "ReconciliationStatus",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "MatchMethod",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "ExceptionReason",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "ReconciliationRunID",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "ProcessedAt",
+                                          "required":  false,
+                                          "type":  "timestamptz"
+                                      },
+                                      {
+                                          "name":  "CloseRunID",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "CloseAttemptID",
+                                          "required":  false,
+                                          "type":  "string"
+                                      }
+                                  ]
+                   },
+                   {
+                       "namespace":  "dbo",
+                       "name":  "FactReconciliationSummary",
+                       "tableUuid":  "aa8cf33b-25be-414c-b5ab-8a81eb5a7160",
+                       "schemaId":  1,
+                       "fields":  [
+                                      {
+                                          "name":  "ReconciliationStatus",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "ReferenceGroupCount",
+                                          "required":  false,
+                                          "type":  "long"
+                                      },
+                                      {
+                                          "name":  "BankTransactionCount",
+                                          "required":  false,
+                                          "type":  "long"
+                                      },
+                                      {
+                                          "name":  "GLEntryCount",
+                                          "required":  false,
+                                          "type":  "long"
+                                      },
+                                      {
+                                          "name":  "ProcessedAt",
+                                          "required":  false,
+                                          "type":  "timestamptz"
+                                      },
+                                      {
+                                          "name":  "CloseRunID",
+                                          "required":  false,
+                                          "type":  "string"
+                                      },
+                                      {
+                                          "name":  "CloseAttemptID",
+                                          "required":  false,
+                                          "type":  "string"
+                                      }
+                                  ]
+                   }
+               ],
+    "dataRowsExported":  false,
+    "exportedUtc":  "2026-11-04T08:38:02Z"
+}

@@ -1,0 +1,11 @@
+{
+  "displayName": "WH_Elarwick_Reconciliation",
+  "itemId": "b312f7f7-e558-4836-abfc-872dbac3582e",
+  "itemType": "Warehouse",
+  "workspaceId": "862d5926-a7fb-4540-8fc7-51df8f916f0d",
+  "definitionExported": false,
+  "definitionExportLimitation": "A Warehouse item-definition route was not available. Table schemas were retrieved by item ID from OneLake. SQL modules were not exported for this workspace item.",
+  "schemaFile": "onelake-table-schemas.json",
+  "tableCount": 7,
+  "dataRowsExported": false
+}

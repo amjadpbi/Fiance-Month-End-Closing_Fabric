@@ -1,0 +1,33 @@
+{
+    "displayName":  "LH_Elarwick_Reconciliation",
+    "itemId":  "a1933b01-c4ac-44dc-a17f-6f16b68bb93e",
+    "itemType":  "Lakehouse",
+    "workspaceId":  "862d5926-a7fb-4540-8fc7-51df8f916f0d",
+    "workspaceName":  "Elarwick Dev",
+    "relatedSqlEndpointId":  "81401709-f1fe-4900-934f-d9273416c15a",
+    "tableCount":  0,
+    "definitionParts":  [
+                            {
+                                "path":  "lakehouse.metadata.json",
+                                "payloadType":  "InlineBase64",
+                                "byteCount":  23
+                            },
+                            {
+                                "path":  "alm.settings.json",
+                                "payloadType":  "InlineBase64",
+                                "byteCount":  1016
+                            },
+                            {
+                                "path":  "shortcuts.metadata.json",
+                                "payloadType":  "InlineBase64",
+                                "byteCount":  2
+                            },
+                            {
+                                "path":  ".platform",
+                                "payloadType":  "InlineBase64",
+                                "byteCount":  313
+                            }
+                        ],
+    "exportedUtc":  "2026-11-04T08:33:35Z",
+    "dataRowsExported":  false
+}

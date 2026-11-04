@@ -1,0 +1,70 @@
+{
+  "displayName": "Elarwick Dev",
+  "workspaceId": "862d5926-a7fb-4540-8fc7-51df8f916f0d",
+  "items": [
+    {
+      "displayName": "NB_01_Ingest_Bronze",
+      "itemId": "279673ed-4a82-4465-a6e9-1e7b4eed5c6c",
+      "itemType": "Notebook",
+      "definitionExported": true
+    },
+    {
+      "displayName": "NB_02_Validate_Silver",
+      "itemId": "42e6ee97-279b-44c8-ac5d-913d74ffda5f",
+      "itemType": "Notebook",
+      "definitionExported": true
+    },
+    {
+      "displayName": "NB_03_Journal_Controls",
+      "itemId": "df7ff53a-2218-4d60-a136-cbd791ed64e6",
+      "itemType": "Notebook",
+      "definitionExported": true
+    },
+    {
+      "displayName": "PL_Elarwick_MonthEnd_Close",
+      "itemId": "1b4ca812-90d0-418a-971b-97a9162080c2",
+      "itemType": "DataPipeline",
+      "definitionExported": true
+    },
+    {
+      "displayName": "PL_Elarwick_Gold_To_Warehouse",
+      "itemId": "3c13314c-9bd8-4e29-b9de-bbb940d1c8b3",
+      "itemType": "DataPipeline",
+      "definitionExported": true
+    },
+    {
+      "displayName": "LH_Elarwick_Reconciliation",
+      "itemId": "a1933b01-c4ac-44dc-a17f-6f16b68bb93e",
+      "itemType": "Lakehouse",
+      "definitionExported": true,
+      "relatedSqlEndpointId": "81401709-f1fe-4900-934f-d9273416c15a",
+      "tableCount": 0
+    },
+    {
+      "displayName": "WH_Elarwick_Reconciliation",
+      "itemId": "b312f7f7-e558-4836-abfc-872dbac3582e",
+      "itemType": "Warehouse",
+      "definitionExported": false,
+      "schemaExported": true,
+      "tableCount": 7,
+      "sqlModulesExported": false
+    },
+    {
+      "displayName": "WH_Elarwick_Reconciliation_Dev",
+      "itemId": "dd0f8444-714a-4c3a-b853-6d50910b9802",
+      "itemType": "Warehouse",
+      "definitionExported": false,
+      "schemaExported": true,
+      "tableCount": 0,
+      "sqlModulesExported": false
+    }
+  ],
+  "relatedSqlEndpoints": [
+    {
+      "displayName": "LH_Elarwick_Reconciliation",
+      "itemId": "81401709-f1fe-4900-934f-d9273416c15a",
+      "relatedItemId": "a1933b01-c4ac-44dc-a17f-6f16b68bb93e"
+    }
+  ],
+  "dataRowsExported": false
+}

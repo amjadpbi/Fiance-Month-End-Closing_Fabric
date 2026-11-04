@@ -1,0 +1,153 @@
+/// One row per exception group in a reconciliation run. Missing-side amounts and differences remain blank.
+table 'Reconciliation Exceptions'
+	lineageTag: 4e5b3194-26c1-4faa-983e-f4325228e158
+
+	/// Counts exception-group rows in the current exception filter context.
+	measure 'Exception Groups' = COUNTROWS ( 'Reconciliation Exceptions' )
+		formatString: #,##0
+		displayFolder: Exceptions
+		lineageTag: 50ece387-4421-4a47-8ec9-df09ddcf26f4
+
+	column NormalizedReference
+		dataType: string
+		lineageTag: b31b10c2-e87f-41cb-a103-45818f6abee6
+		sourceColumn: NormalizedReference
+
+	column BankTransactionIDs
+		dataType: string
+		lineageTag: a5f4dea0-12bc-4328-9b88-897aa27f4f97
+		sourceColumn: BankTransactionIDs
+
+	column JournalEntryIDs
+		dataType: string
+		lineageTag: c71c6cb6-9444-4abd-bef5-d3b3f87f3ccb
+		sourceColumn: JournalEntryIDs
+
+	column BankSignedAmount
+		dataType: double
+		formatString: #,##0.00;(#,##0.00);0.00
+		lineageTag: 011b9626-7b38-4a2e-b1a7-86552236bc23
+		summarizeBy: sum
+		sourceColumn: BankSignedAmount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column GLSignedAmount
+		dataType: double
+		formatString: #,##0.00;(#,##0.00);0.00
+		lineageTag: 10bf5a08-bdb7-4c33-becf-99c8cca30b14
+		summarizeBy: sum
+		sourceColumn: GLSignedAmount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column AmountDifference
+		dataType: double
+		formatString: #,##0.00;(#,##0.00);0.00
+		lineageTag: 0768cff9-8bb5-4673-86f5-deb574bc66b5
+		summarizeBy: sum
+		sourceColumn: AmountDifference
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column BankFirstDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: ac4faa45-a78a-4749-9190-a69e939b5f91
+		summarizeBy: none
+		sourceColumn: BankFirstDate
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column BankLastDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 23605f47-696d-4d60-af64-a128816a1ab4
+		summarizeBy: none
+		sourceColumn: BankLastDate
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column GLFirstDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 52143e08-cc41-4e63-8c73-91b4c6171537
+		summarizeBy: none
+		sourceColumn: GLFirstDate
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column GLLastDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 1e00cdb7-6f1d-49c3-b31d-92988ff2b4bb
+		summarizeBy: none
+		sourceColumn: GLLastDate
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column DateDifferenceDays
+		dataType: int64
+		lineageTag: a26cfe3d-0224-4548-a3d7-9c289339a03c
+		sourceColumn: DateDifferenceDays
+
+	column BankTransactionCount
+		dataType: int64
+		lineageTag: c598c102-3254-4663-b1f4-d789c18efd1e
+		sourceColumn: BankTransactionCount
+
+	column GLEntryCount
+		dataType: int64
+		lineageTag: 4e47bbab-7092-4f01-82e8-a996f342089f
+		sourceColumn: GLEntryCount
+
+	column ReconciliationStatus
+		dataType: string
+		lineageTag: b957f994-7dae-40c4-b1f9-5c5832e75915
+		sourceColumn: ReconciliationStatus
+
+	column MatchMethod
+		dataType: string
+		lineageTag: df9094e3-b0d1-494d-8c0b-187b456cd69d
+		sourceColumn: MatchMethod
+
+	column ExceptionReason
+		dataType: string
+		lineageTag: d14e6aec-f113-4399-bee3-dd7bfdeb34e7
+		sourceColumn: ExceptionReason
+
+	column ReconciliationRunID
+		dataType: string
+		isHidden
+		lineageTag: 950d56fc-6300-4065-b5b2-b376168fd205
+		sourceColumn: ReconciliationRunID
+
+	column ProcessedAt
+		dataType: dateTime
+		lineageTag: fbb08575-6abb-44bb-bff8-73446b4f269d
+		sourceColumn: ProcessedAt
+
+	/// Technical composite key for an exception group, matching reconciliation results by run and reference.
+	column ReconciliationGroupKey = VAR _Run = COALESCE ( 'Reconciliation Exceptions'[ReconciliationRunID], "" ) VAR _Reference = 'Reconciliation Exceptions'[NormalizedReference] RETURN FORMAT ( LEN ( _Run ), "0" ) & ":" & _Run & ":" & IF ( ISBLANK ( _Reference ), "N", "V" & FORMAT ( LEN ( _Reference ), "0" ) & ":" & _Reference )
+		dataType: string
+		isHidden
+		lineageTag: 751cddb2-82a4-4fd3-a6b3-f0ddb1c281f6
+
+	partition 'Reconciliation Exceptions' = m
+		mode: import
+		source = let Source = Sql.Database("kxme24s4ar5excpmug6oeu3a5a-2upkngedxxhebght4tvazxeofq.datawarehouse.fabric.microsoft.com", "WH_Elarwick_Reconciliation"), View = Source{[Schema="dbo", Item="vw_ReconciliationExceptions"]}[Data] in View
+

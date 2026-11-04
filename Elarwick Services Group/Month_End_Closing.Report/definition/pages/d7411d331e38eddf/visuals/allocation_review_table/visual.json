@@ -1,0 +1,198 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "allocation_review_table",
+  "position": {
+    "x": 648,
+    "y": 290,
+    "z": 2000,
+    "height": 200,
+    "width": 608,
+    "tabOrder": 2000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Allocation Review"
+                    }
+                  },
+                  "Property": "ReferenceNumber"
+                }
+              },
+              "queryRef": "Allocation Review.ReferenceNumber",
+              "nativeQueryRef": "ReferenceNumber"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Allocation Review"
+                    }
+                  },
+                  "Property": "ReconciliationStatus"
+                }
+              },
+              "queryRef": "Allocation Review.ReconciliationStatus",
+              "nativeQueryRef": "ReconciliationStatus"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Allocation Review"
+                    }
+                  },
+                  "Property": "ReviewReason"
+                }
+              },
+              "queryRef": "Allocation Review.ReviewReason",
+              "nativeQueryRef": "ReviewReason"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Allocation Review"
+                    }
+                  },
+                  "Property": "BankTransactionIDs"
+                }
+              },
+              "queryRef": "Allocation Review.BankTransactionIDs",
+              "nativeQueryRef": "BankTransactionIDs"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Allocation Review"
+                    }
+                  },
+                  "Property": "JournalEntryIDs"
+                }
+              },
+              "queryRef": "Allocation Review.JournalEntryIDs",
+              "nativeQueryRef": "JournalEntryIDs"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Allocation Review"
+                    }
+                  },
+                  "Property": "BankGroupAmount"
+                }
+              },
+              "queryRef": "Allocation Review.BankGroupAmount",
+              "nativeQueryRef": "BankGroupAmount"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Allocation Review"
+                    }
+                  },
+                  "Property": "GLGroupAmount"
+                }
+              },
+              "queryRef": "Allocation Review.GLGroupAmount",
+              "nativeQueryRef": "GLGroupAmount"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "columnHeaders": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "values": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "total": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Allocation review cases'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

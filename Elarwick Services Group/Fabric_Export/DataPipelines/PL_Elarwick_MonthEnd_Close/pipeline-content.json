@@ -1,0 +1,150 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "name": "Run_Bronze_Ingestion",
+        "type": "TridentNotebook",
+        "dependsOn": [],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "notebookId": "bbe940fc-a2c4-4ff6-9390-55e94035a151",
+          "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c"
+        }
+      },
+      {
+        "name": "Run_Silver_Validation",
+        "type": "TridentNotebook",
+        "dependsOn": [
+          {
+            "activity": "Run_Bronze_Ingestion",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "notebookId": "e8d17ad4-8365-4db7-a3d6-49f2d5e2fcde",
+          "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c"
+        }
+      },
+      {
+        "name": "Run_Journal_Controls",
+        "type": "TridentNotebook",
+        "dependsOn": [
+          {
+            "activity": "Run_Silver_Validation",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "notebookId": "fc72573b-d29d-4222-a93b-389806537667",
+          "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c"
+        }
+      },
+      {
+        "name": "Copy_Gold_ReconciliationResults",
+        "type": "Copy",
+        "dependsOn": [
+          {
+            "activity": "Run_Journal_Controls",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "source": {
+            "type": "LakehouseTableSource",
+            "datasetSettings": {
+              "annotations": [],
+              "linkedService": {
+                "name": "LH_Elarwick_Reconciliation",
+                "properties": {
+                  "annotations": [],
+                  "type": "Lakehouse",
+                  "typeProperties": {
+                    "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c",
+                    "artifactId": "1836fa4b-2f43-4a48-b8d6-de7bd7d9e935",
+                    "rootFolder": "Tables"
+                  }
+                }
+              },
+              "type": "LakehouseTable",
+              "schema": [],
+              "typeProperties": {
+                "schema": "dbo",
+                "table": "gold_reconciliationresults"
+              }
+            }
+          },
+          "sink": {
+            "type": "DataWarehouseSink",
+            "allowCopyCommand": true,
+            "copyCommandSettings": {},
+            "writeBehavior": "Insert",
+            "tableOption": "autoCreate",
+            "datasetSettings": {
+              "annotations": [],
+              "linkedService": {
+                "name": "WH_Elarwick_Reconciliation",
+                "properties": {
+                  "annotations": [],
+                  "type": "DataWarehouse",
+                  "typeProperties": {
+                    "endpoint": "kxme24s4ar5excpmug6oeu3a5a-2upkngedxxhebght4tvazxeofq.datawarehouse.fabric.microsoft.com",
+                    "artifactId": "22a20472-caf8-4bec-affa-ae5d2c788748",
+                    "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c"
+                  }
+                }
+              },
+              "type": "DataWarehouseTable",
+              "schema": [],
+              "typeProperties": {
+                "schema": "dbo",
+                "table": "FactReconciliationResults"
+              }
+            }
+          },
+          "enableStaging": true,
+          "translator": {
+            "type": "TabularTranslator",
+            "typeConversion": true,
+            "typeConversionSettings": {
+              "allowDataTruncation": true,
+              "treatBooleanAsNumber": false
+            }
+          }
+        }
+      }
+    ]
+  }
+}

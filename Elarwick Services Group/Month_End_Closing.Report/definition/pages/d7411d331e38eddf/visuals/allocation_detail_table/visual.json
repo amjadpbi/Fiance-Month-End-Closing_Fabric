@@ -1,0 +1,253 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "allocation_detail_table",
+  "position": {
+    "x": 24,
+    "y": 490,
+    "z": 1000,
+    "height": 205,
+    "width": 1232,
+    "tabOrder": 1000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Reconciliation Allocations"
+                    }
+                  },
+                  "Property": "ReferenceNumber"
+                }
+              },
+              "queryRef": "Reconciliation Allocations.ReferenceNumber",
+              "nativeQueryRef": "ReferenceNumber"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Reconciliation Allocations"
+                    }
+                  },
+                  "Property": "BankTransactionID"
+                }
+              },
+              "queryRef": "Reconciliation Allocations.BankTransactionID",
+              "nativeQueryRef": "BankTransactionID"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Reconciliation Allocations"
+                    }
+                  },
+                  "Property": "JournalEntryID"
+                }
+              },
+              "queryRef": "Reconciliation Allocations.JournalEntryID",
+              "nativeQueryRef": "JournalEntryID"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Reconciliation Allocations"
+                    }
+                  },
+                  "Property": "BankTransactionDate"
+                }
+              },
+              "queryRef": "Reconciliation Allocations.BankTransactionDate",
+              "nativeQueryRef": "BankTransactionDate"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Reconciliation Allocations"
+                    }
+                  },
+                  "Property": "GLPostingDate"
+                }
+              },
+              "queryRef": "Reconciliation Allocations.GLPostingDate",
+              "nativeQueryRef": "GLPostingDate"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Reconciliation Allocations"
+                    }
+                  },
+                  "Property": "AllocatedSignedAmount"
+                }
+              },
+              "queryRef": "Reconciliation Allocations.AllocatedSignedAmount",
+              "nativeQueryRef": "AllocatedSignedAmount"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Reconciliation Allocations"
+                    }
+                  },
+                  "Property": "BankSignedAmount"
+                }
+              },
+              "queryRef": "Reconciliation Allocations.BankSignedAmount",
+              "nativeQueryRef": "BankSignedAmount"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Reconciliation Allocations"
+                    }
+                  },
+                  "Property": "GLSignedAmount"
+                }
+              },
+              "queryRef": "Reconciliation Allocations.GLSignedAmount",
+              "nativeQueryRef": "GLSignedAmount"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "grid": [
+        {
+          "properties": {
+            "rowPadding": {
+              "expr": {
+                "Literal": {
+                  "Value": "2D"
+                }
+              }
+            },
+            "imageHeight": {
+              "expr": {
+                "Literal": {
+                  "Value": "32D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnHeaders": [
+        {
+          "properties": {
+            "autoSizeColumnWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "columnAdjustment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'fitToContent'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "values": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "total": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Allocation-level detail'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

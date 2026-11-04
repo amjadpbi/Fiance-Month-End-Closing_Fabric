@@ -1,0 +1,83 @@
+/// One row per reconciliation status in the Warehouse close summary. Use this summary for current close totals, not for historical trend charts.
+table 'Month-End Close Summary'
+	lineageTag: 8d1a066d-7b0c-4251-9840-57d4ceaf8534
+
+	/// Sums the Warehouse close summary's status-level reference group counts.
+	measure 'Close Summary Group Count' = SUM ( 'Month-End Close Summary'[ReferenceGroupCount] )
+		formatString: #,##0
+		displayFolder: Close
+		lineageTag: 8e587fd3-8545-4efd-b9bd-89dc3e745474
+
+	/// Sums the Warehouse close summary's status-level review group counts.
+	measure 'Close Summary Review Groups' = SUM ( 'Month-End Close Summary'[ReviewGroupCount] )
+		formatString: #,##0
+		displayFolder: Close
+		lineageTag: 04a009e5-a2db-4ffe-ac0e-81ad86cfa73d
+
+	column ReconciliationStatus
+		dataType: string
+		lineageTag: 944b9812-f1fb-4488-bf59-fc5b89eb733f
+		sourceColumn: ReconciliationStatus
+
+	column ReferenceGroupCount
+		dataType: int64
+		lineageTag: 7083e54e-9fab-4e4b-bde0-48c5a26a3c04
+		sourceColumn: ReferenceGroupCount
+
+	column BankTransactionCount
+		dataType: int64
+		lineageTag: 2851cda0-9cb1-450c-9d3e-85546959a618
+		sourceColumn: BankTransactionCount
+
+	column GLEntryCount
+		dataType: int64
+		lineageTag: bb9f9347-5e22-450b-93ee-69a5c7ecfd52
+		sourceColumn: GLEntryCount
+
+	column TotalBankSignedAmount
+		dataType: double
+		formatString: #,##0.00;(#,##0.00);0.00
+		lineageTag: f6fc90d3-8e8a-4f16-9684-bf00681fb9f4
+		summarizeBy: sum
+		sourceColumn: TotalBankSignedAmount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column TotalGLSignedAmount
+		dataType: double
+		formatString: #,##0.00;(#,##0.00);0.00
+		lineageTag: bd2ba67e-a3af-4254-9037-e5731288f147
+		summarizeBy: sum
+		sourceColumn: TotalGLSignedAmount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column TotalAmountDifference
+		dataType: double
+		formatString: #,##0.00;(#,##0.00);0.00
+		lineageTag: c3d7b596-c1ca-4231-a6c6-fd93b87f4889
+		summarizeBy: sum
+		sourceColumn: TotalAmountDifference
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ReviewGroupCount
+		dataType: int64
+		lineageTag: 0613ddb8-e9ff-4048-87d0-6b517fec3def
+		sourceColumn: ReviewGroupCount
+
+	column LatestProcessedAt
+		dataType: dateTime
+		lineageTag: 97e85e7c-a6a1-4519-a795-967add1f5234
+		sourceColumn: LatestProcessedAt
+
+	partition 'Month-End Close Summary' = m
+		mode: import
+		source = let Source = Sql.Database("kxme24s4ar5excpmug6oeu3a5a-2upkngedxxhebght4tvazxeofq.datawarehouse.fabric.microsoft.com", "WH_Elarwick_Reconciliation"), View = Source{[Schema="dbo", Item="vw_MonthEndCloseSummary"]}[Data] in View
+
