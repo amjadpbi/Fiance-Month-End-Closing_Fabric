@@ -96,7 +96,7 @@ Go-based SQLCMD v1.10.0 is installed. The old ODBC SQLCMD earlier in PATH caused
 
 Replace `<SQLCMD_PATH>`, `<YOUR_ENTRA_UPN>`, and `<PROJECT_ROOT>` with values from your environment before running these examples.
 
-Admin connection pattern (Dev only):
+Example Dev connection (replace placeholders before running):
 
 ```powershell
 & "<SQLCMD_PATH>" -S "kxme24s4ar5excpmug6oeu3a5a-2upkngedxxhebght4tvazxeofq.datawarehouse.fabric.microsoft.com" -d "WH_Elarwick_Reconciliation_Dev" -G -U "<YOUR_ENTRA_UPN>" -Q "SELECT USER_NAME() AS CurrentUser, DB_NAME() AS CurrentDatabase;"
