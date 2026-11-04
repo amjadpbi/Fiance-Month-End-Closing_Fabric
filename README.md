@@ -78,16 +78,16 @@ It also records 10 `CONFIRMED_MATCH` groups and 2 `CONFIRMED_GROUP_MATCH` groups
 
 ## Repository map
 
-- [`Elarwick Services Group/Month_End_Closing.pbip`](Elarwick%20Services%20Group/Month_End_Closing.pbip) — Power BI project entry point.
-- [`Elarwick Services Group/Month_End_Closing.Report/`](Elarwick%20Services%20Group/Month_End_Closing.Report/) — PBIR pages and visuals.
-- [`Elarwick Services Group/Month_End_Closing.SemanticModel/`](Elarwick%20Services%20Group/Month_End_Closing.SemanticModel/) — TMDL semantic model.
-- [`Elarwick Services Group/Dataset/`](Elarwick%20Services%20Group/Dataset/) — synthetic source and expected-result files.
-- [`Elarwick Services Group/Fabric_Export/`](Elarwick%20Services%20Group/Fabric_Export/) — exported definitions for delivered production Fabric items, schemas, and Warehouse view SQL.
-- [`Elarwick Services Group/Documentation/FINAL_IMPLEMENTATION.md`](Elarwick%20Services%20Group/Documentation/FINAL_IMPLEMENTATION.md) — implementation and setup notes.
-- [`Elarwick Services Group/Month_End_Closing.pdf`](Elarwick%20Services%20Group/Month_End_Closing.pdf) — report export.
+- [`Month_End_Closing.pbip`](Month_End_Closing.pbip) — Power BI project entry point.
+- [`Month_End_Closing.Report/`](Month_End_Closing.Report/) — PBIR pages and visuals.
+- [`Month_End_Closing.SemanticModel/`](Month_End_Closing.SemanticModel/) — TMDL semantic model.
+- [`Dataset/`](Dataset/) — synthetic source and expected-result files.
+- [`Fabric_Export/`](Fabric_Export/) — exported definitions for delivered production Fabric items, schemas, and Warehouse view SQL.
+- [`Documentation/FINAL_IMPLEMENTATION.md`](Documentation/FINAL_IMPLEMENTATION.md) — implementation and setup notes.
+- [`Month_End_Closing.pdf`](Month_End_Closing.pdf) — report export.
 
 ## Opening the report
 
-Open `Elarwick Services Group/Month_End_Closing.pbip` in Power BI Desktop. The report references the semantic model in the neighboring `Month_End_Closing.SemanticModel` folder. Refreshing or querying the model requires authorized access to the Fabric Warehouse SQL endpoint and an appropriately configured Power BI data-source credential. Credentials and machine-specific Power BI local settings are not included.
+Open `Month_End_Closing.pbip` in Power BI Desktop. The report references the semantic model in the neighboring `Month_End_Closing.SemanticModel` folder. Refreshing or querying the model requires authorized access to the Fabric Warehouse SQL endpoint and an appropriately configured Power BI data-source credential. Credentials and machine-specific Power BI local settings are not included.
 
 Fabric definitions in `Fabric_Export` are reference artifacts; they do not include table data or a deployment automation script. Do not treat them as instructions to run a production pipeline.
