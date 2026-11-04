@@ -7,6 +7,7 @@ IF DB_NAME() <> 'WH_Elarwick_Reconciliation_Dev'
 GO
 
 -- Finance user: create database principal through GRANT
+-- Replace these placeholders with your own Entra ID UPNs before executing this script.
 GRANT SELECT ON OBJECT::dbo.vw_ReconciliationResults
 TO [Finance_Approver_UPN_PLACEHOLDER];
 GO
