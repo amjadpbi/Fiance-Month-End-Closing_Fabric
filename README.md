@@ -1,171 +1,93 @@
-# Elarwick Services Group — Finance Reconciliation & Month-End Close Intelligence
+# Elarwick Finance Reconciliation & Close-Readiness Intelligence
 
-A hands-on Microsoft Fabric project that simulates a finance reconciliation workflow, moves curated Lakehouse data into a Warehouse, and exposes reusable SQL reporting views for reconciliation and month-end review.
+A Microsoft Fabric and Power BI portfolio project that reconciles synthetic bank and general-ledger activity, surfaces exceptions and allocation details, and presents the results in a four-page finance report.
 
-All data in this project is synthetic. It is a learning and portfolio project, not a production finance system or a real client engagement.
+All project data is synthetic. This is a learning and portfolio solution, not a production finance system or a real client engagement.
 
-## Project objective
+## Business problem
 
-Finance teams need to compare bank activity with general-ledger (GL) activity, identify items that do not reconcile, and review allocations before month-end close.
+Finance teams need to compare bank activity with general-ledger activity, find matched and unmatched transactions, investigate amount/date discrepancies, and review how transactions are allocated. The project demonstrates a repeatable data path for those tasks and provides SQL and Power BI reporting over the resulting reconciliation data.
 
-This project builds a workflow to:
+## Delivered solution
 
-- ingest synthetic bank, GL, account-mapping, and chart-of-accounts data;
-- validate and transform source data through Bronze, Silver, and Gold layers;
-- identify confirmed matches, group matches, and exceptions;
-- transfer Gold outputs into a Fabric Warehouse;
-- provide reusable SQL views for reporting and investigation.
+- Fabric Lakehouse layers for Bronze ingestion, Silver validation, and Gold reconciliation outputs.
+- Three Fabric notebooks for ingestion, validation, and reconciliation processing.
+- A Fabric Warehouse containing the reconciliation tables and five reusable reporting views.
+- A Power BI semantic model and report with:
+  1. Reconciliation Overview
+  2. Reconciliation Workbench
+  3. Exceptions & Investigation
+  4. Allocation Review & Close Readiness
+- Synthetic CSV inputs, expected results, and scenario files for the project test set.
 
-## Architecture
+## Implemented data flow
 
 ```text
-Synthetic finance source files
-          |
-          v
-Microsoft Fabric Lakehouse
-  Bronze -> Silver -> Gold
-                    |
-                    v
-         Lakehouse-to-Warehouse pipeline
-                    |
-                    v
-Microsoft Fabric Warehouse
-  Source tables + SQL reporting views
-                    |
-                    v
-      SQL analysis / future Power BI reporting
+Synthetic CSV source files
+        |
+        v
+Fabric Lakehouse: Bronze -> Silver -> Gold
+        |                     |
+        |                     +-- reconciliation results, exceptions,
+        |                         summary, dimensions, allocations
+        v
+Fabric Warehouse tables -> SQL reporting views
+                                  |
+                                  v
+                      Power BI Import semantic model
+                                  |
+                                  v
+                         Four-page Power BI report
 ```
 
-### Fabric assets
+The production workspace is `Elarwick_Finance_Engineering`. Its Lakehouse is `LH_Elarwick_Reconciliation` and its Warehouse is `WH_Elarwick_Reconciliation`.
 
-| Asset | Name |
-|---|---|
-| Workspace | `Elarwick_Finance_Engineering` |
-| Lakehouse | `LH_Elarwick_Reconciliation` |
-| Warehouse | `WH_Elarwick_Reconciliation` |
-| Main pipeline | `PL_Elarwick_MonthEnd_Close` |
-| Gold-to-Warehouse pipeline | `PL_Elarwick_Gold_To_Warehouse` |
+The notebook definitions are `NB_01_Ingest_Bronze`, `NB_02_Validate_Silver`, and `NB_03_Journal_Controls`. Two pipeline definitions are included: `PL_Elarwick_MonthEnd_Close` sequences the notebooks and copies the reconciliation-results table; `PL_Elarwick_Gold_To_Warehouse` separately copies the seven Gold/dimension outputs. These are separate pipelines, not a single end-to-end close orchestration.
 
-### Notebooks
+The Warehouse reporting views are:
 
-- `NB_01_Ingest_Bronze` — ingests source data into Bronze.
-- `NB_02_Validate_Silver` — validates and prepares Silver data.
-- `NB_03_Journal_Controls` — creates reconciliation results, exceptions, and summary outputs.
+- `dbo.vw_ReconciliationResults`
+- `dbo.vw_ReconciliationExceptions`
+- `dbo.vw_ReconciliationAllocationReview`
+- `dbo.vw_ReconciliationAllocations`
+- `dbo.vw_MonthEndCloseSummary`
 
-## Reconciliation outputs
+The semantic model imports from these views. Its reconciliation-results measures include group counts, confirmed groups, review groups, match rate, bank and ledger signed totals, and the sum of populated group-level amount differences. That amount-difference measure is not defined as bank total minus ledger total; bank-only and ledger-only groups have blank group differences.
 
-The Lakehouse Gold layer includes:
+## Validation recorded
 
-- `gold_reconciliationresults`
-- `gold_reconciliationexceptions`
-- `gold_reconciliationsummary`
-- `gold_reconciliationallocations`
-- `gold_reconciliationallocationreview`
+The project documentation records a Warehouse validation baseline of:
 
-The results include statuses such as:
-
-- `CONFIRMED_MATCH`
-- `CONFIRMED_GROUP_MATCH`
-- `AMOUNT_DISCREPANCY`
-- `BANK_ONLY`
-- `DATE_MISMATCH`
-- `LEDGER_ONLY`
-- `POSSIBLE_DUPLICATE`
-- `POTENTIAL_MATCH`
-
-Confirmed statuses represent reconciliation outcomes accepted by the current matching workflow. Other statuses are surfaced for review; this is the current reporting convention, not a claim that every item has been fully investigated by a finance user.
-
-## Warehouse reporting views
-
-Five views have been created in `WH_Elarwick_Reconciliation`:
-
-| View | Purpose |
-|---|---|
-| `dbo.vw_ReconciliationResults` | Reusable access to reconciliation results, amounts, dates, status, and reasons. |
-| `dbo.vw_ReconciliationExceptions` | Items requiring investigation, grouped by status and exception reason. |
-| `dbo.vw_ReconciliationAllocationReview` | Allocation groups flagged for finance review, with review reasons. |
-| `dbo.vw_MonthEndCloseSummary` | Aggregated counts and signed amounts by reconciliation status, including review-group counts. |
-| `dbo.vw_ReconciliationAllocations` | Allocation-level details connecting bank transactions and GL entries. |
-
-These views sit on top of the Warehouse tables. They do not create a second copy of the source records. They provide a reusable SQL interface for analysis and can be queried independently of a Power BI semantic model.
-
-## Validation completed
-
-The following checks were run against the Fabric Warehouse:
-
-### View row counts
-
-| View | Validated rows |
+| Reporting view | Rows |
 |---|---:|
 | `vw_ReconciliationResults` | 19 |
 | `vw_ReconciliationExceptions` | 7 |
 | `vw_ReconciliationAllocationReview` | 7 |
-| `vw_MonthEndCloseSummary` | 8 |
 | `vw_ReconciliationAllocations` | 14 |
+| `vw_MonthEndCloseSummary` | 8 |
 
-The view counts matched the expected baseline at the time of validation.
+It also records 10 `CONFIRMED_MATCH` groups and 2 `CONFIRMED_GROUP_MATCH` groups, all with zero group-level amount difference. Allocation totals were checked for those confirmed groups, including distinct transaction/entry checks for `GROUP-010` and `GROUP-012`. These are recorded project-run results, not a claim that the live Fabric data has been freshly revalidated for this repository update.
 
-### Confirmed reconciliation checks
+## Limitations
 
-- The results contained 10 `CONFIRMED_MATCH` groups and 2 `CONFIRMED_GROUP_MATCH` groups.
-- All 12 confirmed groups had a zero amount difference in the reconciliation results.
-- Each confirmed group had corresponding allocation rows.
-- Allocated totals matched the result amounts for all 12 confirmed groups.
-- Group-level allocation checks for `GROUP-010` and `GROUP-012` showed that distinct bank and GL totals each equalled the allocated total.
+- The Copy sinks are configured to insert. A previous repeated load appended duplicates; cleanup and a subsequent transfer validation were recorded. The pipelines are not safe to rerun as an idempotent incremental load.
+- Incremental loading, duplicate-proof retries, partial-failure recovery, and comprehensive load auditing are not delivered capabilities.
+- Advanced close-run orchestration, approval, and exception-review controls are not part of this final solution.
+- The project does not establish that every exception has been resolved or that the synthetic workflow is production-ready.
+- Fabric exports contain item definitions and metadata, not Lakehouse or Warehouse table rows. Fabric access is required for live data and execution.
 
-### Allocation grain matters
+## Repository map
 
-In group allocations, a bank transaction or GL entry can appear on more than one allocation row. Summing repeated full transaction or journal amounts across those rows can overstate totals. Group-level checks must aggregate at the correct business grain rather than blindly summing repeated values.
+- [`Elarwick Services Group/Month_End_Closing.pbip`](Elarwick%20Services%20Group/Month_End_Closing.pbip) — Power BI project entry point.
+- [`Elarwick Services Group/Month_End_Closing.Report/`](Elarwick%20Services%20Group/Month_End_Closing.Report/) — PBIR pages and visuals.
+- [`Elarwick Services Group/Month_End_Closing.SemanticModel/`](Elarwick%20Services%20Group/Month_End_Closing.SemanticModel/) — TMDL semantic model.
+- [`Elarwick Services Group/Dataset/`](Elarwick%20Services%20Group/Dataset/) — synthetic source and expected-result files.
+- [`Elarwick Services Group/Fabric_Export/`](Elarwick%20Services%20Group/Fabric_Export/) — exported definitions for delivered production Fabric items, schemas, and Warehouse view SQL.
+- [`Elarwick Services Group/Documentation/FINAL_IMPLEMENTATION.md`](Elarwick%20Services%20Group/Documentation/FINAL_IMPLEMENTATION.md) — implementation and setup notes.
+- [`Elarwick Services Group/Month_End_Closing.pdf`](Elarwick%20Services%20Group/Month_End_Closing.pdf) — report export.
 
-### What these checks establish
+## Opening the report
 
-The checks establish row-count agreement for the reporting views and amount consistency for the confirmed groups examined. They do not prove that every source record is correct, that every exception has been resolved, or that the pipeline is safe for repeated execution.
+Open `Elarwick Services Group/Month_End_Closing.pbip` in Power BI Desktop. The report references the semantic model in the neighboring `Month_End_Closing.SemanticModel` folder. Refreshing or querying the model requires authorized access to the Fabric Warehouse SQL endpoint and an appropriately configured Power BI data-source credential. Credentials and machine-specific Power BI local settings are not included.
 
-## Current status
-
-**Completed**
-
-- Lakehouse reconciliation results, exceptions, summary, allocation, and allocation-review outputs are present.
-- Gold outputs have been transferred to the Warehouse.
-- Row-count validation passed for the seven transferred tables in the current project run.
-- Five Warehouse reporting views have been created and their row counts validated.
-- Confirmed-result and allocation amount checks passed for the 12 confirmed groups.
-
-**Still to do**
-
-- Build and refine reporting for finance users, including a Power BI report if needed.
-- Add broader financial and record-level validation for exceptions and allocations.
-- Improve pipeline and notebook reliability after the reporting work is complete.
-
-## Known limitation: repeated pipeline runs
-
-The current Gold-to-Warehouse Copy Data pipeline appended rows when the full pipeline was rerun. Duplicate rows were cleaned up and the full transfer was run again, after which row-count validation passed.
-
-**Do not treat the transfer pipeline as safe for repeated runs yet.** Incremental loading, idempotency, handling changed records, failure recovery, and run auditing are deliberately deferred until the final improvement phase.
-
-## Deferred reliability work
-
-The final engineering phase should cover:
-
-1. Stable business keys for each transferred table.
-2. Incremental loads and a defined strategy for changed records.
-3. Idempotent inserts or upserts so retries do not create duplicates.
-4. Recovery from failed or partially completed runs.
-5. Notebook rerun safety for Lakehouse Gold outputs.
-6. Validation by keys and financial totals, not row counts alone.
-7. Pipeline concurrency and run auditing, including inspection of existing control tables.
-
-## Scope and tools
-
-- Microsoft Fabric Trial
-- Fabric Lakehouse and Warehouse
-- Spark notebooks and Delta tables
-- Fabric pipelines and Copy Data activities
-- Warehouse SQL views
-
-The project uses synthetic data. Production deployment, enterprise security hardening, CI/CD, real-time ingestion, and production-scale performance testing are outside the current implemented scope.
-
-## Learning approach
-
-The solution is being built iteratively: inspect the data, test assumptions, validate results, investigate issues, and correct the implementation. The goal is to demonstrate the reasoning and validation behind a finance data workflow, not simply to produce a dashboard.
-
+Fabric definitions in `Fabric_Export` are reference artifacts; they do not include table data or a deployment automation script. Do not treat them as instructions to run a production pipeline.

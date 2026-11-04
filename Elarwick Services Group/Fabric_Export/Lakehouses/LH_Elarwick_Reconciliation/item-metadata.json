@@ -8,6 +8,8 @@
     "lakehouse.metadata.json",
     "alm.settings.json",
     "shortcuts.metadata.json",
-    ".platform"
-  ]
+    ".platform",
+    "onelake-table-schemas.json"
+  ],
+  "tableSchemaSource": "Item-ID-specific OneLake Delta metadata; schema only, no table rows."
 }
