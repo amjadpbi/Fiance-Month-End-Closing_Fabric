@@ -1,0 +1,21 @@
+﻿BankTransactionID,ExpectedStatus,ExpectedMatchMethod,ExpectedJournalEntryID,ExpectedAmountDifference,ExpectedExceptionCategory,ExpectedReason
+B001,ConfirmedMatch,Exact,JE001,0.00,None,"Reference, date and amount agree"
+B002,ConfirmedMatch,Exact,JE002,0.00,None,"Reference, date and amount agree; cash outflow"
+B003,ConfirmedMatch,Exact,JE003,0.00,None,"Reference, date and amount agree"
+B004,ConfirmedMatch,Exact,JE004,0.00,None,"Reference, date and amount agree; cash outflow"
+B005,ConfirmedMatch,Exact,JE005,0.00,None,"Reference, date and amount agree"
+B006,ConfirmedMatch,Exact,JE006,0.00,None,"Reference, date and amount agree; cash outflow"
+B007,ConfirmedMatch,Exact,JE007,0.00,None,"Reference, date and amount agree"
+B008,ConfirmedMatch,Exact,JE008,0.00,None,"Reference, date and amount agree; cash outflow"
+B009,PotentialMatch,RuleBased,JE009,0.00,Potential match,"Date and amount support a candidate, but reference is missing"
+B010,ConfirmedGroupedMatch,Grouped,JE010,0.00,None,B010 + B011 = 300.00; reference supports grouping
+B011,ConfirmedGroupedMatch,Grouped,JE010,0.00,None,B010 + B011 = 300.00; reference supports grouping
+B012,ConfirmedGroupedMatch,Grouped,JE011|JE012,0.00,None,450.00 = 150.00 + 300.00; shared reference supports grouping
+B013,PotentialMatch,AmountDiscrepancy,JE013,500.00,Amount discrepancy,"Bank 25,000.00 vs ledger 24,500.00; do not auto-confirm"
+B014,PotentialMatch,DateDifference,JE014,0.00,Potential match,Reference and amount agree but dates differ; review required
+B015,Unmatched,None,,990.00,Unmatched,No supported ledger match
+B016,SuspectedDuplicate,DuplicateEvidence,JE001,0.00,Duplicate,Same date/reference/amount as B001 but distinct ID; preserve and review
+B017,Quarantined,ValidationFailure,,0.00,Invalid/rejected,Both debit and credit are populated
+B018,ConfirmedMatch,Exact,JE015,0.00,None,"Reference, date and amount agree"
+B019,ConfirmedMatch,Exact,JE016,0.00,None,"Reference, date and amount agree"
+B020,ConfirmedMatch,Exact,JE017,0.00,None,"Reference, date and amount agree"

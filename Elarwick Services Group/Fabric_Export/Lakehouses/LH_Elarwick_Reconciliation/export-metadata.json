@@ -1,0 +1,11 @@
+{
+    "itemName":  "LH_Elarwick_Reconciliation",
+    "itemType":  "Lakehouse",
+    "objectCount":  17,
+    "columnCount":  196,
+    "moduleCount":  0,
+    "exportType":  "catalog metadata only",
+    "constraintsAndIndexesExported":  false,
+    "dataRowsExported":  false,
+    "exportedUtc":  "2026-11-04T08:24:22Z"
+}

@@ -1,0 +1,21 @@
+{
+    "displayName":  "NB_02_Validate_Silver",
+    "itemId":  "42e6ee97-279b-44c8-ac5d-913d74ffda5f",
+    "itemType":  "Notebook",
+    "workspaceId":  "862d5926-a7fb-4540-8fc7-51df8f916f0d",
+    "workspaceName":  "Elarwick Dev",
+    "definitionParts":  [
+                            {
+                                "path":  "notebook-content.py",
+                                "payloadType":  "InlineBase64",
+                                "byteCount":  20925
+                            },
+                            {
+                                "path":  ".platform",
+                                "payloadType":  "InlineBase64",
+                                "byteCount":  307
+                            }
+                        ],
+    "exportedUtc":  "2026-11-04T08:33:08Z",
+    "dataRowsExported":  false
+}

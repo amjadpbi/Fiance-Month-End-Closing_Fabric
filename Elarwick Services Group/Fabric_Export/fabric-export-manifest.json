@@ -1,0 +1,311 @@
+{
+  "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c",
+  "additionalWorkspaces": [
+    {
+      "displayName": "Elarwick Dev",
+      "workspaceId": "862d5926-a7fb-4540-8fc7-51df8f916f0d",
+      "itemCount": 8
+    }
+  ],
+  "relatedItems": [
+    {
+      "displayName": "LH_Elarwick_Reconciliation",
+      "itemType": "SQLEndpoint",
+      "itemId": "5f26eff9-79c3-466c-85b1-2748387ad799",
+      "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c"
+    },
+    {
+      "displayName": "LH_Elarwick_Reconciliation_Dev",
+      "itemType": "SQLEndpoint",
+      "itemId": "b34d921f-e45d-4f43-aab1-1b5f22baf84b",
+      "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c"
+    },
+    {
+      "displayName": "LH_Elarwick_Reconciliation",
+      "itemType": "SQLEndpoint",
+      "itemId": "81401709-f1fe-4900-934f-d9273416c15a",
+      "workspaceId": "862d5926-a7fb-4540-8fc7-51df8f916f0d"
+    }
+  ],
+  "exports": [
+    {
+      "displayName": "NB_01_Ingest_Bronze",
+      "itemId": "bbe940fc-a2c4-4ff6-9390-55e94035a151",
+      "itemType": "Notebook",
+      "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c",
+      "definitionParts": [
+        "notebook-content.py",
+        ".platform"
+      ],
+      "exportedUtc": "2026-11-04T08:19:07Z"
+    },
+    {
+      "displayName": "NB_02_Validate_Silver",
+      "itemId": "e8d17ad4-8365-4db7-a3d6-49f2d5e2fcde",
+      "itemType": "Notebook",
+      "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c",
+      "definitionParts": [
+        "notebook-content.py",
+        ".platform"
+      ],
+      "exportedUtc": "2026-11-04T08:19:07Z"
+    },
+    {
+      "displayName": "NB_03_Journal_Controls",
+      "itemId": "fc72573b-d29d-4222-a93b-389806537667",
+      "itemType": "Notebook",
+      "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c",
+      "definitionParts": [
+        "notebook-content.py",
+        ".platform"
+      ],
+      "exportedUtc": "2026-11-04T08:19:07Z"
+    },
+    {
+      "displayName": "NB_01_Ingest_Bronze_Dev",
+      "itemId": "3390794a-de7a-4d9c-967c-7085d22eb4b7",
+      "itemType": "Notebook",
+      "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c",
+      "definitionParts": [
+        "notebook-content.py",
+        ".platform"
+      ],
+      "exportedUtc": "2026-11-04T08:19:07Z"
+    },
+    {
+      "displayName": "NB_02_Validate_Silver_Dev",
+      "itemId": "bc06c534-4b1e-4950-a282-6d30f6af2e71",
+      "itemType": "Notebook",
+      "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c",
+      "definitionParts": [
+        "notebook-content.py",
+        ".platform"
+      ],
+      "exportedUtc": "2026-11-04T08:19:07Z"
+    },
+    {
+      "displayName": "NB_03_Reconciliation_Engine_Dev",
+      "itemId": "a6ede369-a7b6-4cd7-a869-89f324af1034",
+      "itemType": "Notebook",
+      "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c",
+      "definitionParts": [
+        "notebook-content.py",
+        ".platform"
+      ],
+      "exportedUtc": "2026-11-04T08:19:07Z"
+    },
+    {
+      "displayName": "PL_Elarwick_MonthEnd_Close",
+      "itemId": "56d419c8-e1ca-4f47-95bd-9b9493abe0e3",
+      "itemType": "DataPipeline",
+      "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c",
+      "definitionParts": [
+        "pipeline-content.json",
+        ".platform"
+      ],
+      "exportedUtc": "2026-11-04T08:19:07Z"
+    },
+    {
+      "displayName": "PL_Elarwick_Gold_To_Warehouse",
+      "itemId": "e98584ef-c334-48e3-a7d9-925613360d8a",
+      "itemType": "DataPipeline",
+      "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c",
+      "definitionParts": [
+        "pipeline-content.json",
+        ".platform"
+      ],
+      "exportedUtc": "2026-11-04T08:19:07Z"
+    },
+    {
+      "displayName": "PL_Dev_Lakehouse_Connector_Test",
+      "itemId": "942f81f3-7721-4c86-b3e7-6b0e4074e23c",
+      "itemType": "DataPipeline",
+      "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c",
+      "definitionParts": [
+        "pipeline-content.json",
+        ".platform"
+      ],
+      "exportedUtc": "2026-11-04T08:19:07Z"
+    },
+    {
+      "displayName": "PL_Dev_Close_Load",
+      "itemId": "ed09bde2-3066-4137-beb4-695e21e1168e",
+      "itemType": "DataPipeline",
+      "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c",
+      "definitionParts": [
+        "pipeline-content.json",
+        ".platform"
+      ],
+      "exportedUtc": "2026-11-04T08:19:07Z"
+    },
+    {
+      "displayName": "PL_Dev_Close_Finalize",
+      "itemId": "126dcd1e-877f-4a03-b3a8-294b692bb817",
+      "itemType": "DataPipeline",
+      "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c",
+      "definitionParts": [
+        "pipeline-content.json",
+        ".platform"
+      ],
+      "exportedUtc": "2026-11-04T08:19:07Z"
+    },
+    {
+      "displayName": "LH_Elarwick_Reconciliation",
+      "itemId": "1836fa4b-2f43-4a48-b8d6-de7bd7d9e935",
+      "itemType": "Lakehouse",
+      "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c",
+      "definitionParts": [
+        "lakehouse.metadata.json",
+        "alm.settings.json",
+        "shortcuts.metadata.json",
+        ".platform",
+        "table-schemas.sql"
+      ],
+      "relatedSqlEndpointId": "5f26eff9-79c3-466c-85b1-2748387ad799",
+      "exportedUtc": "2026-11-04T08:19:07Z",
+      "dataRowsExported": false
+    },
+    {
+      "displayName": "LH_Elarwick_Reconciliation_Dev",
+      "itemId": "fde2d467-db15-4156-9ae9-4ebc889e90e4",
+      "itemType": "Lakehouse",
+      "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c",
+      "definitionParts": [
+        "lakehouse.metadata.json",
+        "alm.settings.json",
+        "shortcuts.metadata.json",
+        ".platform",
+        "table-schemas.sql"
+      ],
+      "relatedSqlEndpointId": "b34d921f-e45d-4f43-aab1-1b5f22baf84b",
+      "exportedUtc": "2026-11-04T08:19:07Z",
+      "dataRowsExported": false
+    },
+    {
+      "displayName": "WH_Elarwick_Reconciliation",
+      "itemId": "22a20472-caf8-4bec-affa-ae5d2c788748",
+      "itemType": "Warehouse",
+      "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c",
+      "definitionParts": [
+        "item-metadata.json",
+        "table-schemas.sql",
+        "constraints-and-indexes.json",
+        "onelake-table-schemas.json",
+        "sql-modules/"
+      ],
+      "definitionExported": false,
+      "schemaSource": "Item-ID-specific OneLake metadata; SQL catalog exports are database-name-based and production item attribution is ambiguous across workspaces.",
+      "dataRowsExported": false
+    },
+    {
+      "displayName": "WH_Elarwick_Reconciliation_Dev",
+      "itemId": "af68efe3-b674-4e5a-bf86-ab7ab1a9a5c9",
+      "itemType": "Warehouse",
+      "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c",
+      "definitionParts": [
+        "item-metadata.json",
+        "table-schemas.sql",
+        "constraints-and-indexes.json",
+        "onelake-table-schemas.json",
+        "sql-modules/"
+      ],
+      "definitionExported": false,
+      "dataRowsExported": false
+    },
+    {
+      "displayName": "NB_01_Ingest_Bronze",
+      "itemId": "279673ed-4a82-4465-a6e9-1e7b4eed5c6c",
+      "itemType": "Notebook",
+      "workspaceId": "862d5926-a7fb-4540-8fc7-51df8f916f0d",
+      "definitionParts": [
+        "notebook-content.py",
+        ".platform"
+      ],
+      "exportedUtc": "2026-11-04T08:33:35Z"
+    },
+    {
+      "displayName": "NB_02_Validate_Silver",
+      "itemId": "42e6ee97-279b-44c8-ac5d-913d74ffda5f",
+      "itemType": "Notebook",
+      "workspaceId": "862d5926-a7fb-4540-8fc7-51df8f916f0d",
+      "definitionParts": [
+        "notebook-content.py",
+        ".platform"
+      ],
+      "exportedUtc": "2026-11-04T08:33:35Z"
+    },
+    {
+      "displayName": "NB_03_Journal_Controls",
+      "itemId": "df7ff53a-2218-4d60-a136-cbd791ed64e6",
+      "itemType": "Notebook",
+      "workspaceId": "862d5926-a7fb-4540-8fc7-51df8f916f0d",
+      "definitionParts": [
+        "notebook-content.py",
+        ".platform"
+      ],
+      "exportedUtc": "2026-11-04T08:33:35Z"
+    },
+    {
+      "displayName": "PL_Elarwick_MonthEnd_Close",
+      "itemId": "1b4ca812-90d0-418a-971b-97a9162080c2",
+      "itemType": "DataPipeline",
+      "workspaceId": "862d5926-a7fb-4540-8fc7-51df8f916f0d",
+      "definitionParts": [
+        "pipeline-content.json",
+        ".platform"
+      ],
+      "exportedUtc": "2026-11-04T08:33:35Z"
+    },
+    {
+      "displayName": "PL_Elarwick_Gold_To_Warehouse",
+      "itemId": "3c13314c-9bd8-4e29-b9de-bbb940d1c8b3",
+      "itemType": "DataPipeline",
+      "workspaceId": "862d5926-a7fb-4540-8fc7-51df8f916f0d",
+      "definitionParts": [
+        "pipeline-content.json",
+        ".platform"
+      ],
+      "exportedUtc": "2026-11-04T08:33:35Z"
+    },
+    {
+      "displayName": "LH_Elarwick_Reconciliation",
+      "itemId": "a1933b01-c4ac-44dc-a17f-6f16b68bb93e",
+      "itemType": "Lakehouse",
+      "workspaceId": "862d5926-a7fb-4540-8fc7-51df8f916f0d",
+      "definitionParts": [
+        "lakehouse.metadata.json",
+        "alm.settings.json",
+        "shortcuts.metadata.json",
+        ".platform",
+        "table-schemas.json"
+      ],
+      "relatedSqlEndpointId": "81401709-f1fe-4900-934f-d9273416c15a",
+      "dataRowsExported": false
+    },
+    {
+      "displayName": "WH_Elarwick_Reconciliation",
+      "itemId": "b312f7f7-e558-4836-abfc-872dbac3582e",
+      "itemType": "Warehouse",
+      "workspaceId": "862d5926-a7fb-4540-8fc7-51df8f916f0d",
+      "definitionParts": [
+        "item-metadata.json",
+        "onelake-table-schemas.json"
+      ],
+      "definitionExported": false,
+      "dataRowsExported": false
+    },
+    {
+      "displayName": "WH_Elarwick_Reconciliation_Dev",
+      "itemId": "dd0f8444-714a-4c3a-b853-6d50910b9802",
+      "itemType": "Warehouse",
+      "workspaceId": "862d5926-a7fb-4540-8fc7-51df8f916f0d",
+      "definitionParts": [
+        "item-metadata.json",
+        "onelake-table-schemas.json"
+      ],
+      "definitionExported": false,
+      "dataRowsExported": false
+    }
+  ],
+  "exportedUtc": "2026-11-04T08:19:07Z"
+}

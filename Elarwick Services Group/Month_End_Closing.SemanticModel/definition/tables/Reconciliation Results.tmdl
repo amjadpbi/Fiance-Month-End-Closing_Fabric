@@ -1,0 +1,191 @@
+/// One row per reconciliation reference group in a reconciliation run. Group-level amounts must not be summed through allocation detail.
+table 'Reconciliation Results'
+	lineageTag: d3eb7454-b51a-4cea-a0e8-fe58043fe268
+
+	/// Counts reference-group rows in the selected reconciliation result set, including groups with a missing reference.
+	measure 'Total Reconciliation Groups' = COUNTROWS ( 'Reconciliation Results' )
+		formatString: #,##0
+		displayFolder: Reconciliation
+		lineageTag: f8aec8e4-d353-48c5-b6a7-9871490ba714
+
+	/// Counts confirmed one-to-one and confirmed grouped reconciliation result rows.
+	measure 'Confirmed Reconciliation Groups' = COALESCE ( CALCULATE ( COUNTROWS ( 'Reconciliation Results' ), KEEPFILTERS ( 'Reconciliation Results'[ReconciliationStatus] IN { "CONFIRMED_MATCH", "CONFIRMED_GROUP_MATCH" } ) ), 0 )
+		formatString: #,##0
+		displayFolder: Reconciliation
+		lineageTag: 3b6114b7-5c93-4721-85d5-cfb3e7737a41
+
+	/// Counts reconciliation result rows not marked as a confirmed match or confirmed group match.
+	measure 'Groups Requiring Review' = COALESCE ( CALCULATE ( COUNTROWS ( 'Reconciliation Results' ), KEEPFILTERS ( 'Reconciliation Results'[ReconciliationStatus] <> "CONFIRMED_MATCH" ), KEEPFILTERS ( 'Reconciliation Results'[ReconciliationStatus] <> "CONFIRMED_GROUP_MATCH" ) ), 0 )
+		formatString: #,##0
+		displayFolder: Reconciliation
+		lineageTag: aade5527-ab35-4b87-b1ef-90697b1516dc
+
+	/// Confirmed reconciliation groups divided by all reconciliation result groups in the current filter context.
+	measure 'Group Match Rate' = DIVIDE ( [Confirmed Reconciliation Groups], [Total Reconciliation Groups] )
+		formatString: 0.0%
+		displayFolder: Reconciliation
+		lineageTag: a486f6aa-e989-425c-b45b-76ad20a3436f
+
+	/// Sums bank-side signed amounts once per reconciliation result group. Blank amounts for groups without bank data remain blank at row level.
+	measure 'Bank Signed Total' = SUM ( 'Reconciliation Results'[BankSignedAmount] )
+		formatString: #,##0.00;(#,##0.00);0.00
+		displayFolder: Amounts
+		lineageTag: e69f1341-f353-4bcd-a610-cb0af21c4ec0
+
+	/// Sums ledger-side signed amounts once per reconciliation result group. Blank amounts for groups without ledger data remain blank at row level.
+	measure 'Ledger Signed Total' = SUM ( 'Reconciliation Results'[GLSignedAmount] )
+		formatString: #,##0.00;(#,##0.00);0.00
+		displayFolder: Amounts
+		lineageTag: 1cf0a493-d048-40cd-89ad-8f12947db2e3
+
+	/// Net signed sum of nonblank group amount differences; bank-only and ledger-only blank differences are not coerced to zero.
+	measure 'Reconciliation Amount Difference' = SUM ( 'Reconciliation Results'[Amount Difference] )
+		formatString: #,##0.00;(#,##0.00);0.00
+		displayFolder: Amounts
+		lineageTag: e6f2e872-b627-42e7-958f-04f552b019a3
+
+	column NormalizedReference
+		dataType: string
+		lineageTag: 8087659e-c24c-4e65-a252-f333c864ee98
+		sourceColumn: NormalizedReference
+
+	column BankTransactionIDs
+		dataType: string
+		lineageTag: 3baa6782-e4dd-4e23-9d49-dbcc41149963
+		sourceColumn: BankTransactionIDs
+
+	column JournalEntryIDs
+		dataType: string
+		lineageTag: 85251308-b919-4d93-82dc-aa4226888290
+		sourceColumn: JournalEntryIDs
+
+	column BankSignedAmount
+		dataType: double
+		formatString: #,##0.00;(#,##0.00);0.00
+		lineageTag: c277ae76-b1ea-4eed-9280-dcb1b774014b
+		summarizeBy: sum
+		sourceColumn: BankSignedAmount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column GLSignedAmount
+		dataType: double
+		formatString: #,##0.00;(#,##0.00);0.00
+		lineageTag: 9441b8b2-64f8-411c-85a7-ca163a3b7803
+		summarizeBy: sum
+		sourceColumn: GLSignedAmount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Amount Difference'
+		dataType: double
+		formatString: #,##0.00;(#,##0.00);0.00
+		lineageTag: d8fceea7-e585-40b0-a167-ff15434ed457
+		summarizeBy: sum
+		sourceColumn: Amount Difference
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column BankFirstDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: eb1bab2c-213b-4c86-9dae-f7c36f70d2a2
+		summarizeBy: none
+		sourceColumn: BankFirstDate
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column BankLastDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 6e141251-20fa-4a1b-83cd-47752e2f7baa
+		summarizeBy: none
+		sourceColumn: BankLastDate
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column GLFirstDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: f9a24b63-7215-46fb-9abd-41991aaaf468
+		summarizeBy: none
+		sourceColumn: GLFirstDate
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column GLLastDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: cc9640ed-1d5a-45dc-b48c-825b00cc4ec1
+		summarizeBy: none
+		sourceColumn: GLLastDate
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Date DifferenceDays'
+		dataType: int64
+		lineageTag: 995a9d53-578c-46fa-bdf4-29756cf75e04
+		sourceColumn: Date DifferenceDays
+
+	column BankTransactionCount
+		dataType: int64
+		lineageTag: efc0571e-8509-4590-baf2-dea54341d1be
+		sourceColumn: BankTransactionCount
+
+	column GLEntryCount
+		dataType: int64
+		lineageTag: 6080b52e-d627-4de0-9de9-13e156781d11
+		sourceColumn: GLEntryCount
+
+	column ReconciliationStatus
+		dataType: string
+		lineageTag: cf72b9f5-f484-4b39-a793-89cd7f25d003
+		sourceColumn: ReconciliationStatus
+
+	column MatchMethod
+		dataType: string
+		lineageTag: 88687093-0abd-4bd1-84d6-917dbed00f75
+		sourceColumn: MatchMethod
+
+	column ExceptionReason
+		dataType: string
+		lineageTag: ff2a5e82-f59f-48fe-9bc6-37e64d80ee1d
+		sourceColumn: ExceptionReason
+
+	column ReconciliationRunID
+		dataType: string
+		isHidden
+		lineageTag: 4da2526c-3a6c-427b-be91-34d0284128db
+		sourceColumn: ReconciliationRunID
+
+	column ProcessedAt
+		dataType: dateTime
+		lineageTag: dee98cde-84f8-4f64-9c3b-dff43598dc83
+		sourceColumn: ProcessedAt
+
+	/// Technical composite key for a reconciliation group using run ID and reference, with explicit handling for missing references.
+	column ReconciliationGroupKey = VAR _Run = COALESCE ( 'Reconciliation Results'[ReconciliationRunID], "" ) VAR _Reference = 'Reconciliation Results'[NormalizedReference] RETURN FORMAT ( LEN ( _Run ), "0" ) & ":" & _Run & ":" & IF ( ISBLANK ( _Reference ), "N", "V" & FORMAT ( LEN ( _Reference ), "0" ) & ":" & _Reference )
+		dataType: string
+		isHidden
+		lineageTag: 793204b9-ee38-49a1-be5c-830be36d4d68
+
+	partition 'Reconciliation Results' = m
+		mode: import
+		source =
+				let Source = Sql.Database("kxme24s4ar5excpmug6oeu3a5a-2upkngedxxhebght4tvazxeofq.datawarehouse.fabric.microsoft.com", "WH_Elarwick_Reconciliation"), View = Source{[Schema="dbo", Item="vw_ReconciliationResults"]}[Data],
+				    #"Renamed Columns" = Table.RenameColumns(View,{{"DateDifferenceDays", "Date DifferenceDays"}, {"AmountDifference", "Amount Difference"}}) in #"Renamed Columns"
+

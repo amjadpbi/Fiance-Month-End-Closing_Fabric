@@ -1,0 +1,11 @@
+{
+    "itemName":  "WH_Elarwick_Reconciliation",
+    "itemType":  "Warehouse",
+    "objectCount":  7,
+    "columnCount":  82,
+    "moduleCount":  5,
+    "exportType":  "catalog metadata only",
+    "constraintsAndIndexesExported":  false,
+    "dataRowsExported":  false,
+    "exportedUtc":  "2026-11-04T08:24:27Z"
+}

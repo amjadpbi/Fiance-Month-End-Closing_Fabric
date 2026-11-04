@@ -1,0 +1,184 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "close_status_summary_table",
+  "position": {
+    "x": 23.896103896103895,
+    "y": 289.87012987012986,
+    "z": 6000,
+    "height": 200.51948051948051,
+    "width": 598.44155844155841,
+    "tabOrder": 6000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Month-End Close Summary"
+                    }
+                  },
+                  "Property": "ReconciliationStatus"
+                }
+              },
+              "queryRef": "Month-End Close Summary.ReconciliationStatus",
+              "nativeQueryRef": "ReconciliationStatus"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Month-End Close Summary"
+                    }
+                  },
+                  "Property": "ReferenceGroupCount"
+                }
+              },
+              "queryRef": "Month-End Close Summary.ReferenceGroupCount",
+              "nativeQueryRef": "ReferenceGroupCount"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Month-End Close Summary"
+                    }
+                  },
+                  "Property": "ReviewGroupCount"
+                }
+              },
+              "queryRef": "Month-End Close Summary.ReviewGroupCount",
+              "nativeQueryRef": "ReviewGroupCount"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Month-End Close Summary"
+                    }
+                  },
+                  "Property": "TotalBankSignedAmount"
+                }
+              },
+              "queryRef": "Month-End Close Summary.TotalBankSignedAmount",
+              "nativeQueryRef": "TotalBankSignedAmount"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Month-End Close Summary"
+                    }
+                  },
+                  "Property": "TotalGLSignedAmount"
+                }
+              },
+              "queryRef": "Month-End Close Summary.TotalGLSignedAmount",
+              "nativeQueryRef": "TotalGLSignedAmount"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Month-End Close Summary"
+                    }
+                  },
+                  "Property": "TotalAmountDifference"
+                }
+              },
+              "queryRef": "Month-End Close Summary.TotalAmountDifference",
+              "nativeQueryRef": "TotalAmountDifference"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "columnHeaders": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "values": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "total": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Close summary by status'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

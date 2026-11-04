@@ -1,0 +1,11 @@
+{
+  "displayName": "NB_03_Journal_Controls",
+  "itemId": "fc72573b-d29d-4222-a93b-389806537667",
+  "itemType": "Notebook",
+  "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c",
+  "definitionParts": [
+    "notebook-content.py",
+    ".platform"
+  ],
+  "exportedUtc": "2026-11-04T08:19:07Z"
+}

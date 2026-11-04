@@ -1,0 +1,11 @@
+{
+  "displayName": "PL_Elarwick_Gold_To_Warehouse",
+  "itemId": "e98584ef-c334-48e3-a7d9-925613360d8a",
+  "itemType": "DataPipeline",
+  "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c",
+  "definitionParts": [
+    "pipeline-content.json",
+    ".platform"
+  ],
+  "exportedUtc": "2026-11-04T08:19:07Z"
+}

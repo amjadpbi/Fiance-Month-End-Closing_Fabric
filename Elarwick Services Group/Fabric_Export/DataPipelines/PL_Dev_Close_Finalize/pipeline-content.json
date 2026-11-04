@@ -1,0 +1,52 @@
+{
+  "properties": {
+    "description": "Dev-only second stage. Requires complete Finance exception reviews; finalizes readiness but never records Finance approval or moves the accepted-close pointer.",
+    "parameters": {
+      "CloseRunID": {
+        "type": "String"
+      },
+      "CloseAttemptID": {
+        "type": "String"
+      }
+    },
+    "variables": {},
+    "activities": [
+      {
+        "name": "Verify_Review_And_Finalize",
+        "type": "Script",
+        "dependsOn": [],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "linkedService": {
+          "name": "WH_Elarwick_Reconciliation_Dev",
+          "properties": {
+            "annotations": [],
+            "type": "DataWarehouse",
+            "typeProperties": {
+              "endpoint": "kxme24s4ar5excpmug6oeu3a5a-2upkngedxxhebght4tvazxeofq.datawarehouse.fabric.microsoft.com",
+              "artifactId": "af68efe3-b674-4e5a-bf86-ab7ab1a9a5c9",
+              "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c"
+            }
+          }
+        },
+        "typeProperties": {
+          "scripts": [
+            {
+              "type": "Query",
+              "text": {
+                "value": "@concat('IF DB_NAME() <> N''WH_Elarwick_Reconciliation_Dev'' THROW 51200, ''This activity can run only in WH_Elarwick_Reconciliation_Dev.'', 1;\n','DECLARE @CloseRunID varchar(36) = N''',replace(pipeline().parameters.CloseRunID,'''',''''''),''';\nDECLARE @CloseAttemptID varchar(36) = N''',replace(pipeline().parameters.CloseAttemptID,'''',''''''),''';\n','\nIF NOT EXISTS (SELECT 1 FROM dbo.Control_CloseRuns WHERE CloseRunID = @CloseRunID AND CurrentAttemptID = @CloseAttemptID AND ExecutionStatus = ''RUNNING'' AND ApprovalStatus IS NULL) THROW 51230, ''Only the current running close attempt can be finalized.'', 1;\nIF (SELECT COUNT_BIG(*) FROM dbo.Control_CloseSourceFiles WHERE CloseRunID = @CloseRunID AND CloseAttemptID = @CloseAttemptID) <> 4 THROW 51231, ''Four source manifests are required.'', 1;\nIF (SELECT COUNT_BIG(*) FROM dbo.Control_CloseTableLoads WHERE CloseRunID = @CloseRunID AND CloseAttemptID = @CloseAttemptID AND LoadStatus = ''PERSISTED'') <> 7 THROW 51232, ''Seven persisted table manifests are required.'', 1;\nIF (SELECT COUNT_BIG(*) FROM dbo.Control_CloseValidations WHERE CloseRunID = @CloseRunID AND CloseAttemptID = @CloseAttemptID AND ValidationCode IN (''SOURCE_COMPLETENESS'',''DATA_VALIDATION'',''RECONCILIATION_INTEGRITY'',''REPORTING_PERIOD_CONFIRMATION'') AND ValidationResult = ''PASS'' AND IsRequired = 1) <> 4 THROW 51233, ''A required pre-review validation is missing or failed.'', 1;\nIF (SELECT COUNT_BIG(*) FROM dbo.FactReconciliationExceptions WHERE CloseRunID = @CloseRunID AND CloseAttemptID = @CloseAttemptID) <> (SELECT COUNT_BIG(*) FROM dbo.Control_CloseExceptions WHERE CloseRunID = @CloseRunID AND CloseAttemptID = @CloseAttemptID) THROW 51234, ''Every exception fact must have a matching review record.'', 1;\nIF EXISTS (SELECT 1 FROM dbo.FactReconciliationExceptions AS F LEFT JOIN dbo.Control_CloseExceptions AS E ON E.CloseExceptionID = F.CloseExceptionID AND E.CloseRunID = F.CloseRunID AND E.CloseAttemptID = F.CloseAttemptID WHERE F.CloseRunID = @CloseRunID AND F.CloseAttemptID = @CloseAttemptID AND E.CloseExceptionID IS NULL) THROW 51239, ''An exception fact is missing its review record.'', 1;\nIF EXISTS (SELECT 1 FROM dbo.Control_CloseExceptions AS E LEFT JOIN dbo.FactReconciliationExceptions AS F ON F.CloseExceptionID = E.CloseExceptionID AND F.CloseRunID = E.CloseRunID AND F.CloseAttemptID = E.CloseAttemptID WHERE E.CloseRunID = @CloseRunID AND E.CloseAttemptID = @CloseAttemptID AND F.CloseExceptionID IS NULL) THROW 51240, ''A registered exception has no matching fact row.'', 1;\nIF EXISTS (SELECT 1 FROM dbo.Control_CloseExceptions AS E WHERE E.CloseRunID = @CloseRunID AND E.CloseAttemptID = @CloseAttemptID AND (E.ExceptionStatus NOT IN (''OPEN'',''RESOLVED'') OR E.ReviewStatus NOT IN (''REVIEWED'',''ACKNOWLEDGED'') OR E.ReviewedByDatabasePrincipal IS NULL OR E.ReviewedAt IS NULL OR E.ReviewComments IS NULL OR LTRIM(RTRIM(E.ReviewComments)) = '''' OR (E.ExceptionStatus = ''OPEN'' AND (E.ReviewStatus <> ''ACKNOWLEDGED'' OR E.UnresolvedAcknowledged <> 1)) OR (E.ExceptionStatus = ''RESOLVED'' AND E.UnresolvedAcknowledged = 1))) THROW 51235, ''Finance exception review is incomplete or invalid.'', 1;\nIF EXISTS (SELECT CloseExceptionID FROM dbo.FactReconciliationExceptions WHERE CloseRunID = @CloseRunID AND CloseAttemptID = @CloseAttemptID GROUP BY CloseExceptionID HAVING CloseExceptionID IS NULL OR COUNT_BIG(*) <> 1) THROW 51236, ''Exception fact identifiers are null or duplicated.'', 1;\nIF EXISTS (SELECT 1 FROM dbo.Control_CloseValidations WHERE CloseRunID = @CloseRunID AND CloseAttemptID = @CloseAttemptID AND ValidationCode = ''EXCEPTION_REVIEW'' AND (ValidationResult <> ''PASS'' OR IsRequired <> 1)) THROW 51237, ''Existing exception-review validation is not a required PASS.'', 1;\nIF NOT EXISTS (SELECT 1 FROM dbo.Control_CloseValidations WHERE CloseRunID = @CloseRunID AND CloseAttemptID = @CloseAttemptID AND ValidationCode = ''EXCEPTION_REVIEW'')\nBEGIN\n    DECLARE @ExceptionCount bigint = (SELECT COUNT_BIG(*) FROM dbo.Control_CloseExceptions WHERE CloseRunID = @CloseRunID AND CloseAttemptID = @CloseAttemptID);\n    EXEC dbo.usp_RecordCloseValidation @CloseRunID = @CloseRunID, @CloseAttemptID = @CloseAttemptID, @ValidationCode = ''EXCEPTION_REVIEW'', @ValidationResult = ''PASS'', @ExpectedValue = ''All exceptions reviewed by Finance'', @ActualValue = CONVERT(varchar(20), @ExceptionCount) + '' reviewed exceptions'', @EvidenceReference = ''PL_Dev_Close_Finalize'';\nEND;\nEXEC dbo.usp_FinalizeCloseAttempt @CloseRunID = @CloseRunID, @CloseAttemptID = @CloseAttemptID, @ExecutionResult = ''COMPLETED'';\nIF NOT EXISTS (SELECT 1 FROM dbo.Control_CloseRuns WHERE CloseRunID = @CloseRunID AND CurrentAttemptID = @CloseAttemptID AND ExecutionStatus = ''COMPLETED'' AND ReadinessStatus = ''READY'' AND ApprovalStatus = ''PENDING'') THROW 51238, ''Close attempt finalized but is not READY for separate Finance approval.'', 1;\nSELECT CloseRunID, CurrentAttemptID AS CloseAttemptID, ExecutionStatus, ReadinessStatus, ApprovalStatus FROM dbo.Control_CloseRuns WHERE CloseRunID = @CloseRunID;\n')",
+                "type": "Expression"
+              }
+            }
+          ],
+          "scriptBlockExecutionTimeout": "02:00:00"
+        }
+      }
+    ]
+  }
+}

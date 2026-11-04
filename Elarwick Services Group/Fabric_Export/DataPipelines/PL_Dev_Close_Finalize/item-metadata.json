@@ -1,0 +1,11 @@
+{
+  "displayName": "PL_Dev_Close_Finalize",
+  "itemId": "126dcd1e-877f-4a03-b3a8-294b692bb817",
+  "itemType": "DataPipeline",
+  "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c",
+  "definitionParts": [
+    "pipeline-content.json",
+    ".platform"
+  ],
+  "exportedUtc": "2026-11-04T08:19:07Z"
+}

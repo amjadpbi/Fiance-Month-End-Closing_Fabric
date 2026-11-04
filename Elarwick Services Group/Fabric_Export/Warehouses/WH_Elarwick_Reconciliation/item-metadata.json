@@ -1,0 +1,12 @@
+{
+  "displayName": "WH_Elarwick_Reconciliation",
+  "itemId": "22a20472-caf8-4bec-affa-ae5d2c788748",
+  "itemType": "Warehouse",
+  "workspaceId": "98a61ed5-bd83-40ce-98f3-e4ea0cdc8e2c",
+  "sqlEndpoint": "kxme24s4ar5excpmug6oeu3a5a-2upkngedxxhebght4tvazxeofq.datawarehouse.fabric.microsoft.com",
+  "definitionExported": false,
+  "definitionExportLimitation": "A Fabric Warehouse item-definition export route was not available. Table and module metadata was retrieved through read-only SQL catalog queries.",
+  "schemaExportFile": "onelake-table-schemas.json",
+  "sqlCatalogAttribution": "The catalog query used the database display name. A same-named Production Warehouse exists in another workspace, so SQL catalog modules and index metadata cannot be conclusively assigned to this item. The OneLake schema export is item-ID-specific.",
+  "dataRowsExported": false
+}
