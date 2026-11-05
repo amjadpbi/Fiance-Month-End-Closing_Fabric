@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "exception_breakdown_chart",
   "position": {
-    "x": 516.12903225806451,
-    "y": 241.29032258064515,
+    "x": 648,
+    "y": 308,
+    "width": 608,
+    "height": 148,
     "z": 0,
-    "height": 210.32258064516128,
-    "width": 750.9677419354839,
     "tabOrder": 0
   },
   "visual": {

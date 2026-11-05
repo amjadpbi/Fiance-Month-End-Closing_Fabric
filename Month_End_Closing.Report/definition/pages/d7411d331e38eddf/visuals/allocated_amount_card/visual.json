@@ -3,10 +3,10 @@
   "name": "allocated_amount_card",
   "position": {
     "x": 960,
-    "y": 135,
-    "z": 0,
-    "height": 140,
+    "y": 190,
     "width": 296,
+    "height": 140,
+    "z": 0,
     "tabOrder": 0
   },
   "visual": {

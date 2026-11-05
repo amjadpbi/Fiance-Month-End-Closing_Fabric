@@ -3,9 +3,9 @@
   "name": "exception_detail_table",
   "position": {
     "x": 24,
-    "y": 350,
+    "y": 334,
     "z": 0,
-    "height": 345,
+    "height": 360,
     "width": 1232,
     "tabOrder": 0
   },
@@ -185,51 +185,25 @@
             }
           ]
         }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Reconciliation Exceptions"
+                  }
+                },
+                "Property": "MatchMethod"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
       }
     },
-    "visualContainerObjects": {
-      "title": [
-        {
-          "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "true"
-                }
-              }
-            },
-            "text": {
-              "expr": {
-                "Literal": {
-                  "Value": "'Investigation detail'"
-                }
-              }
-            },
-            "fontSize": {
-              "expr": {
-                "Literal": {
-                  "Value": "12D"
-                }
-              }
-            }
-          }
-        }
-      ],
-      "subTitle": [
-        {
-          "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "false"
-                }
-              }
-            }
-          }
-        }
-      ]
-    },
-    "drillFilterOtherVisuals": true,
     "objects": {
       "grid": [
         {
@@ -289,7 +263,220 @@
             }
           }
         }
+      ],
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "150.64516129032256D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Reconciliation Exceptions.NormalizedReference"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "146.28194970934067D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Reconciliation Exceptions.ReconciliationStatus"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "427.0967741935484D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Reconciliation Exceptions.ExceptionReason"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "150.32258064516128D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Reconciliation Exceptions.MatchMethod"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "138.5483870967742D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Reconciliation Exceptions.BankTransactionIDs"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "110.1613450407891D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Reconciliation Exceptions.JournalEntryIDs"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "139.67741935483872D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Reconciliation Exceptions.BankSignedAmount"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "125.48387096774194D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Reconciliation Exceptions.GLSignedAmount"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "146.1290322580645D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Reconciliation Exceptions.AmountDifference"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "194.83870967741936D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Reconciliation Exceptions.BankFirstDate"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "120D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Reconciliation Exceptions.GLFirstDate"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "137.25815206526255D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Reconciliation Exceptions.DateDifferenceDays"
+          }
+        }
       ]
-    }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Investigation detail'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
   }
 }

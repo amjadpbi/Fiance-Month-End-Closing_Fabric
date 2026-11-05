@@ -3,11 +3,11 @@
   "name": "exception_groups_card",
   "position": {
     "x": 24,
-    "y": 100,
-    "z": 1000,
+    "y": 154,
+    "z": 3000,
     "height": 140,
-    "width": 280,
-    "tabOrder": 1000
+    "width": 296,
+    "tabOrder": 2000
   },
   "visual": {
     "visualType": "card",

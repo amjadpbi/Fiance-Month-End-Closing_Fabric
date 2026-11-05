@@ -28,19 +28,19 @@ table 'Reconciliation Results'
 
 	/// Sums bank-side signed amounts once per reconciliation result group. Blank amounts for groups without bank data remain blank at row level.
 	measure 'Bank Signed Total' = SUM ( 'Reconciliation Results'[BankSignedAmount] )
-		formatString: #,##0.00;(#,##0.00);0.00
+		formatString: $#,##0.00;($#,##0.00);$0.00
 		displayFolder: Amounts
 		lineageTag: e69f1341-f353-4bcd-a610-cb0af21c4ec0
 
 	/// Sums ledger-side signed amounts once per reconciliation result group. Blank amounts for groups without ledger data remain blank at row level.
 	measure 'Ledger Signed Total' = SUM ( 'Reconciliation Results'[GLSignedAmount] )
-		formatString: #,##0.00;(#,##0.00);0.00
+		formatString: $#,##0.00;($#,##0.00);$0.00
 		displayFolder: Amounts
 		lineageTag: 1cf0a493-d048-40cd-89ad-8f12947db2e3
 
 	/// Net signed sum of nonblank group amount differences; bank-only and ledger-only blank differences are not coerced to zero.
 	measure 'Reconciliation Amount Difference' = SUM ( 'Reconciliation Results'[Amount Difference] )
-		formatString: #,##0.00;(#,##0.00);0.00
+		formatString: $#,##0.00;($#,##0.00);$0.00
 		displayFolder: Amounts
 		lineageTag: e6f2e872-b627-42e7-958f-04f552b019a3
 
@@ -61,36 +61,30 @@ table 'Reconciliation Results'
 
 	column BankSignedAmount
 		dataType: double
-		formatString: #,##0.00;(#,##0.00);0.00
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
 		lineageTag: c277ae76-b1ea-4eed-9280-dcb1b774014b
 		summarizeBy: sum
 		sourceColumn: BankSignedAmount
 
 		annotation SummarizationSetBy = Automatic
 
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
 	column GLSignedAmount
 		dataType: double
-		formatString: #,##0.00;(#,##0.00);0.00
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
 		lineageTag: 9441b8b2-64f8-411c-85a7-ca163a3b7803
 		summarizeBy: sum
 		sourceColumn: GLSignedAmount
 
 		annotation SummarizationSetBy = Automatic
 
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
 	column 'Amount Difference'
 		dataType: double
-		formatString: #,##0.00;(#,##0.00);0.00
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
 		lineageTag: d8fceea7-e585-40b0-a167-ff15434ed457
 		summarizeBy: sum
 		sourceColumn: Amount Difference
 
 		annotation SummarizationSetBy = Automatic
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column BankFirstDate
 		dataType: dateTime

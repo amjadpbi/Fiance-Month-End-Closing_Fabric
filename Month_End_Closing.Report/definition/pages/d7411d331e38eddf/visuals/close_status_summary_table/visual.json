@@ -2,12 +2,12 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "close_status_summary_table",
   "position": {
-    "x": 23.896103896103895,
-    "y": 289.87012987012986,
-    "z": 6000,
-    "height": 200.51948051948051,
-    "width": 598.44155844155841,
-    "tabOrder": 6000
+    "x": 23.225806451612904,
+    "y": 338.06451612903226,
+    "z": 8000,
+    "height": 200,
+    "width": 575,
+    "tabOrder": 7000
   },
   "visual": {
     "visualType": "tableEx",
@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "Month-End Close Summary.ReconciliationStatus",
-              "nativeQueryRef": "ReconciliationStatus"
+              "nativeQueryRef": "ReconciliationStatus",
+              "displayName": "Status"
             },
             {
               "field": {
@@ -41,7 +42,8 @@
                 }
               },
               "queryRef": "Month-End Close Summary.ReferenceGroupCount",
-              "nativeQueryRef": "ReferenceGroupCount"
+              "nativeQueryRef": "ReferenceGroupCount",
+              "displayName": "References"
             },
             {
               "field": {
@@ -55,7 +57,8 @@
                 }
               },
               "queryRef": "Month-End Close Summary.ReviewGroupCount",
-              "nativeQueryRef": "ReviewGroupCount"
+              "nativeQueryRef": "ReviewGroupCount",
+              "displayName": "Review groups"
             },
             {
               "field": {
@@ -69,7 +72,8 @@
                 }
               },
               "queryRef": "Month-End Close Summary.TotalBankSignedAmount",
-              "nativeQueryRef": "TotalBankSignedAmount"
+              "nativeQueryRef": "TotalBankSignedAmount",
+              "displayName": "Bank signed"
             },
             {
               "field": {
@@ -83,7 +87,8 @@
                 }
               },
               "queryRef": "Month-End Close Summary.TotalGLSignedAmount",
-              "nativeQueryRef": "TotalGLSignedAmount"
+              "nativeQueryRef": "TotalGLSignedAmount",
+              "displayName": "GL signed"
             },
             {
               "field": {
@@ -97,7 +102,8 @@
                 }
               },
               "queryRef": "Month-End Close Summary.TotalAmountDifference",
-              "nativeQueryRef": "TotalAmountDifference"
+              "nativeQueryRef": "TotalAmountDifference",
+              "displayName": "Difference"
             }
           ]
         }
@@ -140,6 +146,92 @@
                 }
               }
             }
+          }
+        }
+      ],
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "175.87096643320075D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Month-End Close Summary.ReconciliationStatus"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "82D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Month-End Close Summary.ReferenceGroupCount"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "112D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Month-End Close Summary.ReviewGroupCount"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "108D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Month-End Close Summary.TotalBankSignedAmount"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "85D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Month-End Close Summary.TotalGLSignedAmount"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "85D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Month-End Close Summary.TotalAmountDifference"
           }
         }
       ]

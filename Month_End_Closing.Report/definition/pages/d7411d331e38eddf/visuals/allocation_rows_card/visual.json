@@ -3,11 +3,11 @@
   "name": "allocation_rows_card",
   "position": {
     "x": 648,
-    "y": 135,
-    "z": 3000,
+    "y": 190,
+    "z": 5000,
     "height": 140,
     "width": 296,
-    "tabOrder": 3000
+    "tabOrder": 4000
   },
   "visual": {
     "visualType": "card",

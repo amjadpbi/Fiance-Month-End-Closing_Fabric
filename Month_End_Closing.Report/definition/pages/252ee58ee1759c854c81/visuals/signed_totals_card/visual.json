@@ -2,12 +2,12 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "signed_totals_card",
   "position": {
-    "x": 1021.9354838709677,
-    "y": 467.09677419354836,
-    "z": 2000,
-    "height": 252.90322580645162,
-    "width": 246.45161290322579,
-    "tabOrder": 2000
+    "x": 833.03520456707906,
+    "y": 470.104662226451,
+    "z": 4000,
+    "height": 224.09134157944817,
+    "width": 422.6070409134158,
+    "tabOrder": 3000
   },
   "visual": {
     "visualType": "multiRowCard",
@@ -120,7 +120,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "10D"
+                  "Value": "8D"
                 }
               }
             }

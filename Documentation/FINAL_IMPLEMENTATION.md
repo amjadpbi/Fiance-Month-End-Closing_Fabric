@@ -17,6 +17,10 @@ The implemented flow is:
 
 The model contains tables for Reconciliation Results, Reconciliation Exceptions, Allocation Review, Reconciliation Allocations, and Month-End Close Summary. The report pages are Reconciliation Overview, Reconciliation Workbench, Exceptions & Investigation, and Allocation Review & Close Readiness.
 
+### Report presentation
+
+The four pages use a deep-navy title strip, native horizontal page-navigation tabs, a light-grey canvas, white visual containers, and muted blue chart styling. The Overview pairs reconciliation-status and exception-reason charts above the reconciliation-group table and signed totals. The Workbench presents status, reference, and match-method slicers above the reconciliation-group detail table. Exceptions & Investigation balances the exception-group KPI and reason chart above the investigation detail table. Allocation Review & Close Readiness places close-status and allocation-review summaries below its four KPI cards, with allocation-level detail beneath them. Currency display remains in USD; the synchronization updates format metadata only, not measures or relationships. The report retains the synthetic-data coverage note and the Warehouse limitation note; it does not represent production business results or formal close approval.
+
 Two pipeline definitions are provided in `Fabric_Export/DataPipelines`:
 
 - `PL_Elarwick_MonthEnd_Close` sequences the three notebooks and then copies `gold_reconciliationresults` to `FactReconciliationResults`.

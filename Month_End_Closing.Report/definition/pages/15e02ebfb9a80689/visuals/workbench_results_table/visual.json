@@ -3,11 +3,11 @@
   "name": "workbench_results_table",
   "position": {
     "x": 24,
-    "y": 260,
-    "z": 3000,
-    "height": 435,
+    "y": 288,
+    "z": 5000,
+    "height": 406,
     "width": 1232,
-    "tabOrder": 2000
+    "tabOrder": 3000
   },
   "visual": {
     "visualType": "tableEx",
@@ -129,6 +129,23 @@
             }
           ]
         }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Reconciliation Results"
+                  }
+                },
+                "Property": "MatchMethod"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
       }
     },
     "objects": {
@@ -202,6 +219,120 @@
                 }
               }
             }
+          }
+        }
+      ],
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "144.88847540953117D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Reconciliation Results.NormalizedReference"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "185.15528518767653D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Reconciliation Results.ReconciliationStatus"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "189.3548387096774D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Reconciliation Results.MatchMethod"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "330D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Reconciliation Results.ExceptionReason"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "150.17197324307287D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Reconciliation Results.BankSignedAmount"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "165.64516129032256D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Reconciliation Results.GLSignedAmount"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "153.70967741935485D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Reconciliation Results.AmountDifference"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "162.25812774603753D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Reconciliation Results.DateDifferenceDays"
           }
         }
       ]

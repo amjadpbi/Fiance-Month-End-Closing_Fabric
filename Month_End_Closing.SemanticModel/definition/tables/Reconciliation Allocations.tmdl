@@ -10,7 +10,7 @@ table 'Reconciliation Allocations'
 
 	/// Sums allocation-grain allocated amounts; does not sum repeated bank or ledger group totals.
 	measure 'Allocated Signed Amount' = SUM ( 'Reconciliation Allocations'[AllocatedSignedAmount] )
-		formatString: #,##0.00;(#,##0.00);0.00
+		formatString: $#,##0.00;($#,##0.00);$0.00
 		displayFolder: Allocations
 		lineageTag: e9d907d7-10ec-4222-9734-2bd69fd5dfaa
 
@@ -59,36 +59,30 @@ table 'Reconciliation Allocations'
 
 	column AllocatedSignedAmount
 		dataType: double
-		formatString: #,##0.00;(#,##0.00);0.00
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
 		lineageTag: f6021f15-9c91-4cc6-b181-b990a335a685
 		summarizeBy: sum
 		sourceColumn: AllocatedSignedAmount
 
 		annotation SummarizationSetBy = Automatic
 
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
 	column BankSignedAmount
 		dataType: double
-		formatString: #,##0.00;(#,##0.00);0.00
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
 		lineageTag: 9b1913f9-66a0-4f22-a022-4471755d07e9
 		summarizeBy: sum
 		sourceColumn: BankSignedAmount
 
 		annotation SummarizationSetBy = Automatic
 
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
 	column GLSignedAmount
 		dataType: double
-		formatString: #,##0.00;(#,##0.00);0.00
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
 		lineageTag: d9981e9b-7950-4618-97d7-ba9bed91b95c
 		summarizeBy: sum
 		sourceColumn: GLSignedAmount
 
 		annotation SummarizationSetBy = Automatic
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column MatchMethod
 		dataType: string

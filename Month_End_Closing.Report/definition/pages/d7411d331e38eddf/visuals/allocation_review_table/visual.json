@@ -2,12 +2,12 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "allocation_review_table",
   "position": {
-    "x": 648,
-    "y": 290,
-    "z": 2000,
+    "x": 615,
+    "y": 330,
+    "z": 4000,
     "height": 200,
-    "width": 608,
-    "tabOrder": 2000
+    "width": 641,
+    "tabOrder": 3000
   },
   "visual": {
     "visualType": "tableEx",
@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "Allocation Review.ReferenceNumber",
-              "nativeQueryRef": "ReferenceNumber"
+              "nativeQueryRef": "ReferenceNumber",
+              "displayName": "Reference"
             },
             {
               "field": {
@@ -41,7 +42,8 @@
                 }
               },
               "queryRef": "Allocation Review.ReconciliationStatus",
-              "nativeQueryRef": "ReconciliationStatus"
+              "nativeQueryRef": "ReconciliationStatus",
+              "displayName": "Status"
             },
             {
               "field": {
@@ -55,7 +57,8 @@
                 }
               },
               "queryRef": "Allocation Review.ReviewReason",
-              "nativeQueryRef": "ReviewReason"
+              "nativeQueryRef": "ReviewReason",
+              "displayName": "Review reason"
             },
             {
               "field": {
@@ -69,7 +72,8 @@
                 }
               },
               "queryRef": "Allocation Review.BankTransactionIDs",
-              "nativeQueryRef": "BankTransactionIDs"
+              "nativeQueryRef": "BankTransactionIDs",
+              "displayName": "Bank txns"
             },
             {
               "field": {
@@ -83,7 +87,8 @@
                 }
               },
               "queryRef": "Allocation Review.JournalEntryIDs",
-              "nativeQueryRef": "JournalEntryIDs"
+              "nativeQueryRef": "JournalEntryIDs",
+              "displayName": "Journal entries"
             },
             {
               "field": {
@@ -97,7 +102,8 @@
                 }
               },
               "queryRef": "Allocation Review.BankGroupAmount",
-              "nativeQueryRef": "BankGroupAmount"
+              "nativeQueryRef": "BankGroupAmount",
+              "displayName": "Bank amount"
             },
             {
               "field": {
@@ -111,10 +117,28 @@
                 }
               },
               "queryRef": "Allocation Review.GLGroupAmount",
-              "nativeQueryRef": "GLGroupAmount"
+              "nativeQueryRef": "GLGroupAmount",
+              "displayName": "GL amount"
             }
           ]
         }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Allocation Review"
+                  }
+                },
+                "Property": "BankTransactionIDs"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
       }
     },
     "objects": {
@@ -154,6 +178,106 @@
                 }
               }
             }
+          }
+        }
+      ],
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "85D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Allocation Review.ReferenceNumber"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "137.25806451612902D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Allocation Review.ReconciliationStatus"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "145D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Allocation Review.ReviewReason"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "77D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Allocation Review.BankTransactionIDs"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "108D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Allocation Review.JournalEntryIDs"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "101D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Allocation Review.BankGroupAmount"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "89D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Allocation Review.GLGroupAmount"
           }
         }
       ]

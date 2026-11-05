@@ -18,6 +18,7 @@ Finance teams need to compare bank activity with general-ledger activity, find m
   2. Reconciliation Workbench
   3. Exceptions & Investigation
   4. Allocation Review & Close Readiness
+- A refined report presentation with a navy title strip, native page-navigation tabs, a consistent finance palette, and table-focused layouts. Existing model bindings and measures are retained.
 - Synthetic CSV inputs, expected results, and scenario files for the project test set.
 
 ## Implemented data flow

@@ -2,12 +2,12 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "status_breakdown_chart",
   "position": {
-    "x": 25,
-    "y": 241,
-    "z": 3000,
-    "height": 210.32258064516128,
-    "width": 482.58064516129031,
-    "tabOrder": 3000
+    "x": 24,
+    "y": 308,
+    "z": 5000,
+    "height": 148,
+    "width": 608,
+    "tabOrder": 5000
   },
   "visual": {
     "visualType": "barChart",

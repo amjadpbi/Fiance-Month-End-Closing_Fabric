@@ -36,36 +36,30 @@ table 'Month-End Close Summary'
 
 	column TotalBankSignedAmount
 		dataType: double
-		formatString: #,##0.00;(#,##0.00);0.00
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
 		lineageTag: f6fc90d3-8e8a-4f16-9684-bf00681fb9f4
 		summarizeBy: sum
 		sourceColumn: TotalBankSignedAmount
 
 		annotation SummarizationSetBy = Automatic
 
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
 	column TotalGLSignedAmount
 		dataType: double
-		formatString: #,##0.00;(#,##0.00);0.00
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
 		lineageTag: bd2ba67e-a3af-4254-9037-e5731288f147
 		summarizeBy: sum
 		sourceColumn: TotalGLSignedAmount
 
 		annotation SummarizationSetBy = Automatic
 
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
 	column TotalAmountDifference
 		dataType: double
-		formatString: #,##0.00;(#,##0.00);0.00
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
 		lineageTag: c3d7b596-c1ca-4231-a6c6-fd93b87f4889
 		summarizeBy: sum
 		sourceColumn: TotalAmountDifference
 
 		annotation SummarizationSetBy = Automatic
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column ReviewGroupCount
 		dataType: int64

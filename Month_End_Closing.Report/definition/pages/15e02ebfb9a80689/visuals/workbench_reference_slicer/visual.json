@@ -3,11 +3,11 @@
   "name": "workbench_reference_slicer",
   "position": {
     "x": 444,
-    "y": 100,
-    "z": 2000,
-    "height": 140,
+    "y": 154,
+    "z": 4000,
+    "height": 120,
     "width": 392,
-    "tabOrder": 1000
+    "tabOrder": 2000
   },
   "visual": {
     "visualType": "slicer",
@@ -38,6 +38,19 @@
       "general": [
         {
           "properties": {}
+        }
+      ],
+      "header": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
         }
       ]
     },

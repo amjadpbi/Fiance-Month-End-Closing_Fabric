@@ -25,36 +25,30 @@ table 'Reconciliation Exceptions'
 
 	column BankSignedAmount
 		dataType: double
-		formatString: #,##0.00;(#,##0.00);0.00
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
 		lineageTag: 011b9626-7b38-4a2e-b1a7-86552236bc23
 		summarizeBy: sum
 		sourceColumn: BankSignedAmount
 
 		annotation SummarizationSetBy = Automatic
 
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
 	column GLSignedAmount
 		dataType: double
-		formatString: #,##0.00;(#,##0.00);0.00
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
 		lineageTag: 10bf5a08-bdb7-4c33-becf-99c8cca30b14
 		summarizeBy: sum
 		sourceColumn: GLSignedAmount
 
 		annotation SummarizationSetBy = Automatic
 
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
 	column AmountDifference
 		dataType: double
-		formatString: #,##0.00;(#,##0.00);0.00
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
 		lineageTag: 0768cff9-8bb5-4673-86f5-deb574bc66b5
 		summarizeBy: sum
 		sourceColumn: AmountDifference
 
 		annotation SummarizationSetBy = Automatic
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column BankFirstDate
 		dataType: dateTime

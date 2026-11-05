@@ -3,11 +3,11 @@
   "name": "close_review_groups_card",
   "position": {
     "x": 336,
-    "y": 135,
-    "z": 5000,
+    "y": 190,
+    "z": 7000,
     "height": 140,
     "width": 296,
-    "tabOrder": 5000
+    "tabOrder": 6000
   },
   "visual": {
     "visualType": "card",

@@ -2,12 +2,12 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "review_groups_table",
   "position": {
-    "x": 25,
-    "y": 467,
-    "z": 1000,
-    "height": 253.125,
-    "width": 984.00974025974028,
-    "tabOrder": 1000
+    "x": 24,
+    "y": 470,
+    "z": 3000,
+    "height": 224,
+    "width": 800,
+    "tabOrder": 2000
   },
   "visual": {
     "visualType": "tableEx",
@@ -140,7 +140,7 @@
                     "Entity": "Reconciliation Results"
                   }
                 },
-                "Property": "Amount Difference"
+                "Property": "ExceptionReason"
               }
             },
             "direction": "Descending"
@@ -194,7 +194,7 @@
             "value": {
               "expr": {
                 "Literal": {
-                  "Value": "346.4095011668434D"
+                  "Value": "362.4790649056553D"
                 }
               }
             }
@@ -208,7 +208,7 @@
             "value": {
               "expr": {
                 "Literal": {
-                  "Value": "135.88735606693677D"
+                  "Value": "137.11221246410912D"
                 }
               }
             }
@@ -222,7 +222,7 @@
             "value": {
               "expr": {
                 "Literal": {
-                  "Value": "117.98426827801026D"
+                  "Value": "126.15128449096099D"
                 }
               }
             }
@@ -236,7 +236,7 @@
             "value": {
               "expr": {
                 "Literal": {
-                  "Value": "136.09065763507667D"
+                  "Value": "141.27973358705995D"
                 }
               }
             }
@@ -250,7 +250,7 @@
             "value": {
               "expr": {
                 "Literal": {
-                  "Value": "178.94313906475804D"
+                  "Value": "187.6878836792773D"
                 }
               }
             }
@@ -264,7 +264,7 @@
             "value": {
               "expr": {
                 "Literal": {
-                  "Value": "152.0395143904041D"
+                  "Value": "143.20171265461465D"
                 }
               }
             }
@@ -278,7 +278,7 @@
             "value": {
               "expr": {
                 "Literal": {
-                  "Value": "137.03088523765413D"
+                  "Value": "146.00816885530463D"
                 }
               }
             }
@@ -292,13 +292,41 @@
             "value": {
               "expr": {
                 "Literal": {
-                  "Value": "186.96538308835116D"
+                  "Value": "183.05554136844873D"
                 }
               }
             }
           },
           "selector": {
             "metadata": "Reconciliation Results.ReconciliationStatus"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "80D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Reconciliation Results.Amount Difference"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "70D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Reconciliation Results.Date DifferenceDays"
           }
         }
       ]
