@@ -4,6 +4,8 @@
 
 This project uses synthetic bank statements, general-ledger entries, account mappings, and chart-of-accounts data to demonstrate finance reconciliation and close-readiness reporting. It delivers a Fabric Lakehouse-to-Warehouse data path, SQL reporting views, and a four-page Power BI report. It does not implement a production finance control system.
 
+The intended architecture also included a controlled close lifecycle: run and attempt tracking, source and load manifests, validation gates, exception review, Finance approval, accepted-close reporting, and safe recovery. The distinction between that architecture and the delivered implementation is documented in [ARCHITECTURE_AND_IMPLEMENTATION_STATUS.md](ARCHITECTURE_AND_IMPLEMENTATION_STATUS.md).
+
 ## Architecture and components
 
 The implemented flow is:
@@ -73,6 +75,8 @@ The `Dataset` folder contains the synthetic CSV inputs, `expected_reconciliation
 - Advanced close-run approval, exception-review orchestration, and related Dev control procedures are not included in the final solution.
 - Some source or data-quality issues may still require finance investigation. The report surfaces review statuses; it does not perform business approval.
 - Fabric item-definition exports do not include table rows, pipeline execution history, or credentials. `Fabric_Export` does not provide an automated deployment process.
+
+Additional close-control components were explored in a separate Dev environment. Some notebook and pipeline definitions, control procedures, and reporting-view definitions were created or inspected. However, the complete load, validation, exception-review, Finance decision, accepted-close publication, and reporting path was not executed and verified as one end-to-end workflow. Static definition checks and prior synthetic control records are not equivalent to full integration testing. See [ARCHITECTURE_AND_IMPLEMENTATION_STATUS.md](ARCHITECTURE_AND_IMPLEMENTATION_STATUS.md) for the capability-level status and design intent.
 
 ## Local report setup
 
