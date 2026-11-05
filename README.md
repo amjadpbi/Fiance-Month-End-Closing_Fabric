@@ -55,6 +55,16 @@ The Warehouse reporting views are:
 
 The semantic model imports from these views. Its reconciliation-results measures include group counts, confirmed groups, review groups, match rate, bank and ledger signed totals, and the sum of populated group-level amount differences. That amount-difference measure is not defined as bank total minus ledger total; bank-only and ledger-only groups have blank group differences.
 
+## Architecture intent and implementation boundary
+
+The original architecture was broader than the final reporting workflow. It was designed to include controlled close runs and attempts, source and table-load manifests, validation gates, exception-review evidence, authorized Finance approval, accepted-close reporting, and safe recovery from failed or repeated loads.
+
+Some of these controls were explored further in a separate Dev environment. Their definitions and wiring were inspected, but the complete close lifecycle was not executed and verified end to end. They must not be presented as delivered production capabilities.
+
+The published repository implements the reconciliation data path and reporting layer. It does **not** implement a verified end-to-end close approval and recovery workflow. In particular, the two published pipelines are separate, insert-based loads are not idempotent, and the report is a review aid rather than a formal approval interface.
+
+See [Architecture Intent and Implementation Status](Documentation/ARCHITECTURE_AND_IMPLEMENTATION_STATUS.md) for the intended lifecycle, the five acceptance checks, state separation, and a capability-by-capability status table.
+
 ## Validation recorded
 
 The project documentation records a Warehouse validation baseline of:
@@ -85,6 +95,7 @@ It also records 10 `CONFIRMED_MATCH` groups and 2 `CONFIRMED_GROUP_MATCH` groups
 - [`Dataset/`](Dataset/) — synthetic source and expected-result files.
 - [`Fabric_Export/`](Fabric_Export/) — exported definitions for delivered production Fabric items, schemas, and Warehouse view SQL.
 - [`Documentation/FINAL_IMPLEMENTATION.md`](Documentation/FINAL_IMPLEMENTATION.md) — implementation and setup notes.
+- [`Documentation/ARCHITECTURE_AND_IMPLEMENTATION_STATUS.md`](Documentation/ARCHITECTURE_AND_IMPLEMENTATION_STATUS.md) — intended architecture and delivered/deferred capability status.
 - [`Month_End_Closing.pdf`](Month_End_Closing.pdf) — report export.
 
 ## Opening the report
